@@ -1,0 +1,24 @@
+@import 'styles/reset.css';
+@import 'styles/variables.css';
+
+body {
+  font-family: var(--font-family);
+  line-height: 1.5;
+  font-size: 16px;
+  color: var(--color-main);
+}
+
+.page {
+  margin-block: 48px;
+}
+
+.container {
+  display: block;
+  margin: 0 auto;
+  padding-inline: var(--md-padding);
+  max-width: 1352px;
+}
+
+.underline {
+  text-decoration: underline;
+}
