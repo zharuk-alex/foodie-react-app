@@ -1,39 +1,82 @@
 .button {
-  font-weight: 500;
-  letter-spacing: -0.01em;
   display: inline-flex;
   align-items: center;
-  padding: 16px 56px;
-  border-radius: 200px;
-  cursor: pointer;
-  position: relative;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 30px;
+  text-transform: uppercase;
+  font-family: var(--font-family);
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  padding: 16px 32px;
+  height: fit-content;
+}
+
+.button:hover svg {
+  fill: currentColor;
 }
 
 .button:disabled {
-  background-color: #e26a6a;
+  background-color: var(--color-gray);
   cursor: not-allowed;
 }
 
 .main {
   composes: button;
-  background-color: var(--color-button);
+  background-color: var(--color-main);
   color: var(--color-white);
   border: none;
 }
 
-.main:hover {
-  background-color: var(--color-button-hover);
+.main:hover:not(:disabled) {
+  background-color: var(--color-secondary);
 }
 
 .outlined {
   composes: button;
   background-color: transparent;
-  border: 1px solid var(--color-gray-light);
-  padding-inline: 32px;
+  border: 1px solid var(--color-secondary);
+  padding-block: 15px;
 }
 
 .outlined:hover {
-  border: 1px solid var(--color-button-hover);
+  background-color: var(--color-main);
+  color: var(--color-white);
+}
+
+.secondary {
+  composes: button;
+  background-color: var(--color-main);
+  color: var(--color-white);
+  width: 400px;
+}
+
+.secondary:hover {
+  background-color: var(--color-gray);
+}
+
+.btn-icon {
+  composes: button;
+  background-color: transparent;
+  border: 1px solid var(--color-gray-light);
+  padding: 12px;
+  color: var(--color-main);
+}
+
+.btn-icon:hover {
+  background-color: var(--color-main);
+  color: var(--color-white);
+}
+
+.btn-icon:hover svg {
+  fill: currentColor;
+}
+
+.btn-icon-sm {
+  composes: btn-icon;
+  padding: 10px;
 }
 
 .hiddenChild {

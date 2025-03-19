@@ -26,4 +26,13 @@ const routes = [
   },
 ];
 
+const ComponentsPage =
+  process.env.NODE_ENV === "development"
+    ? lazy(() => import("./pages/ComponentsPage/ComponentsPage"))
+    : null;
+
+if (ComponentsPage) {
+  routes.push({ path: "/components", element: <ComponentsPage /> });
+}
+
 export default routes;
