@@ -1,5 +1,15 @@
 import React from "react";
-import { Btn, Icon, Container } from "components/UI";
+import {
+  Btn,
+  Icon,
+  Container,
+  Chip,
+  Dropdown,
+  MainTitle,
+  Subtitle,
+  Avatar,
+  Pagination,
+} from "components/UI";
 
 const ComponentsPage = () => {
   return (
@@ -31,10 +41,41 @@ const ComponentsPage = () => {
           </div>
         </section>
         <section>
-          <h2>Icons</h2>
+          <h2>Other</h2>
           <div style={{ display: "flex", gap: "12px" }}>
+            <Avatar placeholder="Avatar">
+              <span>Avatar</span>
+            </Avatar>
             <Icon className="icon" name="icon-star" size="20" color="#050505" />
+            <Chip label="chip" />
+            <Dropdown
+              options={[
+                {
+                  value: 1,
+                  label: "apple",
+                },
+                {
+                  value: 2,
+                  label: "banana",
+                },
+                {
+                  value: 3,
+                  label: "mango",
+                },
+              ]}
+              value={{
+                value: 1,
+                label: "apple",
+              }}
+              placeholder="Choose category"
+              onChange={() => false}
+            />
           </div>
+          <div>
+            <MainTitle>MainTitle</MainTitle>
+            <Subtitle>Subtitle</Subtitle>
+          </div>
+          <Pagination total={5} current={2} />
         </section>
       </Container>
     </>

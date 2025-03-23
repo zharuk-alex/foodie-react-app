@@ -3,7 +3,7 @@ import css from "./Btn.module.css";
 
 const Btn = ({
   variant = "main",
-  className,
+  className = "",
   children,
   onClick,
   disabled,
