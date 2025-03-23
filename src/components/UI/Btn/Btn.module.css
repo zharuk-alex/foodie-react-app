@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border-radius: 30px;
+  border-radius: var(--main-radius);
   text-transform: uppercase;
   font-family: var(--font-family);
   font-weight: 700;
