@@ -111,7 +111,7 @@ export const addToFollowingThunk = createAsyncThunk(
   }
 );
 
-export const removeFromFollowing = createAsyncThunk(
+export const removeFromFollowingThunk = createAsyncThunk(
   "auth/removeFromFollowing",
   async (id, { getState, rejectWithValue }) => {
     try {
@@ -121,6 +121,25 @@ export const removeFromFollowing = createAsyncThunk(
         API_ROUTES.USERS.UNFOLLOW(id)
       );
       return response?.data?.userId;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getFollowersThunk = createAsyncThunk(
+  "auth/getAllFollowers",
+  async ({ id, page, limit }, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      setToken(token);
+      const { data: response } = await api.get(API_ROUTES.USERS.FOLLOWERS(id), {
+        params: {
+          page,
+          limit,
+        },
+      });
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
     }

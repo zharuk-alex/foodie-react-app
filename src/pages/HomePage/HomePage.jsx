@@ -2,19 +2,20 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addToFollowingThunk,
   currentUserThunk,
+  getFollowersThunk,
   getFullUserDetailsThunk,
   loginThunk,
   logoutThunk,
-  removeFromFollowing,
+  removeFromFollowingThunk,
   updateAvatarThunk,
 } from "../../store/auth/operations.js";
-import { selectToken } from "../../store/auth/selectors.js";
+import { selectPagination } from "../../store/auth/selectors.js";
 import styles from "./HomePage.module.css";
 import { useState } from "react";
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const data = useSelector(selectToken);
+  const data = useSelector(selectPagination);
   const [file, setFile] = useState(null);
 
   const handleClick = () => {
@@ -52,9 +53,16 @@ const HomePage = () => {
   };
 
   const handleUnfollow = () => {
-    dispatch(removeFromFollowing("iddLLAtVZg2HXJkCXvJf8"));
+    dispatch(removeFromFollowingThunk("iddLLAtVZg2HXJkCXvJf8"));
   };
 
+  const handleFollowers = () => {
+    dispatch(
+      getFollowersThunk({ id: "iddLLAtVZg2HXJkCXvJf8", page: 1, limit: 1 })
+    );
+  };
+
+  const handleFollowing = () => {};
   return (
     <>
       <div className={styles["wrapper"]}>
@@ -75,6 +83,13 @@ const HomePage = () => {
 
         <button type="button" onClick={handleUnfollow}>
           Unfollow
+        </button>
+        <button type="button" onClick={handleFollowers}>
+          Get all follower
+        </button>
+
+        <button type="button" onClick={handleFollowing}>
+          Get all following
         </button>
       </div>
       <form encType="multipart/form-data" onSubmit={handleSubmit}>

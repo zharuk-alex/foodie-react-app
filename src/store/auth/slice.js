@@ -3,11 +3,12 @@ import { initialState } from "./initialState.js";
 import {
   addToFollowingThunk,
   currentUserThunk,
+  getFollowersThunk,
   getFullUserDetailsThunk,
   loginThunk,
   logoutThunk,
   registerThunk,
-  removeFromFollowing,
+  removeFromFollowingThunk,
   updateAvatarThunk,
 } from "./operations.js";
 
@@ -32,9 +33,17 @@ const usersSlice = createSlice({
         state.isLoading = false;
         state.error = null;
       })
-      .addCase(removeFromFollowing.fulfilled, (state, { payload }) => {
+      .addCase(removeFromFollowingThunk.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.error = null;
+      })
+      .addCase(getFollowersThunk.fulfilled, (state, { payload }) => {
+        state.followers = payload.followers;
+        state.pagination.page = payload.page;
+        state.pagination.limit = payload.limit;
+        state.pagination.totalPages = payload.totalPage;
+        state.pagination.hasNextPage = payload.hasNextPage;
+        state.pagination.hasPreviousPage = payload.hasPreviousPage;
       })
       .addMatcher(
         isAnyOf(
@@ -58,7 +67,8 @@ const usersSlice = createSlice({
           currentUserThunk.pending,
           getFullUserDetailsThunk.pending,
           updateAvatarThunk.pending,
-          addToFollowingThunk.pending
+          addToFollowingThunk.pending,
+          removeFromFollowingThunk.pending
         ),
         (state) => {
           state.isLoading = true;
@@ -73,7 +83,8 @@ const usersSlice = createSlice({
           currentUserThunk.rejected,
           getFullUserDetailsThunk.rejected,
           updateAvatarThunk.rejected,
-          addToFollowingThunk.rejected
+          addToFollowingThunk.rejected,
+          removeFromFollowingThunk.rejected
         ),
         (state, action) => {
           state.error = action.payload;
