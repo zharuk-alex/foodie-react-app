@@ -6,6 +6,7 @@ import {
   loginThunk,
   logoutThunk,
   registerThunk,
+  updateAvatarThunk,
 } from "./operations.js";
 
 const usersSlice = createSlice({
@@ -18,6 +19,9 @@ const usersSlice = createSlice({
         state.fullUserDetails = payload;
         state.isLoading = false;
         state.error = null;
+      })
+      .addCase(updateAvatarThunk.fulfilled, (state, { payload }) => {
+        state.currentUser.avatarURL = payload.avatarURL;
       })
       .addMatcher(
         isAnyOf(
@@ -39,7 +43,8 @@ const usersSlice = createSlice({
           loginThunk.pending,
           logoutThunk.pending,
           currentUserThunk.pending,
-          getFullUserDetailsThunk.pending
+          getFullUserDetailsThunk.pending,
+          updateAvatarThunk.pending
         ),
         (state) => {
           state.isLoading = true;
@@ -52,7 +57,8 @@ const usersSlice = createSlice({
           loginThunk.rejected,
           logoutThunk.rejected,
           currentUserThunk.rejected,
-          getFullUserDetailsThunk.rejected
+          getFullUserDetailsThunk.rejected,
+          updateAvatarThunk.rejected
         ),
         (state, action) => {
           Object.assign(state, initialState);

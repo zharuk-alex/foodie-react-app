@@ -76,3 +76,23 @@ export const getFullUserDetailsThunk = createAsyncThunk(
     }
   }
 );
+
+export const updateAvatarThunk = createAsyncThunk(
+  "auth/updateAvatar",
+  async (avatar, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      setToken(token);
+      const { data: response } = await api.patch(
+        API_ROUTES.USERS.AVATAR,
+        avatar,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
