@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addToFollowingThunk,
   currentUserThunk,
   getFullUserDetailsThunk,
   loginThunk,
@@ -45,6 +46,15 @@ const HomePage = () => {
     setFile(event.target.files[0]);
   };
 
+  const handleFollow = () => {
+    dispatch(addToFollowingThunk("iddLLAtVZg2HXJkCXvJf8"));
+  };
+
+  const handleUnfollow = () => {
+    console.log('unfollow');
+    // dispatch();
+  };
+
   return (
     <>
       <div className={styles["wrapper"]}>
@@ -57,6 +67,14 @@ const HomePage = () => {
 
         <button type="button" onClick={handleCurrent}>
           Current user full details
+        </button>
+
+        <button type="button" onClick={handleFollow}>
+          Follow
+        </button>
+
+        <button type="button" onClick={handleUnfollow}>
+          Unfollow
         </button>
       </div>
       <form encType="multipart/form-data" onSubmit={handleSubmit}>

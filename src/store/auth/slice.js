@@ -1,6 +1,7 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { initialState } from "./initialState.js";
 import {
+  addToFollowingThunk,
   currentUserThunk,
   getFullUserDetailsThunk,
   loginThunk,
@@ -22,6 +23,13 @@ const usersSlice = createSlice({
       })
       .addCase(updateAvatarThunk.fulfilled, (state, { payload }) => {
         state.currentUser.avatarURL = payload.avatarURL;
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(addToFollowingThunk.fulfilled, (state, { payload }) => {
+        state.following.pop(payload);
+        state.isLoading = false;
+        state.error = null;
       })
       .addMatcher(
         isAnyOf(
@@ -44,7 +52,8 @@ const usersSlice = createSlice({
           logoutThunk.pending,
           currentUserThunk.pending,
           getFullUserDetailsThunk.pending,
-          updateAvatarThunk.pending
+          updateAvatarThunk.pending,
+          addToFollowingThunk.pending
         ),
         (state) => {
           state.isLoading = true;
@@ -58,11 +67,13 @@ const usersSlice = createSlice({
           logoutThunk.rejected,
           currentUserThunk.rejected,
           getFullUserDetailsThunk.rejected,
-          updateAvatarThunk.rejected
+          updateAvatarThunk.rejected,
+          addToFollowingThunk.rejected
         ),
         (state, action) => {
+          const { error } = state;
           Object.assign(state, initialState);
-          state.error = action.payload;
+          state.error = action.payload ?? error;
           state.isLoading = false;
         }
       ),
