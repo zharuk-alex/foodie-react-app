@@ -3,6 +3,7 @@ import {
   addToFollowingThunk,
   currentUserThunk,
   getFollowersThunk,
+  getFollowingThunk,
   getFullUserDetailsThunk,
   loginThunk,
   logoutThunk,
@@ -58,11 +59,13 @@ const HomePage = () => {
 
   const handleFollowers = () => {
     dispatch(
-      getFollowersThunk({ id: "iddLLAtVZg2HXJkCXvJf8", page: 1, limit: 1 })
+      getFollowersThunk({ id: "iddLLAtVZg2HXJkCXvJf8", page: 1 })
     );
   };
 
-  const handleFollowing = () => {};
+  const handleFollowing = () => {
+    dispatch(getFollowingThunk({ page: 1}));
+  };
   return (
     <>
       <div className={styles["wrapper"]}>

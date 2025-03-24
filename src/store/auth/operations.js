@@ -145,3 +145,22 @@ export const getFollowersThunk = createAsyncThunk(
     }
   }
 );
+
+export const getFollowingThunk = createAsyncThunk(
+  "auth/getFollowing",
+  async ({ page, limit }, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      setToken(token);
+      const { data: response } = await api.get(API_ROUTES.USERS.FOLLOWING, {
+        params: {
+          page,
+          limit,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
