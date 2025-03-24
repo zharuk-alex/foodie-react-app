@@ -7,12 +7,14 @@ import routes from "./routes.jsx";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import { Suspense } from "react";
 import { AppLoader } from "components/UI";
+import Footer from "components/Footer/Footer";
 
 const AppLayout = () => (
   <Layout>
     <Suspense fallback={<AppLoader visible={true} />}>
       <Outlet />
     </Suspense>
+    <Footer /> 
   </Layout>
 );
 
