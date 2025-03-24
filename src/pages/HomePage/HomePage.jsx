@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   currentUserThunk,
+  getFullUserDetailsThunk,
   loginThunk,
   logoutThunk,
 } from "../../store/auth/operations.js";
@@ -25,7 +26,7 @@ const HomePage = () => {
   };
 
   const handleCurrent = () => {
-    dispatch(currentUserThunk());
+    dispatch(getFullUserDetailsThunk("B6DZ-1oEfXMBH_giWCuEq"));
   };
   return (
     <>
@@ -38,7 +39,7 @@ const HomePage = () => {
         </button>
 
         <button type="button" onClick={handleCurrent}>
-          Current user
+          Current user full details
         </button>
       </div>
     </>

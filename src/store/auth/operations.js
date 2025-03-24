@@ -62,3 +62,17 @@ export const currentUserThunk = createAsyncThunk(
     }
   }
 );
+
+export const getFullUserDetailsThunk = createAsyncThunk(
+  "auth/fullUserDetails",
+  async (id, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      setToken(token);
+      const { data: response } = await api.get(API_ROUTES.USERS.FULL_INFO(id));
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);

@@ -2,6 +2,7 @@ import { createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { initialState } from "./initialState.js";
 import {
   currentUserThunk,
+  getFullUserDetailsThunk,
   loginThunk,
   logoutThunk,
   registerThunk,
@@ -12,24 +13,34 @@ const usersSlice = createSlice({
   initialState,
   extraReducers: (builder) =>
     builder
-      .addCase(registerThunk.fulfilled, (state, { payload }) => {
-        state.token = payload.token;
-        state.currentUser = payload.user;
-        state.isLoggedIn = true;
-      })
-      .addCase(loginThunk.fulfilled, (state, { payload }) => {
-        state.token = payload.token;
-        state.currentUser = payload.user;
-        state.isLoggedIn = true;
-      })
       .addCase(logoutThunk.fulfilled, () => initialState)
-      .addCase(currentUserThunk.fulfilled, (state, { payload }) => {
-        state.token = payload.token;
-        state.currentUser = payload.user;
-        state.isLoggedIn = true;
+      .addCase(getFullUserDetailsThunk.fulfilled, (state, { payload }) => {
+        state.fullUserDetails = payload;
+        state.isLoading = false;
+        state.error = null;
       })
       .addMatcher(
-        isAnyOf(registerThunk.pending, loginThunk.pending, logoutThunk.pending),
+        isAnyOf(
+          registerThunk.fulfilled,
+          loginThunk.fulfilled,
+          currentUserThunk.fulfilled
+        ),
+        (state, { payload }) => {
+          state.token = payload.token;
+          state.currentUser = payload.user;
+          state.isLoggedIn = true;
+          state.isLoading = false;
+          state.error = null;
+        }
+      )
+      .addMatcher(
+        isAnyOf(
+          registerThunk.pending,
+          loginThunk.pending,
+          logoutThunk.pending,
+          currentUserThunk.pending,
+          getFullUserDetailsThunk.pending
+        ),
         (state) => {
           state.isLoading = true;
           state.error = null;
@@ -39,12 +50,14 @@ const usersSlice = createSlice({
         isAnyOf(
           registerThunk.rejected,
           loginThunk.rejected,
-          logoutThunk.rejected
+          logoutThunk.rejected,
+          currentUserThunk.rejected,
+          getFullUserDetailsThunk.rejected
         ),
         (state, action) => {
-          const { error } = state;
           Object.assign(state, initialState);
-          state.error = action.payload ?? error;
+          state.error = action.payload;
+          state.isLoading = false;
         }
       ),
 });
