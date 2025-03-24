@@ -5,6 +5,7 @@ import {
   getFullUserDetailsThunk,
   loginThunk,
   logoutThunk,
+  removeFromFollowing,
   updateAvatarThunk,
 } from "../../store/auth/operations.js";
 import { selectToken } from "../../store/auth/selectors.js";
@@ -51,8 +52,7 @@ const HomePage = () => {
   };
 
   const handleUnfollow = () => {
-    console.log('unfollow');
-    // dispatch();
+    dispatch(removeFromFollowing("iddLLAtVZg2HXJkCXvJf8"));
   };
 
   return (

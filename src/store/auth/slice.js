@@ -7,6 +7,7 @@ import {
   loginThunk,
   logoutThunk,
   registerThunk,
+  removeFromFollowing,
   updateAvatarThunk,
 } from "./operations.js";
 
@@ -27,7 +28,11 @@ const usersSlice = createSlice({
         state.error = null;
       })
       .addCase(addToFollowingThunk.fulfilled, (state, { payload }) => {
-        state.following.pop(payload);
+        state.following.push(payload);
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(removeFromFollowing.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.error = null;
       })
@@ -71,9 +76,7 @@ const usersSlice = createSlice({
           addToFollowingThunk.rejected
         ),
         (state, action) => {
-          const { error } = state;
-          Object.assign(state, initialState);
-          state.error = action.payload ?? error;
+          state.error = action.payload;
           state.isLoading = false;
         }
       ),

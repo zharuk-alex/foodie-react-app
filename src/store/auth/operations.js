@@ -98,12 +98,28 @@ export const updateAvatarThunk = createAsyncThunk(
 );
 
 export const addToFollowingThunk = createAsyncThunk(
-  "auth/addToFollowers",
+  "auth/addToFollowing",
   async (id, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token;
       setToken(token);
       const { data: response } = await api.post(API_ROUTES.USERS.FOLLOW(id));
+      return response?.data?.userId;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const removeFromFollowing = createAsyncThunk(
+  "auth/removeFromFollowing",
+  async (id, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      setToken(token);
+      const { data: response } = await api.delete(
+        API_ROUTES.USERS.UNFOLLOW(id)
+      );
       return response?.data?.userId;
     } catch (error) {
       return rejectWithValue(error.message);
