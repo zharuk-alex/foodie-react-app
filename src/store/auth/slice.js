@@ -1,6 +1,6 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { initialState } from "./initialState.js";
-import { loginThunk, registerThunk } from "./operations.js";
+import { loginThunk, logoutThunk, registerThunk } from "./operations.js";
 
 const usersSlice = createSlice({
   name: "auth",
@@ -17,24 +17,24 @@ const usersSlice = createSlice({
         state.currentUser = payload.user;
         state.isLoggedIn = true;
       })
+      .addCase(logoutThunk.fulfilled, () => initialState)
       .addMatcher(
-        isAnyOf(registerThunk.pending, loginThunk.pending),
+        isAnyOf(registerThunk.pending, loginThunk.pending, logoutThunk.pending),
         (state) => {
           state.isLoading = true;
           state.error = null;
         }
       )
       .addMatcher(
-        isAnyOf(registerThunk.rejected, loginThunk.rejected),
+        isAnyOf(
+          registerThunk.rejected,
+          loginThunk.rejected,
+          logoutThunk.rejected
+        ),
         (state, action) => {
-          state.isLoading = false;
-          state.isLoggedIn = false;
-          state.error = action.payload;
-          state.token = null;
-          state.currentUser = {};
-          state.fullUserDetails = {};
-          state.followers = [];
-          state.following = [];
+          const { error } = state;
+          Object.assign(state, initialState);
+          state.error = action.payload ?? error;
         }
       ),
 });
