@@ -1,8 +1,9 @@
 export const initialState = {
-  current: {},
+  currentUser: {},
+  fullUserDetails: {},
   followers: [],
   following: [],
-  token: "",
+  token: null,
   isLoggedIn: false,
   isLoading: false,
   error: null,

@@ -3,7 +3,7 @@ import { usersReducer } from "./auth/slice.js";
 
 export const store = configureStore({
   reducer: {
-    users: usersReducer,
+    auth: usersReducer,
   },
   // devTools: import.meta.env.MODE === "development",
 });
