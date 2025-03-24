@@ -33,7 +33,7 @@ export const loginThunk = createAsyncThunk(
 
 export const logoutThunk = createAsyncThunk(
   "auth/logout",
-  async (__, { rejectWithValue, dispatch, getState }) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
       const token = getState().auth.token;
       setToken(token);
@@ -43,6 +43,20 @@ export const logoutThunk = createAsyncThunk(
       } else {
         throw new Error("Logout failed");
       }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const currentUserThunk = createAsyncThunk(
+  "auth/current",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      setToken(token);
+      const { data: response } = await api.get(API_ROUTES.USERS.CURRENT_USER);
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
     }

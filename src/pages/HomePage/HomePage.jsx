@@ -1,5 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { loginThunk, logoutThunk } from "../../store/auth/operations.js";
+import {
+  currentUserThunk,
+  loginThunk,
+  logoutThunk,
+} from "../../store/auth/operations.js";
 import { selectToken } from "../../store/auth/selectors.js";
 import styles from "./HomePage.module.css";
 
@@ -19,6 +23,10 @@ const HomePage = () => {
   const handleLogout = () => {
     dispatch(logoutThunk());
   };
+
+  const handleCurrent = () => {
+    dispatch(currentUserThunk());
+  };
   return (
     <>
       <div className={styles["wrapper"]}>
@@ -27,6 +35,10 @@ const HomePage = () => {
         </button>
         <button type="button" onClick={handleLogout}>
           Logout
+        </button>
+
+        <button type="button" onClick={handleCurrent}>
+          Current user
         </button>
       </div>
     </>
