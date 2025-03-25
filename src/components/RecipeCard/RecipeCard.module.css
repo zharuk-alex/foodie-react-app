@@ -1,0 +1,48 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+
+.img {
+  border-radius: var(--main-radius);
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--color-main);
+}
+
+.text {
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.actions {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  align-self: center;
+  justify-content: space-between;
+}
+
+.avatar {}
+
+.actionBtns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.btn {
+  color: var(--color-main)
+}
