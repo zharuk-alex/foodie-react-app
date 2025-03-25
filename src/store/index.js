@@ -1,21 +1,11 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
-
-// temporary
-const tempSlice = createSlice({
-  name: "temp",
-  initialState: { message: "Hello Redux" },
-  reducers: {
-    updateMessage: (state, action) => {
-      state.message = action.payload;
-    },
-  },
-});
-
-export const { updateMessage } = tempSlice.actions;
+import { configureStore } from "@reduxjs/toolkit";
+import { recipesReducer } from "./recipes/slice";
+import { testimonialsReducer } from "./testimonials/slice";
 
 export const store = configureStore({
   reducer: {
-    temp: tempSlice.reducer, // temporary
+    recipes: recipesReducer,
+    testimonials: testimonialsReducer,
   },
   devTools: process.env.NODE_ENV === "development",
 });
