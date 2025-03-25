@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import css from "./Dropdown.module.css";
 import clsx from "clsx";
+import { Icon } from "components/UI";
 
 const Dropdown = ({
   options = [],
@@ -35,7 +36,13 @@ const Dropdown = ({
         onClick={() => setIsOpen((prev) => !prev)}
       >
         {value ? value.label : placeholder}
-        <span className={css.arrow}>▾</span>
+
+        <Icon
+          name="icon-chevron-down"
+          size="18"
+          color="#000"
+          className={clsx(css.arrow, { [css.arrowRotated]: isOpen })}
+        />
       </div>
       {isOpen && (
         <ul className={css.menu}>
