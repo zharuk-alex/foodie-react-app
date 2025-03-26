@@ -156,7 +156,6 @@ export const addRecipeToFavoriteThunk = createAsyncThunk(
       const token = getState().auth.token;
       setToken(token);
       const { data } = await api.post(API_ROUTES.RECIPES.FAVORITE(id));
-      console.log("add to favorite", data);
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -171,7 +170,6 @@ export const removeRecipeFromFavoriteThunk = createAsyncThunk(
       const token = getState().auth.token;
       setToken(token);
       const { data } = await api.delete(API_ROUTES.RECIPES.FAVORITE(id));
-      console.log("remove from favorite", data);
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
