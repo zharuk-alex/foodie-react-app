@@ -8,7 +8,8 @@ export const fetchTestimonials = createAsyncThunk(
       const response = await api.get(`/testimonials`);
       return response.data;
     } catch (e) {
-      return rejectWithValue(e.message);
+      const backendMessage = e.response?.data?.message;
+      return rejectWithValue(backendMessage || e.message);
     }
   }
 );

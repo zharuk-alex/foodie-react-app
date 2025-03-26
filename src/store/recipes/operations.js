@@ -8,7 +8,8 @@ export const fetchCategories = createAsyncThunk(
       const response = await api.get(`/categories`);
       return response.data;
     } catch (e) {
-      return rejectWithValue(e.message);
+      const backendMessage = e.response?.data?.message;
+      return rejectWithValue(backendMessage || e.message);
     }
   }
 );
@@ -20,7 +21,8 @@ export const fetchAreas = createAsyncThunk(
       const response = await api.get(`/areas`);
       return response.data;
     } catch (e) {
-      return rejectWithValue(e.message);
+      const backendMessage = e.response?.data?.message;
+      return rejectWithValue(backendMessage || e.message);
     }
   }
 );
@@ -32,7 +34,8 @@ export const fetchIngredients = createAsyncThunk(
       const response = await api.get(`/ingredients`);
       return response.data;
     } catch (e) {
-      return rejectWithValue(e.message);
+      const backendMessage = e.response?.data?.message;
+      return rejectWithValue(backendMessage || e.message);
     }
   }
 );
@@ -45,7 +48,8 @@ export const fetchRecipes = createAsyncThunk(
       const response = await api.get(`/recipes/?${query}`);
       return response.data;
     } catch (e) {
-      return rejectWithValue(e.message);
+      const backendMessage = e.response?.data?.message;
+      return rejectWithValue(backendMessage || e.message);
     }
   }
 );

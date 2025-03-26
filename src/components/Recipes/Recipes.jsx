@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import css from "./Recipes.module.css";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -21,15 +21,16 @@ import { Dropdown, Pagination, Icon, AppLoader } from "../UI";
 import RecipeList from "../RecipeList/RecipeList";
 import useScrollToElement from "../../hooks/useScrollToElement";
 
-const Recipes = ({ activeCategory, onUpdateActiveCategory }) => {
+const Recipes = ({ activeCategory, onUpdateActiveCategory, recipes }) => {
   const dispatch = useDispatch();
   const scrollToElement = useScrollToElement();
   const isLoading = useSelector(selectLoading);
+  const hasError = useSelector(selectError);
+
   const [filters, setFilters] = useState({});
-  const rawRecipes = useSelector(selectRecipes);
-  const recipes = rawRecipes.filter(
-    (recipe) => recipe.categoryId === activeCategory.id
-  );
+
+  const isEmpty = !isLoading && !hasError && recipes.length === 0;
+
   const rawAreas = useSelector(selectAreas);
   const rawIngredients = useSelector(selectIngredients);
   const totalRecipes = useSelector(selectTotalRecipes);
@@ -54,7 +55,14 @@ const Recipes = ({ activeCategory, onUpdateActiveCategory }) => {
     dispatch(fetchAreas());
   }, [dispatch]);
 
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     if (!activeCategory?.id) return;
 
     const hasFilters = Object.keys(filters).length > 0;
@@ -75,6 +83,7 @@ const Recipes = ({ activeCategory, onUpdateActiveCategory }) => {
         ...filtersValues,
       })
     );
+
     setTimeout(() => scrollToElement("homepage-categories"), 100);
   }, [filters, activeCategory?.id, page, dispatch]);
 
@@ -114,6 +123,11 @@ const Recipes = ({ activeCategory, onUpdateActiveCategory }) => {
         </div>
         <div>
           {isLoading && <AppLoader />}
+          {isEmpty && (
+            <p className="no-results">
+              No recipes found for the selected category or filters.
+            </p>
+          )}
           <RecipeList recipes={recipes} className={css.recipeList} />
           {pages > 1 && (
             <Pagination

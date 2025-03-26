@@ -11,6 +11,7 @@ import { fetchCategories, fetchRecipes } from "store/recipes/operations";
 import {
   selectLoading,
   selectError,
+  selectRecipes,
   selectCategories,
 } from "store/recipes/selectors";
 import { selectTestimonials } from "store/testimonials/selectors";
@@ -19,15 +20,19 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useScrollToElement from "../../hooks/useScrollToElement";
+import toast, { Toaster } from "react-hot-toast";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const scrollToElement = useScrollToElement();
+  const isLoading = useSelector(selectLoading);
+  const hasError = useSelector(selectError);
   const categories = useSelector(selectCategories);
   const testimonials = useSelector(selectTestimonials);
   const [isShowAll, setIsShowAll] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
+  const recipes = useSelector(selectRecipes);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -60,6 +65,23 @@ const HomePage = () => {
     }
   };
 
+  const onSelectCategory = async (id) => {
+    const resultAction = await dispatch(
+      fetchRecipes({
+        category: id,
+        limit: 12,
+        page: 1,
+      })
+    );
+
+    if (resultAction.meta.requestStatus === "fulfilled") {
+      setCategory(id);
+    } else {
+      const errorMessage = resultAction.payload || "Something went wrong";
+      toast.error(errorMessage);
+    }
+  };
+
   return (
     <>
       <Hero {...heroProps}>
@@ -79,7 +101,7 @@ const HomePage = () => {
               <CategoriesList
                 categories={modifyedCategories}
                 isShowAll={isShowAll}
-                onClickCategory={setCategory}
+                onClickCategory={onSelectCategory}
                 onClickShowAll={() => setIsShowAll(true)}
               />
             </>
@@ -87,8 +109,10 @@ const HomePage = () => {
             <Recipes
               activeCategory={activeCategory}
               onUpdateActiveCategory={setCategory}
+              recipes={recipes}
             />
           )}
+          <Toaster position="bottom-center" reverseOrder={false} />
         </Container>
       </section>
 
