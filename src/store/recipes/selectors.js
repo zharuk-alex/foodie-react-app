@@ -1,5 +1,8 @@
 import { createSelector } from "@reduxjs/toolkit";
 
+export const selectPopularRecipes = (state) => state.recipes.popularRecipes ?? [];
+export const selectSingleRecipe = (state) => state.recipes.singleRecipe;
+export const selectPagination = (state) => state.recipes.pagination;
 export const selectLoading = (state) => state.recipes.isLoading;
 export const selectError = (state) => state.recipes.error;
 export const selectRecipes = (state) => state.recipes.recipes ?? [];

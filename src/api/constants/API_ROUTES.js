@@ -16,6 +16,7 @@ export const API_ROUTES = {
     POPULAR: "/recipes/popular",
     RECIPE_WITH_ID: (id) => `/recipes/${id}`,
     FAVORITE: (id) => `/recipes/${id}/favorite`,
+    OWN_RECIPES: (id) => `/recipes/${id}/own-recipes`,
   },
   AREAS: "/areas",
   CATEGORIES: "/categories",
