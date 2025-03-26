@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import css from "./Icon.module.css";
-import iconsSprite from "/src/assets/icons/icons.svg";
+import iconsSprite from "/src/images/icons.svg";
 
 const Icon = ({
   name,

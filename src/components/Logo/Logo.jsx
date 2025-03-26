@@ -1,4 +1,4 @@
-import logoUrl from "../../assets/icons/logo.svg";
+// import logoUrl from "../../assets/icons/logo.svg";
 
 const Logo = ({ className = "" }) => {
   return <div className={className}>Foodies</div>;

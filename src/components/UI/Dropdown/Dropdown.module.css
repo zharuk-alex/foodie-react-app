@@ -2,18 +2,18 @@
   position: relative;
   display: inline-block;
   width: 100%;
-  font-family: sans-serif;
 }
 
 .trigger {
   padding: 16px 18px;
   border: 1px solid var(--color-gray);
-  border-radius: 30px;
+  border-radius: var(--main-radius);
   cursor: pointer;
   background: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  line-height: 1.5;
 }
 
 .trigger.open {
@@ -21,7 +21,12 @@
 }
 
 .arrow {
-  margin-left: 8px;
+  transition: transform ease-in-out .2s;
+}
+
+.arrowRotated {
+  composes: arrow;
+  transform: rotate(180deg);
 }
 
 .menu {
