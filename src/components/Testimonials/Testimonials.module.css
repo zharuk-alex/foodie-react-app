@@ -12,6 +12,7 @@
 .carousel {
   width: 100%;
   margin: 0 auto;
+  min-height: 250px;
 
   --swiper-pagination-bullet-size: 16px;
   --swiper-pagination-bullet-inactive-color: var(--color-gray);
@@ -21,14 +22,24 @@
 }
 
 :global(.swiper) {
-  /* position: unset !important; */
   padding-bottom: 56px !important;
+  min-height: 250px;
 }
+
+:global(.swiper-slide) {
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 
 .icon {
   position: absolute;
   top: 76px;
   left: 40px;
+  fill: var(--color-gray)
 }
 
 .title {
@@ -45,14 +56,11 @@
   margin-bottom: 80px;
 }
 
-.subtitle {
+.author {
   text-align: center;
   font-weight: 800;
   font-size: 20px;
   line-height: 1.2;
   text-transform: uppercase;
-}
-
-:global(.swiper-slide) {
-  height: 100% !important;
+  margin-top: auto;
 }
