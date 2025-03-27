@@ -1,6 +1,6 @@
 import { useState } from "react";
 import css from "./FollowButton.module.css";
-import { followUser, unfollowUser } from "api/follow"; // to do!!!!!!!!!!!!!
+// import { followUser, unfollowUser } from "api/follow"; // to do!!!!!!!!!!!!!
 
 const FollowButton = ({
   isFollowing: initialState,

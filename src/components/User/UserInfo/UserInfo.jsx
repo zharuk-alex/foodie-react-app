@@ -1,5 +1,5 @@
 import css from "./UserInfo.module.css";
-import defaultAvatar from "assets/images/default_avatar.jpg";
+import defaultAvatar from "images/avatar/default_avatar.jpg";
 
 const UserInfo = ({ user, isOwnProfile, onAvatarChange }) => {
   if (!user) return null;
@@ -44,7 +44,7 @@ const UserInfo = ({ user, isOwnProfile, onAvatarChange }) => {
       </div>
       <div className={css.info}>
         <p className={css.email}><strong>Email:</strong> {email}</p>
-        <ul className={cssstats}>
+        <ul className={css.stats}>
           <li><strong>Recipes:</strong> {recipes}</li>
           <li><strong>Favorites:</strong> {favorites}</li>
           <li><strong>Followers:</strong> {followers}</li>
