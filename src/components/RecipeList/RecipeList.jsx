@@ -8,7 +8,7 @@ const RecipeList = ({ recipes = [], className = "" }) => {
     <ul className={clsx(css.itemsSet, className)}>
       {recipes.map((recipe) => (
         <li key={recipe.id} className={css.item}>
-          <RecipeCard {...recipe} />
+          <RecipeCard recipe={recipe} />
         </li>
       ))}
     </ul>
