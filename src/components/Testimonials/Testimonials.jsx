@@ -18,13 +18,14 @@ const Testimonials = ({ testimonials = [] }) => {
         className={css.title}
       />
       <Icon className={css.icon} name="icon-quotes" size="59" />
+
+      {/* autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }} */}
       <Swiper
         modules={[Autoplay, Pagination]}
         className={css.carousel}
-        autoplay={{
-          delay: 2500,
-          disableOnInteraction: false,
-        }}
         pagination={{
           clickable: true,
           renderBullet: function (_, className) {
