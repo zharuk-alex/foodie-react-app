@@ -99,13 +99,13 @@ const recipesSlice = createSlice({
       })
       .addCase(addRecipeToFavoriteThunk.fulfilled, (state, { payload }) => {
         if (state.singleRecipe?.id === payload.recipeId) {
-          state.singleRecipe.isFavorite = payload.favorite;
+          state.singleRecipe.isFavorite = true;
         }
         const popularRecipe = state.popularRecipes.find(
           (p) => p.id === payload.recipeId
         );
         if (popularRecipe) {
-          popularRecipe.isFavorite = payload.favorite;
+          popularRecipe.isFavorite = true;
         }
 
         state.isLoading = false;
@@ -114,14 +114,14 @@ const recipesSlice = createSlice({
       .addCase(
         removeRecipeFromFavoriteThunk.fulfilled,
         (state, { payload }) => {
-          if (state.singleRecipe?.id === payload.recipeId) {
-            state.singleRecipe.isFavorite = payload.favorite;
+          if (state.singleRecipe?.id === payload.id) {
+            state.singleRecipe.isFavorite = false;
           }
           const popularRecipe = state.popularRecipes.find(
-            (p) => p.id === payload.recipeId
+            (p) => p.id === payload.id
           );
           if (popularRecipe) {
-            popularRecipe.isFavorite = payload.favorite;
+            popularRecipe.isFavorite = false;
           }
           state.isLoading = false;
           state.error = null;
