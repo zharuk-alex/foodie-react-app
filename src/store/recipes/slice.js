@@ -98,12 +98,31 @@ const recipesSlice = createSlice({
         state.error = null;
       })
       .addCase(addRecipeToFavoriteThunk.fulfilled, (state, { payload }) => {
+        if (state.singleRecipe?.id === payload.recipeId) {
+          state.singleRecipe.isFavorite = payload.favorite;
+        }
+        const popularRecipe = state.popularRecipes.find(
+          (p) => p.id === payload.recipeId
+        );
+        if (popularRecipe) {
+          popularRecipe.isFavorite = payload.favorite;
+        }
+
         state.isLoading = false;
         state.error = null;
       })
       .addCase(
         removeRecipeFromFavoriteThunk.fulfilled,
         (state, { payload }) => {
+          if (state.singleRecipe?.id === payload.recipeId) {
+            state.singleRecipe.isFavorite = payload.favorite;
+          }
+          const popularRecipe = state.popularRecipes.find(
+            (p) => p.id === payload.recipeId
+          );
+          if (popularRecipe) {
+            popularRecipe.isFavorite = payload.favorite;
+          }
           state.isLoading = false;
           state.error = null;
         }
