@@ -1,0 +1,11 @@
+.itemsSet {
+  --items: 3;
+  --indent: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px var(--indent);
+}
+
+.item {
+  flex-basis: calc((100% - var(--indent) * (var(--items) - 1)) / var(--items));
+}
