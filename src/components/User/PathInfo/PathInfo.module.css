@@ -1,0 +1,12 @@
+.path {
+  color: #6b7280;
+}
+
+.link {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
