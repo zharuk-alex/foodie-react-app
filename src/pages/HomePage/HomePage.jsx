@@ -1,5 +1,5 @@
 import css from "./HomePage.module.css";
-import { Container, Btn } from "components/UI";
+import { Section, Container, Btn } from "components/UI";
 import Recipes from "components/Recipes/Recipes";
 import Hero from "components/Hero/Hero";
 import PageTitle from "components/PageTitle/PageTitle";
@@ -93,7 +93,7 @@ const HomePage = () => {
           Add recipe
         </Btn>
       </Hero>
-      <section id="homepage-categories">
+      <Section id="homepage-categories" className={css.section}>
         <Container>
           {!activeCategory ? (
             <>
@@ -114,13 +114,13 @@ const HomePage = () => {
           )}
           <Toaster position="bottom-center" reverseOrder={false} />
         </Container>
-      </section>
+      </Section>
 
-      <section>
+      <Section style={{ marginBottom: 80 }}>
         <Container>
           <Testimonials testimonials={testimonials} />
         </Container>
-      </section>
+      </Section>
     </>
   );
 };

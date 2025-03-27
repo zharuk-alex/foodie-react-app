@@ -17,7 +17,7 @@ const Testimonials = ({ testimonials = [] }) => {
         subtitle="What our customer say"
         className={css.title}
       />
-      <Icon className={css.icon} name="icon-quotes" size="59" />
+      <Icon className={css.icon} name="icon-quotes" />
       <Swiper
         modules={[Autoplay, Pagination]}
         className={css.carousel}

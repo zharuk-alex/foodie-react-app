@@ -5,16 +5,25 @@ import heroImg_1 from "/src/images/hero/hero-cake.webp";
 import heroImg_1x2 from "/src/images/hero/hero-cake@2x.webp";
 import heroImg_2 from "/src/images/hero/hero-meat.webp";
 import heroImg_2x2 from "/src/images/hero/hero-meat@2x.webp";
+import { Btn, Section, Subtitle } from "../UI";
+import { useNavigate } from "react-router-dom";
 
-const Hero = ({ title, subtitle, children }) => {
+const Hero = ({ title, subtitle }) => {
+  const navigate = useNavigate();
   return (
-    <section className={css.section}>
+    <Section className={css.section}>
       <div className={css.wrapper}>
         <Container>
           <div className={css.heroInfo}>
             <h1 className={css.title}>{title}</h1>
-            <p className={css.subtitle}>{subtitle}</p>
-            {children}
+            <Subtitle className={css.subtitle}>{subtitle}</Subtitle>
+            <Btn
+              variant="outlined"
+              className={css.btn}
+              onClick={() => navigate(`/recipe/add`)}
+            >
+              Add recipe
+            </Btn>
           </div>
           <div className={css.wrapperFigure}>
             <div>
@@ -34,7 +43,7 @@ const Hero = ({ title, subtitle, children }) => {
           </div>
         </Container>
       </div>
-    </section>
+    </Section>
   );
 };
 
