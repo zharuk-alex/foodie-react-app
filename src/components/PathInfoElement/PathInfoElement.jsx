@@ -1,5 +1,5 @@
 import React from "react";
-import css from "./PathInfo.module.css";
+import css from "./PathInfoElement.module.css";
 import { Link } from "react-router-dom";
 export default function PathInfo({ activePath = "Salmon Avocado Salad" }) {
   return (

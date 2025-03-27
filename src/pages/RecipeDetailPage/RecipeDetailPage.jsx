@@ -1,5 +1,5 @@
 import css from "./RecipeDetailPage.module.css";
-import PathInfo from "../../components/PathInfo/PathInfo";
+import PathInfoElement from "../../components/PathInfoElement/PathInfoElement";
 import RecipeInfo from "../../components/RecipeInfo/RecipeInfo";
 import PopularRecipes from "../../components/PopularRecipes/PopularRecipes";
 import { useParams } from "react-router-dom";
@@ -20,7 +20,7 @@ const RecipeDetailPage = () => {
 
   return (
     <div className={css.main}>
-      <PathInfo activePath={recipe?.title} />
+      <PathInfoElement activePath={recipe?.title} />
       <RecipeInfo recipe={recipe} />
       <PopularRecipes />
     </div>
