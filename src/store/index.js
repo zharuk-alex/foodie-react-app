@@ -9,5 +9,5 @@ export const store = configureStore({
     testimonials: testimonialsReducer,
     auth: usersReducer,
   },
-  // devTools: import.meta.env.MODE === "development",
+  devTools: import.meta.env.MODE === "development",
 });
