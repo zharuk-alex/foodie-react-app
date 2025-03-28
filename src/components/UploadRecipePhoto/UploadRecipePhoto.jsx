@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import clsx from "clsx";
+import { useRef} from "react";
 import { Icon } from "../UI/index.js";
 import css from "./UploadRecipePhoto.module.css";
-import clsx from "clsx";
 
 const UploadRecipePhoto = ({
   register,
