@@ -1,7 +1,13 @@
 .wrapper {
   display: flex;
-  gap: 10px;
-  flex-direction: column;
+  gap: 1px;
   align-items: center;
   position: relative;
+  background: var(--color-white);
+  border-radius: var(--main-radius);
+  border: 1px solid var(--color-white);
+}
+
+.btn-auth{
+  padding: 10px;
 }
