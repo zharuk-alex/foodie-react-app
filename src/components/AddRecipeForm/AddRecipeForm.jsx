@@ -18,30 +18,31 @@ const AddRecipeForm = ({ categories = [], ingredients = [], onSubmitForm }) => {
     resolver: yupResolver(recipeValidationSchema),
   });
 
-  //   const [imagePreview, setImagePreview] = useState(null);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [preparationTime, setPreparationTime] = useState(1);
   const descriptionValue = watch("description", "");
   const instructionValue = watch("instruction", "");
 
-  //   const handleImageChange = (event) => {
-  //     const file = event.target.files[0];
-  //     if (file) {
-  //       setImagePreview(URL.createObjectURL(file));
-  //     }
-  //   };
-
   const addIngredient = () => {
     const ingredient = watch("ingredient");
     const quantity = watch("quantity");
+
     if (ingredient && quantity) {
       setSelectedIngredients([
         ...selectedIngredients,
         { ingredient, quantity },
       ]);
+
+      setSelectedIngredients(updatedIngredients);
+      setValue("ingredients", updatedIngredients);
       setValue("ingredient", "");
       setValue("quantity", "");
     }
+  };
+
+  const handleInputResize = (event) => {
+    event.target.style.height = "auto";
+    event.target.style.height = event.target.scrollHeight + "px";
   };
 
   const removeIngredient = (index) => {
@@ -96,6 +97,7 @@ const AddRecipeForm = ({ categories = [], ingredients = [], onSubmitForm }) => {
           maxLength="200"
           {...register("description")}
           className={errors.description ? styles.errorInput : ""}
+          onInput={handleInputResize}
         />
         <div className={styles.charCounter}>{descriptionValue.length}/200</div>
       </div>
@@ -186,6 +188,7 @@ const AddRecipeForm = ({ categories = [], ingredients = [], onSubmitForm }) => {
           maxLength="200"
           {...register("instruction")}
           className={errors.instruction ? styles.errorInput : ""}
+          onInput={handleInputResize}
         />
         <div className={styles.charCounter}>{instructionValue.length}/200</div>
       </div>

@@ -31,12 +31,36 @@ input::placeholder {
 }
 
 select {
-  padding: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  width: 315px;
+  height: 56px;
+  padding: 12px 40px 12px 16px;
   border: 1px solid #bfbebe;
   border-radius: 30px;
   font-size: 16px;
   background: transparent;
   outline: none;
+  appearance: none;
+  position: relative;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 20px;
+}
+
+select option {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+select option[value=""]:disabled {
+  color: rgba(0, 0, 0, 0.3);
+}
+select:invalid {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+select:focus:invalid {
+  color: rgba(0, 0, 0, 0.5);
 }
 
 input {
@@ -142,9 +166,10 @@ input[name="recipeName"]::placeholder {
   color: var(--color-white);
 }
 
-.time-display {
-  font-size: 18px;
-  font-weight: bold;
+.errorMessage {
+  color: rgb(199, 7, 7);
+  font-size: 14px;
+  margin-top: 4px;
 }
 
 .btnadd {
@@ -168,8 +193,13 @@ input[name="recipeName"]::placeholder {
 
 .inputWrapper textarea {
   width: 100%;
-  padding-right: 40px;
+  padding-right: 100px;
   resize: none;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  overflow: hidden;
+  min-height: 40px;
+  max-height: 300px;
 }
 
 .charCounter {
@@ -180,7 +210,8 @@ input[name="recipeName"]::placeholder {
   width: 42px;
   height: 24px;
   color: #bfbebe;
-  white-space: normal;
+  white-space: nowrap;
+  padding-left: 5px;
 }
 
 .inputWrapper textarea,
@@ -188,7 +219,6 @@ input[name="recipeName"]::placeholder {
   width: 100%;
   border: none;
   border-bottom: 2px solid #bfbebe;
-  padding: 8px 0;
   font-size: 16px;
   outline: none;
   gap: 10px;
