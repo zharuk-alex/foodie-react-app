@@ -1,11 +1,12 @@
 import { Suspense, useEffect } from "react";
 import { useMatches } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import Header from "components/Header/Header";
+import Header from "../Header/Header.jsx";
 import { AppLoader } from "components/UI";
 import { getSeo } from "../../seo";
 import { useState } from "react";
 import Footer from "../Footer/Footer.jsx";
+import {useLocation} from "react-router-dom";
 
 const AppLayout = ({ children }) => {
   const matches = useMatches();
@@ -13,7 +14,7 @@ const AppLayout = ({ children }) => {
     .routeName;
 
   const [seo, setSeo] = useState({});
-
+  const { pathname } = useLocation();
   useEffect(() => {
     const t = getSeo(currentRouteName);
     setSeo(t);
@@ -27,7 +28,7 @@ const AppLayout = ({ children }) => {
           <meta key={index} name={name} content={content} />
         ))}
       </Helmet>
-      <Header />
+      <Header className={['/'].includes(pathname) ? 'home' : ''} />
       <main>
         <Suspense fallback={<AppLoader visible={true} />}>{children}</Suspense>
       </main>
