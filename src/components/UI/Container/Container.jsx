@@ -1,8 +1,8 @@
 import styles from "./Container.module.css";
 
-const Container = ({ children, className }) => {
+const Container = ({ children, className, dataTheme }) => {
   return (
-    <div className={`${styles.container} ${className || ""}`}>{children}</div>
+    <div className={`${styles.container} ${className || ""}`} data-theme={dataTheme || ""}>{children}</div>
   );
 };
 

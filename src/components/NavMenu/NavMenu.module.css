@@ -1,18 +1,37 @@
 .nav {
   display: flex;
   margin-inline: auto;
-  gap: 32px;
+  gap: 40px;
 }
 
 .link {
-  font-family: var(--font-family);
-  font-weight: 500;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 12px;
   line-height: 1.5;
   text-align: center;
   color: var(--color-main);
+  border-radius: var(--main-radius);
+  padding: 14px;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+:global([data-theme='dark']) .link {
+  color: var(--color-white);
+}
+
+.link:hover {
+  border: 1px solid var(--color-main);
+}
+
+:global([data-theme='dark']) .link:hover {
+  border: 1px solid #ffffff33;
 }
 
 .active {
-  color: var(--color-button-hover);
+  border: 1px solid var(--color-gray);
+}
+
+:global([data-theme='dark']) .active {
+  border: 1px solid #ffffff33;
 }

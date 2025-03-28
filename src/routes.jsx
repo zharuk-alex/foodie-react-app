@@ -19,14 +19,14 @@ const routes = [
     path: "/recipe",
     element: <RecipePage />,
     title: "Recipe page",
-    isNav: true,
+    isNav: false,
     handle: { routeName: "recipe_page" },
   },
   {
     path: "/user/:id",
     element: <UserPage />,
     title: "User page",
-    isNav: true,
+    isNav: false,
     handle: { routeName: "user_page" },
   },
   {

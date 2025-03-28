@@ -29,7 +29,7 @@ const UserBar = () => {
         <Link to={`/user/${currentUser?.id}`} className={css.profileLink}>
           Profile
         </Link>
-        <Btn variant="secondary" onClick={handleLogout}>
+        <Btn variant="btn-icon" onClick={handleLogout}>
           Log Out
         </Btn>
       </>

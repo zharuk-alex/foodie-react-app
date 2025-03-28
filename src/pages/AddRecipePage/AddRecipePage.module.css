@@ -1,0 +1,10 @@
+.container {
+  margin: 0 auto;
+  padding: 80px;
+}
+
+.content {
+  display: flex;
+  gap: 80px;
+  align-items: flex-start;
+}

@@ -8,6 +8,14 @@ body {
   overflow-x: hidden;
 }
 
+#root {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 0;
+  text-align: left;
+  min-height: 100vh;
+}
 
 body {
   font-family: var(--font-family);
@@ -20,3 +28,21 @@ body {
 section {
   padding-bottom: 120px;
 }
+
+header {
+  padding-top: 40px;
+  padding-bottom: 120px;
+}
+
+header.home {
+  z-index: 1000;
+  position: sticky;
+  top: 40px;
+  padding: 0;
+}
+
+main {
+  flex-grow: 1;
+  padding-top: 40px;
+}
+

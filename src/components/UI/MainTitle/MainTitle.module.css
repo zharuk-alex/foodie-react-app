@@ -3,6 +3,7 @@
   font-size: 28px;
   line-height: 1.14286;
   color: var(--color-main);
+  text-transform: uppercase;
 }
 
 @media (min-width: 375px) {

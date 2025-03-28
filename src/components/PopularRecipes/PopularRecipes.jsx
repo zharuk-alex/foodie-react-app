@@ -8,10 +8,11 @@ import {
   removeRecipeFromFavoriteThunk,
 } from "../../store/recipes/operations";
 import { selectPopularRecipes } from "../../store/recipes/selectors";
+import { selectIsLoggedIn } from "../../store/auth/selectors";
 export default function PopularRecipes() {
   const dispatch = useDispatch();
   const recipes = useSelector(selectPopularRecipes);
-
+  const isLoggedIn = useSelector(selectIsLoggedIn)
   const handleFavorite = (id, isFavorite) => {
     if (isFavorite) {
       dispatch(removeRecipeFromFavoriteThunk(id));
@@ -22,7 +23,7 @@ export default function PopularRecipes() {
 
   useEffect(() => {
     dispatch(getPopularRecipesThunk());
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <div className={css.card}>
