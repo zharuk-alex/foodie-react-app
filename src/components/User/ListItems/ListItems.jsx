@@ -3,7 +3,12 @@ import { RecipePreview, UserCard } from "components/User";
 
 const ListItems = ({ tab, items }) => {
   if (!items || items.length === 0) {
-    return <div className={css.empty}>Nothing to show here.</div>;
+    return (
+      <div className={css.empty}>
+        Nothing has been added to your recipes list yet. Please browse our
+        recipes and add your favorites for easy access in the future.
+      </div>
+    );
   }
 
   const renderContent = () => {

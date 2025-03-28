@@ -6,7 +6,7 @@ const PathInfo = ({ current }) => {
   return (
     <div className={css.path}>
       <Link to="/" className={css.link}>
-        Home
+        HOME
       </Link>
       {" / "}
       <span>{current}</span>
