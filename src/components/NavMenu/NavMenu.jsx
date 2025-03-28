@@ -1,26 +1,33 @@
-import { NavLink } from "react-router-dom";
-import routes from "../../routes.jsx";
-import { useMemo } from "react";
-import css from "./NavMenu.module.css";
-import clsx from "clsx";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import clsx from 'clsx';
+import css from './NavMenu.module.css';
 
-const NavMenu = () => {
-  const navLinks = useMemo(
-    () => routes?.filter(({ isNav }) => isNav) || [],
-    [routes]
-  );
-
-  const buildLinkClass = ({ isActive }) => {
-    return clsx(css.link, isActive && css.active);
-  };
-
+const NavMenu = ({ isInverse }) => {
   return (
     <nav className={css.nav}>
-      {navLinks.map(({ path, title }) => (
-        <NavLink key={path} to={path} className={buildLinkClass} end>
-          {title}
-        </NavLink>
-      ))}
+      <ul className={css.navLinks}>
+        <li>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              clsx(css.navLink, isActive && css.active, isInverse && css.inverseNavLink)
+            }
+          >
+            Home
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/recipe/add"
+            className={({ isActive }) =>
+              clsx(css.navLink, isActive && css.active, isInverse && css.inverseNavLink)
+            }
+          >
+            Add recipe
+          </NavLink>
+        </li>
+      </ul>
     </nav>
   );
 };
