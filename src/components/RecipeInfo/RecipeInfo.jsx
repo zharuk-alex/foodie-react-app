@@ -6,7 +6,7 @@ import RecipePreparation from "../RecipePreparation/RecipePreparation";
 import { useDispatch, useSelector } from "react-redux";
 import { addRecipeToFavoriteThunk, removeRecipeFromFavoriteThunk } from "../../store/recipes/operations";
 
-export default function RecipeInfo({ recipe }) {
+export default function RecipeInfo({ recipe,isLoggedIn }) {
   const dispatch = useDispatch();
 
   const handleFavorite = (id, isFavorite) => {
@@ -21,7 +21,7 @@ export default function RecipeInfo({ recipe }) {
     <div className={css.card}>
       <img className={css.recipeImage} src={recipe?.thumb} alt="" />
       <div className={css.content}>
-        <RecipeMainInfo recipe={recipe} />
+        <RecipeMainInfo recipe={recipe} isLoggedIn={isLoggedIn} />
         <RecipeIngredients ingredients={recipe?.ingredients} />
         <RecipePreparation
           id={recipe?.id}
