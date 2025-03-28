@@ -5,6 +5,7 @@ import Header from "components/Header/Header";
 import { AppLoader } from "components/UI";
 import { getSeo } from "../../seo";
 import { useState } from "react";
+import Footer from "../Footer/Footer.jsx";
 
 const AppLayout = ({ children }) => {
   const matches = useMatches();
@@ -30,6 +31,7 @@ const AppLayout = ({ children }) => {
       <main>
         <Suspense fallback={<AppLoader visible={true} />}>{children}</Suspense>
       </main>
+      <Footer />
     </>
   );
 };
