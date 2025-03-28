@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import PathInfo from "../../components/PathInfo/PathInfo";
 import PageTitle from "../../components/PageTitle/PageTitle";
+import AddRecipeForm from "../../components/AddRecipeForm/AddRecipeForm";
 import styles from "./AddRecipePage.module.css";
 
 const pageTitle = {
@@ -26,7 +27,7 @@ const AddRecipePage = () => {
     <div className={styles.container}>
       <PathInfo pages={pages} />
       <PageTitle {...pageTitle} />
-      {/* <AddRecipeForm /> */}
+      <AddRecipeForm />
     </div>
   );
 };
