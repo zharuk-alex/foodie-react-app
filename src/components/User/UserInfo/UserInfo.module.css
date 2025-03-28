@@ -1,0 +1,31 @@
+.userWrapper {
+  width: 343px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.name {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.userInfo {
+  border: 1px solid;
+  border-radius: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-left: 69px;
+  padding-right: 69px;
+}
+
+@media (min-width: 768px) {
+  .userWrapper {
+    width: 394px;
+  }
+}

@@ -1,23 +1,20 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import clsx from 'clsx';
-import Logo from '../Logo/Logo';
-import css from './Header.module.css';
+import Logo from 'components/Logo/Logo';
 import NavMenu from '../NavMenu/NavMenu';
+import UserBar from '../UserBar/UserBar';
+import AuthBar from '../AuthBar/AuthBar';
+import { useSelector } from 'react-redux';
+import css from './Header.module.css';
+import { clsx } from 'clsx';
 
 const Header = () => {
-  const location = useLocation();
-  const isInverse = location.pathname === '/';
-
+  const { isLoggedIn } = useSelector(state => state.auth);
   return (
-    <header>
-      <div className={css.headerContainer}>
-        <div
-          className={clsx(css.header, isInverse)}
-        >
-          <Logo />
-          <NavMenu isInverse={isInverse} />
-        </div>
+    <header className={css.header}>
+      <div className={clsx('container', css.wrapper)}>
+        <Logo className={css.logo} />
+        <NavMenu></NavMenu>
+        {isLoggedIn ? <UserBar></UserBar> : <AuthBar></AuthBar>}
       </div>
     </header>
   );

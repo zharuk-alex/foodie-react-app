@@ -6,13 +6,9 @@ const UserInfo = ({ user, isOwnProfile, onAvatarChange }) => {
 
   const {
     avatarUrl,
+    name,
     email,
-    stats: {
-      recipes = 0,
-      favorites = 0,
-      followers = 0,
-      following = 0,
-    } = {},
+    stats: { recipes = 0, favorites = 0, followers = 0, following = 0 } = {},
   } = user;
 
   const handleFileChange = (e) => {
@@ -23,33 +19,46 @@ const UserInfo = ({ user, isOwnProfile, onAvatarChange }) => {
   };
 
   return (
-    <div className={css.userInfo}>
-      <div className={css.avatarWrapper}>
-        <img
-          src={avatarUrl || defaultAvatar}
-          alt="User Avatar"
-          className={css.avatar}
-        />
-        {isOwnProfile && (
-          <label className={css.uploadLabel}>
-            Change Avatar
-            <input
-              type="file"
-              accept="image/*"
-              className={css.fileInput}
-              onChange={handleFileChange}
-            />
-          </label>
-        )}
-      </div>
-      <div className={css.info}>
-        <p className={css.email}><strong>Email:</strong> {email}</p>
-        <ul className={css.stats}>
-          <li><strong>Recipes:</strong> {recipes}</li>
-          <li><strong>Favorites:</strong> {favorites}</li>
-          <li><strong>Followers:</strong> {followers}</li>
-          <li><strong>Following:</strong> {following}</li>
-        </ul>
+    <div className={css.userWrapper}>
+      <div className={css.userInfo}>
+        <div className={css.avatarWrapper}>
+          <img
+            src={avatarUrl || defaultAvatar}
+            alt="User Avatar"
+            className={css.avatar}
+          />
+          {isOwnProfile && (
+            <label className={css.uploadLabel}>
+              Change Avatar
+              <input
+                type="file"
+                accept="image/*"
+                className={css.fileInput}
+                onChange={handleFileChange}
+              />
+            </label>
+          )}
+        </div>
+        <div className={css.info}>
+          <p className={css.name}>{name}</p>
+          <ul className={css.stats}>
+            <li>
+              Email: <strong>{email}</strong>
+            </li>
+            <li>
+              Added recipes: <strong>{recipes}</strong>
+            </li>
+            <li>
+              Favorites: <strong>{favorites}</strong>
+            </li>
+            <li>
+              Followers: <strong>{followers}</strong>
+            </li>
+            <li>
+              Following: <strong>{following}</strong>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );

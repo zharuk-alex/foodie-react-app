@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { MainTitle, Subtitle, Modal, Container } from "components/UI";
+import { MainTitle, Subtitle, Modal, Container, Section } from "components/UI";
 import {
   UserInfo,
   FollowButton,
@@ -152,60 +152,72 @@ const UserPage = () => {
 
   return (
     <>
-      <Container>
-        <PathInfo current="User Profile" />
-        <MainTitle
-          title={
-            isOwnProfile ? "My Profile" : `${fullUserDetails?.name}'s Profile`
-          }
-        />
-        <Subtitle subtitle="Welcome to the user profile page" />
+      {/* Section Title */}
+      <Section className={css.title}>
+        <Container>
+          <PathInfo current="PROFILE" />
+          <MainTitle>PROFILE</MainTitle>
+          <Subtitle>
+            Reveal your culinary art, share your favorite recipe and create
+            gastronomic masterpieces with us.
+          </Subtitle>
+        </Container>
+      </Section>
 
-        <UserInfo
-          user={fullUserDetails}
-          isOwnProfile={isOwnProfile}
-          onAvatarChange={handleAvatarChange}
-        />
-
-        {isOwnProfile ? (
-          <button type="button" onClick={() => setModalOpen(true)}>
-            Log Out
-          </button>
-        ) : (
-          <FollowButton
-            targetUserId={id}
-            isFollowing={fullUserDetails?.isFollowing}
+      {/* Section User */}
+      <Section>
+        <Container>
+          <UserInfo
+            user={fullUserDetails}
+            isOwnProfile={isOwnProfile}
+            onAvatarChange={handleAvatarChange}
           />
-        )}
 
-        <TabsList
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          isOwnProfile={isOwnProfile}
-        />
+          {isOwnProfile ? (
+            <button type="button" onClick={() => setModalOpen(true)}>
+              Log Out
+            </button>
+          ) : (
+            <FollowButton
+              targetUserId={id}
+              isFollowing={fullUserDetails?.isFollowing}
+            />
+          )}
+        </Container>
+      </Section>
 
-        <ListItems
-          tab={activeTab}
-          items={getTabItems()}
-          onDelete={(recipeId) => {
-            if (activeTab === "my-recipes") {
-              dispatch(removeRecipeThunk(recipeId));
-            } else if (activeTab === "favorites") {
-              dispatch(removeRecipeFromFavoriteThunk(recipeId));
-            }
-          }}
-        />
+      {/* Section Tabs */}
+      <Section>
+        <Container>
+          <TabsList
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            isOwnProfile={isOwnProfile}
+          />
 
-        <ListPagination
-          currentPage={recipePagination.page}
-          totalPages={recipePagination.totalPages}
-          onPageChange={setCurrentPage}
-        />
+          <ListItems
+            tab={activeTab}
+            items={getTabItems()}
+            onDelete={(recipeId) => {
+              if (activeTab === "my-recipes") {
+                dispatch(removeRecipeThunk(recipeId));
+              } else if (activeTab === "favorites") {
+                dispatch(removeRecipeFromFavoriteThunk(recipeId));
+              }
+            }}
+          />
 
-        <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-          {/* <LogOutModal /> */}
-        </Modal>
-      </Container>
+          <ListPagination
+            currentPage={recipePagination.page}
+            totalPages={recipePagination.totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </Container>
+      </Section>
+
+      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+        {/* <LogOutModal /> */}
+      </Modal>
     </>
   );
 };
