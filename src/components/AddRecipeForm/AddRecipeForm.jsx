@@ -73,7 +73,6 @@ const AddRecipeForm = ({ categories = [], ingredients = [], onSubmitForm }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
       <UploadRecipePhoto register={register} setValue={setValue} previewImage={previewImage} setPreviewImage={setPreviewImage} />
-
       <div className={styles.formContainer}>
         <input type="text" placeholder="The Name of the Recipe" {...register('recipeName')} className={errors.recipeName ? styles.errorInput : ''} />
         {errors.recipeName && <p className={styles.errorMessage}>{errors.recipeName.message}</p>}

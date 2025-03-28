@@ -117,16 +117,6 @@ const UserPage = () => {
     }
   }, [activeTab, currentPage, dispatch, id, isOwnProfile]);
 
-  // Upload handler
-  const handleAvatarChange = useCallback(
-    (file) => {
-      const formData = new FormData();
-      formData.append("avatar", file);
-      dispatch(updateAvatarThunk(formData));
-    },
-    [dispatch]
-  );
-
   const getTabItems = () => {
     switch (activeTab) {
       case "followers":
@@ -170,7 +160,6 @@ const UserPage = () => {
           <UserInfo
             user={fullUserDetails}
             isOwnProfile={isOwnProfile}
-            onAvatarChange={handleAvatarChange}
           />
 
           {isOwnProfile ? (
