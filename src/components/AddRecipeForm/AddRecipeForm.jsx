@@ -3,110 +3,202 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { recipeValidationSchema } from "../../validation/recipeValidation";
 import Btn from "../UI/Btn/Btn";
-import ClearButton from "../UI/ClearBtn/ClearButton";
+import { Plus, Minus, Trash } from "lucide-react";
 import styles from "./AddRecipeForm.module.css";
 
-const AddRecipeForm = () => {
+const AddRecipeForm = ({ categories = [], ingredients = [], onSubmitForm }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
     watch,
+    setValue,
   } = useForm({
     resolver: yupResolver(recipeValidationSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // Логіка для відправки даних на бекенд.
-  };
-
-  const handleClearForm = () => {
-    reset(); // очищує всю форму
-  };
-
+  //   const [imagePreview, setImagePreview] = useState(null);
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [preparationTime, setPreparationTime] = useState(1);
+  const descriptionValue = watch("description", "");
   const instructionValue = watch("instruction", "");
+
+  //   const handleImageChange = (event) => {
+  //     const file = event.target.files[0];
+  //     if (file) {
+  //       setImagePreview(URL.createObjectURL(file));
+  //     }
+  //   };
+
+  const addIngredient = () => {
+    const ingredient = watch("ingredient");
+    const quantity = watch("quantity");
+    if (ingredient && quantity) {
+      setSelectedIngredients([
+        ...selectedIngredients,
+        { ingredient, quantity },
+      ]);
+      setValue("ingredient", "");
+      setValue("quantity", "");
+    }
+  };
+
+  const removeIngredient = (index) => {
+    setSelectedIngredients(selectedIngredients.filter((_, i) => i !== index));
+  };
+
+  const adjustPreparationTime = (delta) => {
+    setPreparationTime((prev) => Math.max(1, prev + delta));
+  };
+
+  const onSubmit = (data) => {
+    const formData = new FormData();
+    formData.append("recipeName", data.recipeName);
+    formData.append("description", data.description);
+    formData.append("category", data.category);
+    formData.append("preparationTime", preparationTime);
+    formData.append("instruction", data.instruction);
+    if (data.image[0]) formData.append("image", data.image[0]);
+    selectedIngredients.forEach((item, index) => {
+      formData.append(`ingredients[${index}][name]`, item.ingredient);
+      formData.append(`ingredients[${index}][quantity]`, item.quantity);
+    });
+
+    onSubmitForm(formData);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      <div>
-        <label htmlFor="recipeName">Recipe Name</label>
-        <input
-          type="text"
-          id="recipeName"
-          {...register("recipeName")}
-          className={errors.recipeName ? styles.errorInput : ""}
-        />
-        {errors.recipeName && (
-          <p className={styles.errorMessage}>{errors.recipeName.message}</p>
-        )}
-      </div>
+      {/* <input
+        type="file"
+        accept="image/*"
+        {...register("image")}
+        onChange={handleImageChange}
+      />
+      {imagePreview && (
+        <img src={imagePreview} alt="Preview" className={styles.imagePreview} />
+      )} */}
 
-      <div>
-        <label htmlFor="description">Description</label>
+      <input
+        type="text"
+        placeholder="The Name of the Recipe"
+        {...register("recipeName")}
+        className={errors.recipeName ? styles.errorInput : ""}
+      />
+      {errors.recipeName && (
+        <p className={styles.errorMessage}>{errors.recipeName.message}</p>
+      )}
+
+      <div className={styles.inputWrapper}>
         <textarea
-          id="description"
+          placeholder="Enter a description of the dish"
+          maxLength="200"
           {...register("description")}
           className={errors.description ? styles.errorInput : ""}
         />
-        {errors.description && (
-          <p className={styles.errorMessage}>{errors.description.message}</p>
-        )}
+        <div className={styles.charCounter}>{descriptionValue.length}/200</div>
       </div>
 
-      <div>
+      <div className={styles.categorytimeName}>
         <label htmlFor="category">Category</label>
+        <label htmlFor="preparationtime">COOKING TIME</label>
+      </div>
+
+      <div className={styles.categorytimecontainer}>
         <select
-          id="category"
           {...register("category")}
           className={errors.category ? styles.errorInput : ""}
         >
-          <option value="">Select Category</option>
-          <option value="vegetarian">Vegetarian</option>
-          <option value="non-vegetarian">Non-Vegetarian</option>
+          <option value="" disabled hidden>
+            Select a category
+          </option>
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
         </select>
-        {errors.category && (
-          <p className={styles.errorMessage}>{errors.category.message}</p>
-        )}
+
+        <div className={styles.timeContainer}>
+          <button
+            className={styles.cookingTimeBtn}
+            type="button"
+            onClick={() => adjustPreparationTime(-1)}
+          >
+            <Minus size={22} />
+          </button>
+
+          <div className={styles.cookingTimeCount}>
+            <span>{preparationTime}</span>
+            <span>min</span>
+          </div>
+          <button
+            className={styles.cookingTimeBtn}
+            type="button"
+            onClick={() => adjustPreparationTime(1)}
+          >
+            <Plus size={22} />
+          </button>
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="preparationTime">Preparation Time (min)</label>
+      <label htmlFor="ingredient">Ingredients</label>
+      <div className={styles.IngredientContainer}>
+        <select {...register("ingredient")}>
+          <option value="" disabled hidden>
+            Add the ingredient
+          </option>
+          {ingredients.map((ing) => (
+            <option key={ing} value={ing}>
+              {ing}
+            </option>
+          ))}
+        </select>
         <input
-          type="number"
-          id="preparationTime"
-          {...register("preparationTime")}
-          className={errors.preparationTime ? styles.errorInput : ""}
+          type="text"
+          placeholder="Enter quantity"
+          {...register("quantity")}
         />
-        {errors.preparationTime && (
-          <p className={styles.errorMessage}>
-            {errors.preparationTime.message}
-          </p>
-        )}
       </div>
+      <Btn className={styles.btnadd} type="button" onClick={addIngredient}>
+        Add ingredient <Plus size={22} />
+      </Btn>
 
-      <div>
-        <label htmlFor="instruction">Instructions</label>
+      <ul>
+        {selectedIngredients.map((item, index) => (
+          <li key={index}>
+            {item.ingredient} - {item.quantity}
+            <button type="button" onClick={() => removeIngredient(index)}>
+              Remove
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <div className={styles.inputWrapper}>
+        <label className={styles.recipeWrapper} htmlFor="instruction">
+          Recipe Preparation
+        </label>
+
         <textarea
-          id="instruction"
-          {...register("instruction")}
+          placeholder="Enter recipe"
           maxLength="200"
+          {...register("instruction")}
           className={errors.instruction ? styles.errorInput : ""}
         />
-        <p className={styles.characterCount}>
-          {200 - instructionValue.length} characters remaining
-        </p>
-        {errors.instruction && (
-          <p className={styles.errorMessage}>{errors.instruction.message}</p>
-        )}
+        <div className={styles.charCounter}>{instructionValue.length}/200</div>
       </div>
 
-      <div>
-        <Btn type="submit" variant="main" disabled={false}>
-          Publish
-        </Btn>{" "}
-        <ClearButton onClick={handleClearForm} />
+      <div className={styles.publishContainer}>
+        <button
+          className={styles.cookingTimeBtn}
+          type="button"
+          onClick={() => reset()}
+        >
+          <Trash size={18} />
+        </button>
+        <Btn type="submit">Publish</Btn>
       </div>
     </form>
   );
