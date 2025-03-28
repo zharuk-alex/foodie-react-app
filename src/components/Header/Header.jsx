@@ -4,15 +4,15 @@ import NavMenu from '../NavMenu/NavMenu';
 import UserBar from '../UserBar/UserBar';
 import AuthBar from '../AuthBar/AuthBar';
 import css from './Header.module.css';
-import {Container} from "../UI/index.js";
+import { Container } from '../UI/index.js';
 import { useSelector } from 'react-redux';
-import {useLocation} from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
-const Header = () => {
+const Header = ({ className }) => {
   const { pathname } = useLocation();
   const { isLoggedIn } = useSelector(state => state.auth);
   return (
-    <header>
+    <header className={className}>
       <Container className={css.header} dataTheme={['/'].includes(pathname) ? 'dark' : ''}>
         <Logo />
         <NavMenu />
