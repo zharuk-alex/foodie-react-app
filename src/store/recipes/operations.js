@@ -57,8 +57,10 @@ export const fetchRecipes = createAsyncThunk(
 
 export const getRecipeByIdThunk = createAsyncThunk(
   "recipes/getById",
-  async (id, { rejectWithValue }) => {
+  async (id, { getState,rejectWithValue }) => {
     try {
+      const token = getState().auth.token;
+      setToken(token);
       const { data } = await api.get(API_ROUTES.RECIPES.RECIPE_WITH_ID(id));
       return data;
     } catch (error) {
@@ -69,8 +71,10 @@ export const getRecipeByIdThunk = createAsyncThunk(
 
 export const getPopularRecipesThunk = createAsyncThunk(
   "recipes/getPopularRecipes",
-  async (limit = 5, { rejectWithValue }) => {
+  async (limit = 4, { getState,rejectWithValue }) => {
     try {
+      const token = getState().auth.token;
+      setToken(token);
       const { data } = await api.get(API_ROUTES.RECIPES.POPULAR, {
         params: { limit },
       });
@@ -170,7 +174,7 @@ export const removeRecipeFromFavoriteThunk = createAsyncThunk(
       const token = getState().auth.token;
       setToken(token);
       const { data } = await api.delete(API_ROUTES.RECIPES.FAVORITE(id));
-      return data;
+      return {id};
     } catch (error) {
       return rejectWithValue(error.message);
     }
