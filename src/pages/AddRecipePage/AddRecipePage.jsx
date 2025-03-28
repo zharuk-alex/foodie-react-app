@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import PathInfo from "../../components/PathInfo/PathInfo";
 import PageTitle from "../../components/PageTitle/PageTitle";
 import AddRecipeForm from "../../components/AddRecipeForm/AddRecipeForm";
-// import UploadPhoto from "../../components/UploadPhoto/UploadPhoto";
 import styles from "./AddRecipePage.module.css";
+import { Container } from "../../components/UI/index.js";
 
 const pageTitle = {
   title: "Add recipe",
@@ -25,14 +25,13 @@ const AddRecipePage = () => {
   ];
 
   return (
-    <div className={styles.container}>
+    <Container>
       <PathInfo pages={pages} />
       <PageTitle {...pageTitle} />
       <div className={styles.content}>
-        {/* <UploadPhoto /> */}
         <AddRecipeForm />
       </div>
-    </div>
+    </Container>
   );
 };
 

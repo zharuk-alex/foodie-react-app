@@ -1,44 +1,25 @@
-import css from "./UserInfo.module.css";
-import defaultAvatar from "images/avatar/default_avatar.jpg";
+import UploadUserAvatar from '../../UploadUserAvatar/UploadUserAvatar.jsx';
+import css from './UserInfo.module.css';
+import defaultAvatar from 'images/avatar/default_avatar.jpg';
 
-const UserInfo = ({ user, isOwnProfile, onAvatarChange }) => {
+const UserInfo = ({ user, isOwnProfile }) => {
   if (!user) return null;
 
-  const {
-    avatarUrl,
-    name,
-    email,
-    stats: { recipes = 0, favorites = 0, followers = 0, following = 0 } = {},
-  } = user;
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file && onAvatarChange) {
-      onAvatarChange(file);
-    }
-  };
+  const { avatarUrl, name, email, stats: { recipes = 0, favorites = 0, followers = 0, following = 0 } = {} } = user;
 
   return (
     <div className={css.userWrapper}>
       <div className={css.userInfo}>
-        <div className={css.avatarWrapper}>
-          <img
-            src={avatarUrl || defaultAvatar}
-            alt="User Avatar"
-            className={css.avatar}
-          />
+        <UploadUserAvatar avatar={avatarUrl || defaultAvatar} />
+        {/* <div className={css.avatarWrapper}>
+          <img src={avatarUrl || defaultAvatar} alt="User Avatar" className={css.avatar} />
           {isOwnProfile && (
             <label className={css.uploadLabel}>
               Change Avatar
-              <input
-                type="file"
-                accept="image/*"
-                className={css.fileInput}
-                onChange={handleFileChange}
-              />
+              <input type="file" accept="image/*" className={css.fileInput} onChange={handleFileChange} />
             </label>
           )}
-        </div>
+        </div> */}
         <div className={css.info}>
           <p className={css.name}>{name}</p>
           <ul className={css.stats}>
