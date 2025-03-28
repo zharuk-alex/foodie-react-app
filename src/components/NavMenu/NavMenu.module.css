@@ -1,18 +1,39 @@
 .nav {
-  display: flex;
-  margin-inline: auto;
-  gap: 32px;
+  animation: global(fadeIn) 0.5s ease-in-out;
 }
 
-.link {
-  font-family: var(--font-family);
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.5;
-  text-align: center;
-  color: var(--color-main);
+.navLink {
+  border-radius: var(--main-radius);
+  padding: 14px;
+  text-transform: uppercase;
+  color: var(--color-black);
+  border: 1px solid transparent;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.navLink:hover {
+  border: 1px solid var(--color-gray);
+}
+
+.navLinks {
+  display: flex;
+  gap: 40px;
 }
 
 .active {
-  color: var(--color-button-hover);
+  border: 1px solid var(--color-gray);
+}
+
+.inverseNavLink {
+  color: var(--color-white);
+}
+
+.inverseNavLink.active {
+  border: 1px solid var(--color-white);
+}
+
+.inverseNavLink:hover {
+  border: 1px solid var(--color-white);
 }

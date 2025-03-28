@@ -1,26 +1,13 @@
 .header {
-  border-bottom: 1px solid var(--color-badges);
-  padding: 24px 64px;
-  height: 72px;
-  background: var(--color-inputs);
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1;
-}
-
-.wrapper {
   display: flex;
   align-items: center;
-  position: relative;
+  justify-content: center;
+  width: 100%;
 }
 
-.logo {
-  position: absolute;
-  top: 0;
-  left: var(--md-padding);
-  display: inline-flex;
-  height: 100%;
-  align-items: center;
+.headerContainer {
+  padding: 20px 0;
+  z-index: 1;
+  position: relative;
+  margin-top: 40px;
 }
