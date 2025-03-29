@@ -3,6 +3,7 @@ import css from "./RecipeMainInfo.module.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setModalLoginOpen } from "../../store/modal/operations";
+import { Section } from "../UI";
 export default function RecipeMainInfo({ recipe, isLoggedIn }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();

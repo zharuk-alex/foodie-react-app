@@ -3,6 +3,20 @@
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
+  gap: 32px;
+}
+
+@media screen and (min-width: 768px) {
+  .card {
+    gap: 40px;
+  }
+}
+
+.preparation {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
   gap: 20px;
 }
 
@@ -22,6 +36,14 @@
     font-size: 20px;
     line-height: 1.2;
   }
+}
+
+.contents {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .content {
@@ -63,4 +85,18 @@
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--color-gray);
+  height: 48px;
+}
+
+@media screen and (min-width: 768px) {
+  .button {
+    height: 56px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}
+@media screen and (min-width: 1440px) {
+  .button {
+    color: #1a1a1a;
+  }
 }
