@@ -1,25 +1,23 @@
-import "@fontsource/mulish";
-import "@fontsource/mulish/500.css";
-import "@fontsource/mulish/700.css";
-import "@fontsource/mulish/800.css";
-import Layout from "components/AppLayout/AppLayout";
-import routes from "./routes.jsx";
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
-import { Suspense } from "react";
-import { AppLoader } from "components/UI";
-
-const AppLayout = () => (
-  <Layout>
-    <Suspense fallback={<AppLoader visible={true} />}>
-      <Outlet />
-    </Suspense>
-  </Layout>
-);
+import '@fontsource/mulish';
+import '@fontsource/mulish/500.css';
+import '@fontsource/mulish/700.css';
+import '@fontsource/mulish/800.css';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { Suspense } from 'react';
+import routes from './routes.jsx';
+import Layout from 'components/AppLayout/AppLayout';
+import { AppLoader } from 'components/UI';
 
 const App = () => {
   const AppRouter = createBrowserRouter([
     {
-      element: <AppLayout />,
+      element: (
+        <Suspense fallback={<AppLoader visible={true} />}>
+          <Layout>
+            <Outlet />
+          </Layout>
+        </Suspense>
+      ),
       children: [...routes],
     },
   ]);
