@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { MainTitle, Subtitle, Modal, Container, Section } from 'components/UI';
 import { UserInfo, LogoutFollowButton, TabsList, ListItems, ListPagination, PathInfo } from 'components/User';
-// import { LogOutModal } from "components/UI";
 
 import { getFullUserDetailsThunk, getFollowersThunk, getFollowingThunk } from 'store/auth/operations';
 
@@ -147,10 +146,6 @@ const UserPage = () => {
           <ListPagination currentPage={recipePagination.page} totalPages={recipePagination.totalPages} onPageChange={setCurrentPage} />
         </Container>
       </Section>
-
-      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-        {/* <LogOutModal /> */}
-      </Modal>
     </>
   );
 };

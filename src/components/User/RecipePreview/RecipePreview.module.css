@@ -1,0 +1,42 @@
+.card {
+  margin-top: 32px;
+  height: 75px;
+  display: flex;
+  overflow: hidden;
+}
+
+.image {
+  height: 75px;
+  width: 75px;
+  border-radius: 15px;
+  margin-right: 10px;
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+  margin-left: 16px;
+}
+
+.title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.2%;
+  color: var(--color-main);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.description {
+  overflow: hidden;
+  word-break: break-word;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -0.2%;
+  color: var(--color-gray);
+}

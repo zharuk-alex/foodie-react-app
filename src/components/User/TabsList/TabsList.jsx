@@ -9,14 +9,14 @@ const TabsList = ({ activeTab, setActiveTab, isOwnProfile }) => {
 
   const tabs = isOwnProfile
     ? [
-        { label: "My Recipes", key: "my-recipes" },
-        { label: "My Favorites", key: "favorites" },
-        { label: "Followers", key: "followers" },
-        { label: "Following", key: "following" },
+        { label: "MY RECIPES", key: "my-recipes" },
+        { label: "MY FAVORITES", key: "favorites" },
+        { label: "FOLLOWERS", key: "followers" },
+        { label: "FOLLOWING", key: "following" },
       ]
     : [
-        { label: "Recipes", key: "recipes" },
-        { label: "Followers", key: "followers" },
+        { label: "RECIPES", key: "recipes" },
+        { label: "FOLLOWERS", key: "followers" },
       ];
 
   return (

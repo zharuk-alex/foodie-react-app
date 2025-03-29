@@ -4,7 +4,7 @@ import defaultAvatar from 'images/avatar/default_avatar.jpg';
 
 const UserInfo = ({ user, isOwnProfile }) => {
   if (!user) return null;
-  console.log('-->', user);
+
   const { avatar, name, email, totalFavoriteRecipes = 0, totalFollowers = 0, totalFollowing = 0, totalRecipes = 0 } = user;
 
   return (
