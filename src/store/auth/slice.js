@@ -29,6 +29,7 @@ const usersSlice = createSlice({
     cleanFullUserDetails: (state) => {
       state.fullUserDetails = {};
     },
+    forceLogout: () => initialState,
   },
   extraReducers: (builder) =>
     builder
@@ -124,6 +125,7 @@ export const {
   cleanFollowers,
   cleanFollowing,
   cleanFullUserDetails,
+  forceLogout
 } = usersSlice.actions;
 
 export const usersReducer = usersSlice.reducer;
