@@ -3,7 +3,7 @@
   --indent: 20px;
   display: flex;
   flex-wrap: wrap;
-  gap: 40px var(--indent);
+  gap: 32px;
 }
 
 .item {
@@ -12,7 +12,9 @@
 
 @media (min-width: 768px) {
   .itemsSet {
+    --indent: 20px;
     --items: 2;
+    gap: 40px var(--indent);
   }
 }
 
