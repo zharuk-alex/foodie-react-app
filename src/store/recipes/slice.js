@@ -47,6 +47,9 @@ const recipesSlice = createSlice({
     cleanSingleRecipe: state => {
       state.singleRecipe = {};
     },
+    removeRecipeLocally: (state, action) => {
+      state.recipes = state.recipes.filter(recipe => recipe.id !== action.payload);
+    },
   },
   extraReducers: builder => {
     builder
@@ -182,5 +185,6 @@ const recipesSlice = createSlice({
   },
 });
 
-export const { clearCategories, setAppendMode, cleanPagination, cleanRecipes, cleanSingleRecipe, cleanPopularRecipes } = recipesSlice.actions;
+export const { clearCategories, setAppendMode, cleanPagination, cleanRecipes, cleanSingleRecipe, cleanPopularRecipes, removeRecipeLocally } =
+  recipesSlice.actions;
 export const recipesReducer = recipesSlice.reducer;
