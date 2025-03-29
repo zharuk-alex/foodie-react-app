@@ -108,6 +108,13 @@ const recipesSlice = createSlice({
           popularRecipe.isFavorite = true;
         }
 
+        const recipe = state.recipes.find(
+          (r) => r.id === payload.id || r.id === payload.recipeId
+        );
+        if (recipe) {
+          recipe.isFavorite = true;
+        }
+
         state.isLoading = false;
         state.error = null;
       })
@@ -123,6 +130,14 @@ const recipesSlice = createSlice({
           if (popularRecipe) {
             popularRecipe.isFavorite = false;
           }
+
+          const recipe = state.recipes.find(
+            (r) => r.id === payload.id || r.id === payload.recipeId
+          );
+          if (recipe) {
+            recipe.isFavorite = false;
+          }
+
           state.isLoading = false;
           state.error = null;
         }
