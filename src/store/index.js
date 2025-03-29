@@ -6,6 +6,7 @@ import { usersReducer } from "./auth/slice.js";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
+import { setupInterceptors } from '../api/setupInterceptors';
 
 
 const authPersistConfig = {
@@ -32,4 +33,5 @@ export const store = configureStore({
   devTools: import.meta.env.MODE === "development",
 });
 
+setupInterceptors(store);
 export const persistor = persistStore(store);

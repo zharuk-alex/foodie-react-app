@@ -34,6 +34,7 @@ const usersSlice = createSlice({
         state.fullUserDetails.isFollowing = action.payload.isFollowing;
       }
     },
+    forceLogout: () => initialState,
   },
   extraReducers: builder =>
     builder
@@ -117,6 +118,13 @@ const usersSlice = createSlice({
       ),
 });
 
-export const { cleanPagination, cleanFollowers, cleanFollowing, cleanFullUserDetails, updateFollowStatus } = usersSlice.actions;
+export const {
+  cleanPagination,
+  cleanFollowers,
+  cleanFollowing,
+  cleanFullUserDetails,
+  forceLogout,
+  updateFollowStatus,
+} = usersSlice.actions;
 
 export const usersReducer = usersSlice.reducer;
