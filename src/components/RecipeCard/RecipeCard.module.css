@@ -51,3 +51,24 @@
 .btn {
   color: var(--color-main)
 }
+
+.iconFav {
+  color: var(--color-white);
+  stroke: var(--color-main);
+  stroke-width: 2;
+}
+
+.iconIsFav {
+  composes: iconFav;
+  color: var(--color-main);
+}
+
+.btn:hover .iconFav {
+  color: var(--color-main);
+  stroke: var(--color-white);
+}
+
+.btn:hover .iconIsFav {
+  color: var(--color-white);
+  stroke: var(--color-white);
+}

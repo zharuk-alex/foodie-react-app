@@ -40,10 +40,12 @@ export const fetchIngredients = createAsyncThunk(
     }
   }
 );
-
+      
 export const fetchRecipes = createAsyncThunk(
   "recipes/fetchRecipes",
-  async (params, { rejectWithValue }) => {
+  async (params, { getState, rejectWithValue }) => {
+    const token = getState().auth.token;
+    setToken(token);
     const query = new URLSearchParams(params).toString();
     try {
       const response = await api.get(`/recipes/?${query}`);
