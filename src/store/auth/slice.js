@@ -46,6 +46,7 @@ const usersSlice = createSlice({
       })
       .addCase(updateAvatarThunk.fulfilled, (state, { payload }) => {
         state.currentUser.avatarURL = payload.avatarURL;
+        state.fullUserDetails.avatar = payload.avatarURL;
         state.isLoading = false;
         state.error = null;
       })
