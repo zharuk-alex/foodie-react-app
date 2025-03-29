@@ -22,8 +22,10 @@ const UploadUserAvatar = ({ avatar }) => {
     setPreviewImage(imageUrl);
     const formData = new FormData();
     formData.append('avatar', file);
-    const data = await dispatch(updateAvatarThunk(formData));
-    if (data?.payload?.avatarUR) setPreviewImage(data.payload.avatarURL);
+    dispatch(updateAvatarThunk(formData));
+    return () => {
+      URL.revokeObjectURL(imageUrl);
+    };
   };
 
   return (

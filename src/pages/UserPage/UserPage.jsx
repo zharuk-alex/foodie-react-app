@@ -18,6 +18,8 @@ import { getOwnRecipesThunk, getFavoriteRecipesThunk, fetchRecipes, removeRecipe
 import { selectRecipes as selectRecipeList, selectPagination as selectRecipePagination } from 'store/recipes/selectors';
 
 import { cleanPagination as cleanRecipesPagination, cleanRecipes } from 'store/recipes/slice';
+import { selectIsLoading } from '../../store/auth/selectors.js';
+import { AppLoader } from '../../components/UI/index.js';
 
 const UserPage = () => {
   const { id } = useParams();
@@ -29,6 +31,7 @@ const UserPage = () => {
   const following = useSelector(selectFollowing);
   const recipes = useSelector(selectRecipeList);
   const recipePagination = useSelector(selectRecipePagination);
+  const isLoading = useSelector(selectIsLoading);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -70,9 +73,6 @@ const UserPage = () => {
       case 'favorites':
         dispatch(getFavoriteRecipesThunk({ id, page: currentPage, limit }));
         break;
-      case 'recipes':
-        dispatch(fetchRecipes({ userId: id, page: currentPage, limit }));
-        break;
       default:
         break;
     }
@@ -86,7 +86,6 @@ const UserPage = () => {
         return following;
       case 'my-recipes':
       case 'favorites':
-      case 'recipes':
         return recipes;
       default:
         return [];
@@ -101,7 +100,7 @@ const UserPage = () => {
     }
   }, [followers, following, recipes, currentPage]);
 
-  return (
+  return fullUserDetails && !isLoading ? (
     <>
       {/* Section Title */}
       <Section className={css.title}>
@@ -143,6 +142,8 @@ const UserPage = () => {
       </div>
       {/* Section User */}
     </>
+  ) : (
+    <AppLoader />
   );
 };
 

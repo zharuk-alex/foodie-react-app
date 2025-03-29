@@ -79,6 +79,8 @@ const recipesSlice = createSlice({
           state.pagination.totalPages = payload.totalPage;
           state.pagination.hasNextPage = payload.hasNextPage;
           state.pagination.hasPreviousPage = payload.hasPreviousPage;
+        } else {
+          state.pagination = { ...initialState.pagination };
         }
       })
       .addCase(getRecipeByIdThunk.fulfilled, (state, { payload }) => {

@@ -1,66 +1,69 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import css from './Recipes.module.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
-import { selectLoading, selectError, selectRecipes, selectTotalRecipes, selectCategories, selectAreas, selectIngredients } from 'store/recipes/selectors';
-import { fetchAreas, fetchIngredients, fetchRecipes } from 'store/recipes/operations';
+import { selectLoading, selectError, selectRecipes, selectCategories, selectAreas, selectIngredients, selectPagination } from 'store/recipes/selectors';
+import { fetchCategories, fetchAreas, fetchIngredients, fetchRecipes } from 'store/recipes/operations';
 import PageTitle from '../PageTitle/PageTitle';
 import { Dropdown, Pagination, Icon, AppLoader } from '../UI';
 import RecipeList from '../RecipeList/RecipeList';
 import useScrollToElement from '../../hooks/useScrollToElement';
 import { selectIsLoggedIn } from 'store/auth/selectors';
 
-const Recipes = ({ activeCategory, onUpdateActiveCategory, recipes }) => {
+const Recipes = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const scrollToElement = useScrollToElement();
+  const { slug } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const rawAreas = useSelector(selectAreas);
+  const rawIngredients = useSelector(selectIngredients);
+  const categories = useSelector(selectCategories);
+  const recipes = useSelector(selectRecipes);
+  const pagination = useSelector(selectPagination);
+
   const isLoading = useSelector(selectLoading);
   const hasError = useSelector(selectError);
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
-  const [filters, setFilters] = useState({});
+  const activeCategory = categories.find(cat => cat?.name.toLowerCase().replace(/\s+/g, '_') === slug);
 
-  const isEmpty = !isLoading && !hasError && recipes.length === 0;
-
-  const rawAreas = useSelector(selectAreas);
-  const rawIngredients = useSelector(selectIngredients);
-  const totalRecipes = useSelector(selectTotalRecipes);
   const perPage = 12;
-  const [page, setPage] = useState(1);
-  const pages = Math.ceil(totalRecipes / perPage);
-
-  const areas = [{ value: null, label: 'All areas' }, ...rawAreas];
-  const ingredients = [{ value: null, label: 'All ingredients' }, ...rawIngredients];
-
-  const pageTitle = {
-    title: activeCategory.name,
-    subtitle:
-      'Lorem Ipsum je jednostavno probni tekst koji se koristi u tiskarskoj i slovoslagarskoj industriji. Lorem Ipsum postoji kao industrijski standard još od 16-og stoljeća,',
-  };
+  const initialPage = Number(searchParams.get('page')) || 1;
+  const [page, setPage] = useState(initialPage);
+  const [filters, setFilters] = useState(null);
 
   useEffect(() => {
+    dispatch(fetchCategories());
     dispatch(fetchIngredients());
     dispatch(fetchAreas());
   }, [dispatch]);
 
-  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (!rawAreas.length || !rawIngredients.length) return;
+
+    const areaId = searchParams.get('area');
+    const ingredientId = searchParams.get('ingredient');
+
+    const area = rawAreas.find(opt => opt.value === areaId);
+    const ingredient = rawIngredients.find(opt => opt.value === ingredientId);
+
+    setFilters({
+      ...(area ? { area } : {}),
+      ...(ingredient ? { ingredient } : {}),
+    });
+  }, [rawAreas, rawIngredients, searchParams]);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
+    if (!activeCategory?.id || filters === null) return;
 
-    if (!activeCategory?.id) return;
-
-    const hasFilters = Object.keys(filters).length > 0;
-
-    const filtersValues = hasFilters
-      ? Object.fromEntries(
-          Object.entries(filters)
-            .filter(([_, option]) => option?.value != null)
-            .map(([key, option]) => [key, option.value])
-        )
-      : {};
+    const filtersValues = Object.fromEntries(
+      Object.entries(filters)
+        .filter(([_, option]) => option?.value != null)
+        .map(([key, option]) => [key, option.value])
+    );
 
     dispatch(
       fetchRecipes({
@@ -74,35 +77,57 @@ const Recipes = ({ activeCategory, onUpdateActiveCategory, recipes }) => {
     setTimeout(() => scrollToElement('homepage-categories'), 100);
   }, [filters, activeCategory?.id, page, dispatch, isLoggedIn]);
 
-  const updateFilter = (key, option) => {
-    setFilters(prev => ({
-      ...prev,
-      [key]: option,
-    }));
-    setPage(1);
+  const updateUrlParams = (newPage, newFilters = {}) => {
+    const params = {
+      page: newPage,
+      ...Object.fromEntries(
+        Object.entries(newFilters)
+          .filter(([_, opt]) => opt?.value != null)
+          .map(([key, opt]) => [key, opt.value])
+      ),
+    };
+    setSearchParams(params);
   };
 
-  const handleBack = () => {
-    onUpdateActiveCategory(null);
+  const updateFilter = (key, option) => {
+    const updatedFilters = { ...filters, [key]: option };
+    setFilters(updatedFilters);
+    setPage(1);
+    updateUrlParams(1, updatedFilters);
   };
+
+  const onPageChange = p => {
+    setPage(p);
+    updateUrlParams(p, filters);
+  };
+
+  const areas = [{ value: null, label: 'All areas' }, ...rawAreas];
+  const ingredients = [{ value: null, label: 'All ingredients' }, ...rawIngredients];
+
+  const pageTitle = {
+    title: activeCategory?.name,
+    subtitle: 'Discover tasty recipes that fit your preferences!',
+  };
+
+  const isEmpty = !isLoading && !hasError && recipes?.length === 0;
 
   return (
     <>
-      <button onClick={handleBack} className={css.backLink}>
-        <Icon name="icon-arrow-left" size="12" color="#000" />
+      <button onClick={() => navigate('/')} className={css.backLink}>
+        <Icon name="icon-arrow-left" size="12" />
         Back
       </button>
       <PageTitle {...pageTitle} />
       <div className={css.wrapper}>
         <div className={css.filters}>
-          <Dropdown options={areas} value={filters.area} onChange={value => updateFilter('area', value)} placeholder="Area" />
-          <Dropdown options={ingredients} value={filters.ingredient} onChange={value => updateFilter('ingredient', value)} placeholder="Ingredients" />
+          <Dropdown options={areas} value={filters?.area} onChange={val => updateFilter('area', val)} placeholder="Area" />
+          <Dropdown options={ingredients} value={filters?.ingredient} onChange={val => updateFilter('ingredient', val)} placeholder="Ingredients" />
         </div>
         <div>
           {isLoading && <AppLoader />}
           {isEmpty && <p className="no-results">No recipes found for the selected category or filters.</p>}
           <RecipeList recipes={recipes} className={css.recipeList} />
-          {pages > 1 && <Pagination total={pages} current={page} onChange={p => setPage(p)} />}
+          {pagination.totalPages > 1 && <Pagination total={pagination.totalPages} current={page} onChange={onPageChange} />}
         </div>
       </div>
     </>
