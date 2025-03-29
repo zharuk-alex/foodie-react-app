@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Icon } from '../UI/index.js';
 import { updateAvatarThunk } from '../../store/auth/operations.js';
 import css from './UploadUserAvatar.module.css';

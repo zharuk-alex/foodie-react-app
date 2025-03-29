@@ -19,7 +19,7 @@ import { selectRecipes as selectRecipeList, selectPagination as selectRecipePagi
 
 import { cleanPagination as cleanRecipesPagination, cleanRecipes } from 'store/recipes/slice';
 import { selectIsLoading } from '../../store/auth/selectors.js';
-import { AppLoader, Loader } from '../../components/UI/index.js';
+import { AppLoader } from '../../components/UI/index.js';
 
 const UserPage = () => {
   const { id } = useParams();
