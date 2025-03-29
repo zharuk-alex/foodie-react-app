@@ -8,8 +8,8 @@ const PathInfo = ({ current }) => {
       <Link to="/" className={css.link}>
         HOME
       </Link>
-      {" / "}
-      <span>{current}</span>
+      {"/"}
+      <span className={css.current}>{current}</span>
     </div>
   );
 };

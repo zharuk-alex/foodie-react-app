@@ -1,57 +1,23 @@
-import css from "./UserPage.module.css";
+import css from './UserPage.module.css';
 
-import { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { MainTitle, Subtitle, Modal, Container, Section } from "components/UI";
-import {
-  UserInfo,
-  FollowButton,
-  TabsList,
-  ListItems,
-  ListPagination,
-  PathInfo,
-} from "components/User";
-// import { LogOutModal } from "components/UI";
+import { MainTitle, Subtitle, Modal, Container, Section } from 'components/UI';
+import { UserInfo, LogoutFollowButton, TabsList, ListItems, ListPagination, PathInfo } from 'components/User';
 
-import {
-  getFullUserDetailsThunk,
-  getFollowersThunk,
-  getFollowingThunk,
-  updateAvatarThunk,
-} from "store/auth/operations";
+import { getFullUserDetailsThunk, getFollowersThunk, getFollowingThunk } from 'store/auth/operations';
 
-import {
-  cleanPagination as cleanAuthPagination,
-  cleanFollowers,
-  cleanFollowing,
-} from "store/auth/slice";
+import { cleanPagination as cleanAuthPagination, cleanFollowers, cleanFollowing } from 'store/auth/slice';
 
-import {
-  selectCurrentUser,
-  selectFullUserDetails,
-  selectFollowers,
-  selectFollowing,
-} from "store/auth/selectors";
+import { selectCurrentUser, selectFullUserDetails, selectFollowers, selectFollowing } from 'store/auth/selectors';
 
-import {
-  getOwnRecipesThunk,
-  getFavoriteRecipesThunk,
-  fetchRecipes,
-  removeRecipeThunk,
-  removeRecipeFromFavoriteThunk,
-} from "store/recipes/operations";
+import { getOwnRecipesThunk, getFavoriteRecipesThunk, fetchRecipes, removeRecipeThunk, removeRecipeFromFavoriteThunk } from 'store/recipes/operations';
 
-import {
-  selectRecipes as selectRecipeList,
-  selectPagination as selectRecipePagination,
-} from "store/recipes/selectors";
+import { selectRecipes as selectRecipeList, selectPagination as selectRecipePagination } from 'store/recipes/selectors';
 
-import {
-  cleanPagination as cleanRecipesPagination,
-  cleanRecipes,
-} from "store/recipes/slice";
+import { cleanPagination as cleanRecipesPagination, cleanRecipes } from 'store/recipes/slice';
 
 const UserPage = () => {
   const { id } = useParams();
@@ -64,7 +30,7 @@ const UserPage = () => {
   const recipes = useSelector(selectRecipeList);
   const recipePagination = useSelector(selectRecipePagination);
 
-  const [activeTab, setActiveTab] = useState("recipes");
+  const [activeTab, setActiveTab] = useState('recipes');
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -72,7 +38,7 @@ const UserPage = () => {
 
   useEffect(() => {
     if (isOwnProfile) {
-      setActiveTab("my-recipes");
+      setActiveTab('my-recipes');
     }
   }, [isOwnProfile]);
 
@@ -92,24 +58,25 @@ const UserPage = () => {
 
   // Load tabs
   useEffect(() => {
+    if (!currentUser?.id) return;
     const limit = 5;
 
     switch (activeTab) {
-      case "followers":
+      case 'followers':
         dispatch(getFollowersThunk({ id, page: currentPage, limit }));
         break;
-      case "following":
+      case 'following':
         if (isOwnProfile) {
           dispatch(getFollowingThunk({ page: currentPage, limit }));
         }
         break;
-      case "my-recipes":
+      case 'my-recipes':
         dispatch(getOwnRecipesThunk({ id, page: currentPage, limit }));
         break;
-      case "favorites":
+      case 'favorites':
         dispatch(getFavoriteRecipesThunk({ id, page: currentPage, limit }));
         break;
-      case "recipes":
+      case 'recipes':
         dispatch(fetchRecipes({ userId: id, page: currentPage, limit }));
         break;
       default:
@@ -119,13 +86,13 @@ const UserPage = () => {
 
   const getTabItems = () => {
     switch (activeTab) {
-      case "followers":
+      case 'followers':
         return followers;
-      case "following":
+      case 'following':
         return following;
-      case "my-recipes":
-      case "favorites":
-      case "recipes":
+      case 'my-recipes':
+      case 'favorites':
+      case 'recipes':
         return recipes;
       default:
         return [];
@@ -136,7 +103,7 @@ const UserPage = () => {
   useEffect(() => {
     const items = getTabItems();
     if (items.length === 0 && currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
+      setCurrentPage(prev => prev - 1);
     }
   }, [followers, following, recipes, currentPage]);
 
@@ -146,67 +113,39 @@ const UserPage = () => {
       <Section className={css.title}>
         <Container>
           <PathInfo current="PROFILE" />
-          <MainTitle>PROFILE</MainTitle>
-          <Subtitle>
-            Reveal your culinary art, share your favorite recipe and create
-            gastronomic masterpieces with us.
-          </Subtitle>
+          <MainTitle className={css.profileTitle}>PROFILE</MainTitle>
+          <Subtitle>Reveal your culinary art, share your favorite recipe and create gastronomic masterpieces with us.</Subtitle>
         </Container>
       </Section>
 
       {/* Section User */}
       <Section>
-        <Container>
-          <UserInfo
-            user={fullUserDetails}
-            isOwnProfile={isOwnProfile}
-          />
-
-          {isOwnProfile ? (
-            <button type="button" onClick={() => setModalOpen(true)}>
-              Log Out
-            </button>
-          ) : (
-            <FollowButton
-              targetUserId={id}
-              isFollowing={fullUserDetails?.isFollowing}
-            />
-          )}
+        <Container className={css.userContainer}>
+          <UserInfo user={fullUserDetails} isOwnProfile={isOwnProfile} />
+          <LogoutFollowButton isOwnProfile={isOwnProfile} isFollowing={fullUserDetails?.isFollowing} targetUserId={id} />
         </Container>
       </Section>
 
       {/* Section Tabs */}
       <Section>
         <Container>
-          <TabsList
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            isOwnProfile={isOwnProfile}
-          />
+          <TabsList activeTab={activeTab} setActiveTab={setActiveTab} isOwnProfile={isOwnProfile} />
 
           <ListItems
             tab={activeTab}
             items={getTabItems()}
-            onDelete={(recipeId) => {
-              if (activeTab === "my-recipes") {
+            onDelete={recipeId => {
+              if (activeTab === 'my-recipes') {
                 dispatch(removeRecipeThunk(recipeId));
-              } else if (activeTab === "favorites") {
+              } else if (activeTab === 'favorites') {
                 dispatch(removeRecipeFromFavoriteThunk(recipeId));
               }
             }}
           />
 
-          <ListPagination
-            currentPage={recipePagination.page}
-            totalPages={recipePagination.totalPages}
-            onPageChange={setCurrentPage}
-          />
+          <ListPagination currentPage={recipePagination.page} totalPages={recipePagination.totalPages} onPageChange={setCurrentPage} />
         </Container>
       </Section>
-
-      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-        {/* <LogOutModal /> */}
-      </Modal>
     </>
   );
 };
