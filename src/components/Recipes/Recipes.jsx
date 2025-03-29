@@ -1,31 +1,21 @@
-import React, { useEffect, useState, useRef } from "react";
-import css from "./Recipes.module.css";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState, useRef } from 'react';
+import css from './Recipes.module.css';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  selectLoading,
-  selectError,
-  selectRecipes,
-  selectTotalRecipes,
-  selectCategories,
-  selectAreas,
-  selectIngredients,
-} from "store/recipes/selectors";
-import {
-  fetchAreas,
-  fetchIngredients,
-  fetchRecipes,
-} from "store/recipes/operations";
-import PageTitle from "../PageTitle/PageTitle";
-import { Dropdown, Pagination, Icon, AppLoader } from "../UI";
-import RecipeList from "../RecipeList/RecipeList";
-import useScrollToElement from "../../hooks/useScrollToElement";
+import { selectLoading, selectError, selectRecipes, selectTotalRecipes, selectCategories, selectAreas, selectIngredients } from 'store/recipes/selectors';
+import { fetchAreas, fetchIngredients, fetchRecipes } from 'store/recipes/operations';
+import PageTitle from '../PageTitle/PageTitle';
+import { Dropdown, Pagination, Icon, AppLoader } from '../UI';
+import RecipeList from '../RecipeList/RecipeList';
+import useScrollToElement from '../../hooks/useScrollToElement';
+import { selectIsLoggedIn } from 'store/auth/selectors';
 
 const Recipes = ({ activeCategory, onUpdateActiveCategory, recipes }) => {
   const dispatch = useDispatch();
   const scrollToElement = useScrollToElement();
   const isLoading = useSelector(selectLoading);
   const hasError = useSelector(selectError);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const [filters, setFilters] = useState({});
 
@@ -38,16 +28,13 @@ const Recipes = ({ activeCategory, onUpdateActiveCategory, recipes }) => {
   const [page, setPage] = useState(1);
   const pages = Math.ceil(totalRecipes / perPage);
 
-  const areas = [{ value: null, label: "All areas" }, ...rawAreas];
-  const ingredients = [
-    { value: null, label: "All ingredients" },
-    ...rawIngredients,
-  ];
+  const areas = [{ value: null, label: 'All areas' }, ...rawAreas];
+  const ingredients = [{ value: null, label: 'All ingredients' }, ...rawIngredients];
 
   const pageTitle = {
     title: activeCategory.name,
     subtitle:
-      "Lorem Ipsum je jednostavno probni tekst koji se koristi u tiskarskoj i slovoslagarskoj industriji. Lorem Ipsum postoji kao industrijski standard još od 16-og stoljeća,",
+      'Lorem Ipsum je jednostavno probni tekst koji se koristi u tiskarskoj i slovoslagarskoj industriji. Lorem Ipsum postoji kao industrijski standard još od 16-og stoljeća,',
   };
 
   useEffect(() => {
@@ -84,11 +71,11 @@ const Recipes = ({ activeCategory, onUpdateActiveCategory, recipes }) => {
       })
     );
 
-    setTimeout(() => scrollToElement("homepage-categories"), 100);
-  }, [filters, activeCategory?.id, page, dispatch]);
+    setTimeout(() => scrollToElement('homepage-categories'), 100);
+  }, [filters, activeCategory?.id, page, dispatch, isLoggedIn]);
 
   const updateFilter = (key, option) => {
-    setFilters((prev) => ({
+    setFilters(prev => ({
       ...prev,
       [key]: option,
     }));
@@ -108,34 +95,14 @@ const Recipes = ({ activeCategory, onUpdateActiveCategory, recipes }) => {
       <PageTitle {...pageTitle} />
       <div className={css.wrapper}>
         <div className={css.filters}>
-          <Dropdown
-            options={areas}
-            value={filters.area}
-            onChange={(value) => updateFilter("area", value)}
-            placeholder="Area"
-          />
-          <Dropdown
-            options={ingredients}
-            value={filters.ingredient}
-            onChange={(value) => updateFilter("ingredient", value)}
-            placeholder="Ingredients"
-          />
+          <Dropdown options={areas} value={filters.area} onChange={value => updateFilter('area', value)} placeholder="Area" />
+          <Dropdown options={ingredients} value={filters.ingredient} onChange={value => updateFilter('ingredient', value)} placeholder="Ingredients" />
         </div>
         <div>
           {isLoading && <AppLoader />}
-          {isEmpty && (
-            <p className="no-results">
-              No recipes found for the selected category or filters.
-            </p>
-          )}
+          {isEmpty && <p className="no-results">No recipes found for the selected category or filters.</p>}
           <RecipeList recipes={recipes} className={css.recipeList} />
-          {pages > 1 && (
-            <Pagination
-              total={pages}
-              current={page}
-              onChange={(p) => setPage(p)}
-            />
-          )}
+          {pages > 1 && <Pagination total={pages} current={page} onChange={p => setPage(p)} />}
         </div>
       </div>
     </>
