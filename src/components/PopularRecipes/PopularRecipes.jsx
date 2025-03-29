@@ -1,23 +1,22 @@
-import React, { useEffect } from "react";
-import css from "./PopularRecipes.module.css";
-import PopularRecipeCard from "../PopularRecipeCard/PopularRecipeCard";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  addRecipeToFavoriteThunk,
-  getPopularRecipesThunk,
-  removeRecipeFromFavoriteThunk,
-} from "../../store/recipes/operations";
-import { selectPopularRecipes } from "../../store/recipes/selectors";
-import { selectIsLoggedIn } from "../../store/auth/selectors";
-export default function PopularRecipes() {
+import React, { useEffect } from 'react';
+import css from './PopularRecipes.module.css';
+import PopularRecipeCard from '../PopularRecipeCard/PopularRecipeCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { addRecipeToFavoriteThunk, getPopularRecipesThunk, removeRecipeFromFavoriteThunk } from '../../store/recipes/operations';
+import { selectPopularRecipes } from '../../store/recipes/selectors';
+import { setModalLoginOpen } from '../../store/modal/operations';
+export default function PopularRecipes({ isLoggedIn }) {
   const dispatch = useDispatch();
   const recipes = useSelector(selectPopularRecipes);
-  const isLoggedIn = useSelector(selectIsLoggedIn)
   const handleFavorite = (id, isFavorite) => {
-    if (isFavorite) {
-      dispatch(removeRecipeFromFavoriteThunk(id));
+    if (!isLoggedIn) {
+      dispatch(setModalLoginOpen(true));
     } else {
-      dispatch(addRecipeToFavoriteThunk(id));
+      if (isFavorite) {
+        dispatch(removeRecipeFromFavoriteThunk(id));
+      } else {
+        dispatch(addRecipeToFavoriteThunk(id));
+      }
     }
   };
 
@@ -26,13 +25,13 @@ export default function PopularRecipes() {
   }, [isLoggedIn]);
 
   return (
-    <div className={css.card}>
+    <section className={css.card}>
       <h2 className={css.title}>Popular recipes</h2>
       <div className={css.items}>
-        {recipes.map((recipe) => (
+        {recipes.map(recipe => (
           <PopularRecipeCard key={recipe?.id} recipe={recipe} onChangeFavorite={handleFavorite} />
         ))}
       </div>
-    </div>
+    </section>
   );
 }
