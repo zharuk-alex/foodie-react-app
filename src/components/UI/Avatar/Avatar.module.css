@@ -6,8 +6,8 @@
 
 .avatar {
   border-radius: var(--main-radius);
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   background-color: var(--color-gray);
   display: flex;
   align-items: center;
@@ -17,4 +17,11 @@
 .placeholder {
   font-weight: 700;
   color: var(--color-secondary);
+}
+
+@media (min-width: 768px) {
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
 }
