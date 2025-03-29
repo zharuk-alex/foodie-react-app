@@ -34,11 +34,12 @@ const RecipeDetailPage = () => {
     dispatch(getRecipeByIdThunk(id));
   }, [id, isLoggedIn]);
 
+
   return (
     <div className={css.main}>
       {isLoading && <AppLoader />}
       <PathInfoElement activePath={recipe?.title} />
-      <RecipeInfo recipe={recipe} isLoggedIn={isLoggedIn} onChangeFavorite={handleFavorite}/>
+      <RecipeInfo recipe={recipe} isLoggedIn={isLoggedIn} onChangeFavorite={handleFavorite} />
       <PopularRecipes isLoggedIn={isLoggedIn} />
     </div>
   );
