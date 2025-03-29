@@ -22,10 +22,6 @@
   position: relative;
 }
 
-.tabButton:hover {
-  text-decoration: underline;
-}
-
 .active {
   color: var(--color-main);
 }
