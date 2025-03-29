@@ -1,5 +1,5 @@
 .itemsSet {
-  --items: 3;
+  --items: 1;
   --indent: 20px;
   display: flex;
   flex-wrap: wrap;
@@ -8,4 +8,16 @@
 
 .item {
   flex-basis: calc((100% - var(--indent) * (var(--items) - 1)) / var(--items));
+}
+
+@media (min-width: 768px) {
+  .itemsSet {
+    --items: 2;
+  }
+}
+
+@media (min-width: 1440px) {
+  .itemsSet {
+    --items: 3;
+  }
 }
