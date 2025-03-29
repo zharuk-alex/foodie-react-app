@@ -4,43 +4,34 @@ import defaultAvatar from 'images/avatar/default_avatar.jpg';
 
 const UserInfo = ({ user, isOwnProfile }) => {
   if (!user) return null;
-
-  const { avatarUrl, name, email, stats: { recipes = 0, favorites = 0, followers = 0, following = 0 } = {} } = user;
+  console.log('-->', user);
+  const { avatar, name, email, totalFavoriteRecipes = 0, totalFollowers = 0, totalFollowing = 0, totalRecipes = 0 } = user;
 
   return (
-    <div className={css.userWrapper}>
-      <div className={css.userInfo}>
-        <UploadUserAvatar avatar={avatarUrl || defaultAvatar} />
-        {/* <div className={css.avatarWrapper}>
-          <img src={avatarUrl || defaultAvatar} alt="User Avatar" className={css.avatar} />
-          {isOwnProfile && (
-            <label className={css.uploadLabel}>
-              Change Avatar
-              <input type="file" accept="image/*" className={css.fileInput} onChange={handleFileChange} />
-            </label>
-          )}
-        </div> */}
-        <div className={css.info}>
-          <p className={css.name}>{name}</p>
-          <ul className={css.stats}>
-            <li>
-              Email: <strong>{email}</strong>
+    <div className={css.userInfo}>
+      {isOwnProfile ? <UploadUserAvatar avatar={avatar || defaultAvatar} /> : <img src={avatar || defaultAvatar} alt="User Avatar" className={css.avatar} />}
+      <p className={css.name}>{name}</p>
+      <ul className={css.stats}>
+        <li className={css.statsItem}>
+          Email: <strong className={css.userStats}>{email}</strong>
+        </li>
+        <li className={css.statsItem}>
+          Added recipes: <strong className={css.userStats}>{totalRecipes}</strong>
+        </li>
+        {isOwnProfile && (
+          <>
+            <li className={css.statsItem}>
+              Favorites: <strong className={css.userStats}>{totalFavoriteRecipes}</strong>
             </li>
-            <li>
-              Added recipes: <strong>{recipes}</strong>
+            <li className={css.statsItem}>
+              Followers: <strong className={css.userStats}>{totalFollowers}</strong>
             </li>
-            <li>
-              Favorites: <strong>{favorites}</strong>
-            </li>
-            <li>
-              Followers: <strong>{followers}</strong>
-            </li>
-            <li>
-              Following: <strong>{following}</strong>
-            </li>
-          </ul>
-        </div>
-      </div>
+          </>
+        )}
+        <li className={css.statsItem}>
+          Following: <strong className={css.userStats}>{totalFollowing}</strong>
+        </li>
+      </ul>
     </div>
   );
 };
