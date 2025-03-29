@@ -44,7 +44,8 @@
 
 @media screen and (min-width: 1440px) {
   .recipeImage {
-    min-width: 551px;
+    max-width: 551px;
+    flex-shrink: 0;
   }
 }
 
