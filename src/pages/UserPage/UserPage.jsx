@@ -77,9 +77,7 @@ const UserPage = () => {
         }
         break;
       case 'my-recipes':
-        if (isOwnProfile) {
-          
-        }
+      case 'recipes':
         dispatch(getOwnRecipesThunk({ id, page: currentPage, limit }));
         break;
       case 'favorites':
@@ -98,6 +96,7 @@ const UserPage = () => {
         return following;
       case 'my-recipes':
       case 'favorites':
+      case 'recipes':
         return recipes;
       default:
         return [];

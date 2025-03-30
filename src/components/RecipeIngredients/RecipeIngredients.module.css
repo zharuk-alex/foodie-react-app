@@ -42,7 +42,6 @@
   }
 }
 
-
 @media screen and (min-width: 768px) {
   .items {
     gap: 20px;
@@ -50,6 +49,7 @@
 }
 
 .item {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -105,6 +105,8 @@
   gap: 2px;
   width: calc(100% - 90px);
   overflow: hidden;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 @media screen and (min-width: 768px) {
@@ -139,4 +141,26 @@
   white-space: nowrap; /* satır kırılmasın */
   overflow: hidden; /* taşanı gizle */
   text-overflow: ellipsis; /* ... göster */
+}
+
+.deleteBtn {
+  position: absolute;
+  top: -5px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border: none;
+  color: #000;
+  cursor: pointer;
+}
+.deleteBtn:hover {
+  transform: scale(1.1);
+}
+
+.name,
+.amount {
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  color: var(--color-main);
 }
