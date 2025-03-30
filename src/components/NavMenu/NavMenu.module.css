@@ -1,12 +1,13 @@
 .nav {
-  display: none;
+  display: none !important;
 }
 
 @media (min-width: 768px) {
   .nav {
-    display: flex;
+    display: flex !important;
     gap: 4px;
-    margin-inline: auto;
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -56,6 +57,4 @@
   margin-top: 40%;
 }
 
-.navMenu .link {
-
-}
+.navMenu .link {}

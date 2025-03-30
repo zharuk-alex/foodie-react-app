@@ -1,13 +1,14 @@
-header {
-  margin-inline: 8px;
+.container {
+  max-width: 100%;
 }
 
 .headerWrapper {
   padding-bottom: 64px;
   max-width: 1400px;
   margin: 0 auto;
-  margin-top: 20px;
   padding-top: 20px;
+  margin-top: 8px;
+  margin-inline: 8px;
 }
 
 .headerWrapperDark {
@@ -21,6 +22,7 @@ header {
   flex-direction: row;
   gap: 4px;
   align-items: center;
+  justify-content: flex-end;
 }
 
 
@@ -72,6 +74,8 @@ header {
   width: 100%;
 }
 
+
+
 .menuContainerMobile {
   position: fixed;
   top: 0;
@@ -109,10 +113,6 @@ header {
 
 }
 
-.logoDesktop {
-  width: 236px;
-}
-
 .navMenu {
   display: flex !important;
 }
@@ -122,8 +122,24 @@ header {
   height: 100vh;
 }
 
+@media (min-width: 768px) {
+  .headerWrapper {
+    padding-bottom: 80px;
+    margin-top: 16px;
+    margin-inline: 16px;
+  }
+
+  .menuContainer>* {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+}
+
 @media (min-width: 1440px) {
   .headerWrapper {
     padding-bottom: 80px;
+    margin-top: 20px;
+    margin-inline: auto;
   }
 }

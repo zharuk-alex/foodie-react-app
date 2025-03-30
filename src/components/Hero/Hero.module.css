@@ -1,7 +1,7 @@
 .section {
   overflow: hidden;
   position: relative;
-  padding-inline: 8px;
+  margin-inline: 8px;
 }
 
 .wrapper {
@@ -114,7 +114,19 @@
   }
 }
 
+
+@media (min-width: 768px) {
+  .section {
+    margin-inline: 16px;
+  }
+}
+
+
 @media (min-width: 1440px) {
+  .section {
+    margin-inline: 20px;
+  }
+
   .wrapperFigure {
     padding-bottom: 82px;
   }
