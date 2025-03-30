@@ -10,6 +10,11 @@
   flex-basis: calc((100% - var(--indent) * (var(--items) - 1)) / var(--items));
 }
 
+.itemsSet:has(> .item:only-child) .item {
+  flex-basis: 100%;
+  max-width: 290px;
+}
+
 @media (min-width: 768px) {
   .itemsSet {
     --indent: 20px;
