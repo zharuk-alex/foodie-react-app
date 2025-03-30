@@ -3,16 +3,18 @@ import React from "react";
 import css from "./Avatar.module.css";
 
 const Avatar = ({
+  variant = "wrapper",
   src,
   srcSet = null,
   placeholder = "",
   children,
   className = "",
+  ...props
 }) => {
   const firstLetter = placeholder?.trim().charAt(0).toUpperCase();
 
   return (
-    <div className={clsx(css.wrapper, className)}>
+    <div className={clsx(css[variant], className)} {...props}>
       {src ? (
         <img
           src={src}

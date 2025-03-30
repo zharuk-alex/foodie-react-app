@@ -112,10 +112,58 @@
   padding: 14px 28px;
 }
 
+@media (max-width: 768px) {
+  .register {
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 10px 16px;
+  }
+}
+
 .login {
   composes: button;
   background-color: var(--color-white);
   color: var(--color-main);
   border: none;
   padding: 14px 28px;
+}
+
+@media (max-width: 768px) {
+  .login {
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 10px 16px;
+  }
+}
+
+.logoutInHead {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 2;
+  text-align: left;
+  color: var(--color-secondary);
+  text-transform: uppercase;
+  background-color: transparent;
+  padding: 0;
+}
+
+:global([data-theme='dark']) .logoutInHead {
+  color: var(--color-gray-light);
+}
+
+.logoutInHead:hover {
+  color: var(--color-black);
+}
+
+:global([data-theme='dark']) .logoutInHead:hover {
+  color: var(--color-white);
+}
+
+.clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  height: fit-content;
+  background-color: transparent;
 }

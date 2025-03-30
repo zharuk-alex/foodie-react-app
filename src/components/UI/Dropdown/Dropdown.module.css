@@ -20,8 +20,20 @@
   border-color: #888;
 }
 
+.placeholder {
+  color: var(--color-gray);
+}
+
+.clearBtn {
+  width: 18px;
+  height: 18px;
+  stroke: var(--color-main);
+  margin-inline: auto 4px;
+}
+
 .arrow {
   transition: transform ease-in-out 0.2s;
+  color: var(--color-main);
 }
 
 .arrowRotated {
@@ -57,6 +69,6 @@
 }
 
 .placeholderText {
-  color: #BFBEBE; 
+  color: #bfbebe;
   font-weight: 500;
 }
