@@ -8,14 +8,25 @@ import { useState } from 'react';
 import Footer from '../Footer/Footer.jsx';
 import { useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { closeLoginModal } from '../../store/modal/slice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsLoginOpen } from '../../store/modal/selectors.js';
+import LoginModal from '../LoginModal/LoginModal.jsx';
 
 const AppLayout = ({ children }) => {
+  const dispatch = useDispatch();
   const matches = useMatches();
   const currentRouteName = matches.find(match => match.handle)?.handle.routeName;
   const layoutClass = matches
     .map(m => m.handle?.layoutClass)
     .filter(Boolean)
     .at(-1);
+
+  const showLoginModal = useSelector(selectIsLoginOpen);
+
+  const closeModal = () => {
+    dispatch(closeLoginModal());
+  };
 
   const [seo, setSeo] = useState({});
   useEffect(() => {
@@ -37,6 +48,7 @@ const AppLayout = ({ children }) => {
       </main>
       <Footer />
       <Toaster position="bottom-center" reverseOrder={false} />
+      {showLoginModal && <LoginModal onClose={closeModal} />}
     </>
   );
 };

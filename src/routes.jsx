@@ -1,4 +1,6 @@
 import { lazy } from 'react';
+import PrivateRoute from './guards/PrivateRoute/PrivateRoute.jsx';
+import { useLocation } from 'react-router-dom';
 
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
 const RecipePage = lazy(() => import('./pages/RecipePage/RecipePage'));
@@ -38,7 +40,7 @@ const routes = [
   },
   {
     path: '/user/:id',
-    element: <UserPage />,
+    element: <PrivateRoute component={<UserPage />}/>,
     title: 'User page',
     isNav: false,
     handle: { routeName: 'user_page' },
@@ -50,7 +52,7 @@ const routes = [
   },
   {
     path: '/recipe/add',
-    element: <AddRecipePage />,
+    element: <PrivateRoute component={<AddRecipePage />} />,
     title: 'Add Recipe',
     isNav: true,
     handle: { routeName: 'add_recipe' },
