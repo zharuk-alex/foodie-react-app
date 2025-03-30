@@ -59,7 +59,10 @@ const usersSlice = createSlice({
         state.error = null;
       })
       .addCase(getFollowersThunk.fulfilled, (state, { payload }) => {
-        state.followers = payload.followers;
+        state.isLoading = false;
+        state.error = null;
+        state.followers = payload?.followers ?? [];
+        state.total = payload?.totalItem;
         state.pagination.page = payload.page;
         state.pagination.limit = payload.limit;
         state.pagination.totalPages = payload.totalPage;
@@ -67,8 +70,11 @@ const usersSlice = createSlice({
         state.pagination.hasPreviousPage = payload.hasPreviousPage;
       })
       .addCase(getFollowingThunk.fulfilled, (state, { payload }) => {
-        state.following = payload.following;
-        state.pagination.page = payload.page;
+        state.isLoading = false;
+        state.error = null;
+        state.following = payload?.following ?? [];
+        state.total = payload?.totalItem;
+        state.pagination.page = payload?.page;
         state.pagination.limit = payload.limit;
         state.pagination.totalPages = payload.totalPage;
         state.pagination.hasNextPage = payload.hasNextPage;
