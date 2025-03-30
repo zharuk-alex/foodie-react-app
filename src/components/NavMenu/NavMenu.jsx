@@ -4,7 +4,7 @@ import {useMemo} from "react";
 import css from "./NavMenu.module.css";
 import clsx from "clsx";
 
-const NavMenu = () => {
+const NavMenu = ({variant = "nav", className = ""}) => {
   const navLinks = useMemo(
     () => routes?.filter(({isNav}) => isNav) || [],
     [routes]
@@ -13,7 +13,7 @@ const NavMenu = () => {
   const buildLinkClass = ({isActive}) => clsx(css.link, isActive && css.active);
 
   return (
-    <nav className={css.nav}>
+    <nav className={clsx(css[variant], className)}>
       {navLinks.map(({path, title}) => (
         <NavLink key={path} to={path} className={buildLinkClass} end>
           {title}
