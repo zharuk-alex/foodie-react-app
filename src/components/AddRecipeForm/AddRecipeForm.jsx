@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { recipeValidationSchema } from '../../validation/recipeValidation';
-import Btn from '../UI/Btn/Btn';
 import { Plus, Minus, Trash } from 'lucide-react';
+
 import styles from './AddRecipeForm.module.css';
+import Btn from '../UI/Btn/Btn';
+import { recipeValidationSchema } from '../../validation/recipeValidation';
 import UploadRecipePhoto from '../UploadRecipePhoto/UploadRecipePhoto.jsx';
 import RecipeIngredients from '../RecipeIngredients/RecipeIngredients.jsx';
 import { Dropdown } from '../UI';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { fetchIngredients, fetchCategories } from '../../store/recipes/operations.js';
 import { selectCategories, selectIngredients } from '../../store/recipes/selectors.js';
-import { useNavigate } from 'react-router-dom';
+import { addRecipeThunk } from '../../store/recipes/operations.js';
 
 const AddRecipeForm = ({ onSubmitForm }) => {
   const dispatch = useDispatch();
@@ -78,35 +82,41 @@ const AddRecipeForm = ({ onSubmitForm }) => {
     setSelectedCategory(value);
   };
 
-  const handleIngredientChange = value => {
-    setSelectedIngredient(value);
-  };
-
   const adjustPreparationTime = delta => {
     setPreparationTime(prev => Math.max(1, prev + delta));
   };
 
   const onSubmit = async data => {
-    setErrorMessage('');
-    const formData = new FormData();
-    formData.append('recipeName', data.recipeName);
-    formData.append('description', data.description);
-    formData.append('category', selectedCategory);
-    formData.append('preparationTime', preparationTime);
-    formData.append('instruction', data.instruction);
-    if (data.image?.[0]) formData.append('thumb', data.image[0]);
-
-    selectedIngredients.forEach((item, index) => {
-      formData.append(`ingredients[${index}][name]`, item.name);
-      formData.append(`ingredients[${index}][quantity]`, item.measure);
-    });
-
     try {
-      await onSubmitForm(formData);
-      setSuccessMessage('Recipe published!');
-      setTimeout(() => navigate('/user'), 2000);
+      const formData = new FormData();
+      const { image, title, description, category, area, time, instructions } = data;
+
+      formData.append('thumb', image[0]);
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('category', category);
+      formData.append('area', area);
+      formData.append('time', time);
+      formData.append('instructions', instructions);
+
+      formData.append(
+        'ingredients',
+        JSON.stringify(
+          selectedIngredients.map(card => ({
+            id: card._id,
+            measure: card.measure,
+          }))
+        )
+      );
+
+      await addNewRecipe(formData);
+      toast.success('Recipe added successfully');
+
+      if (user) {
+        navigate(`/user/${user.id}/recipies`);
+      }
     } catch (error) {
-      setErrorMessage(error.message || 'Something went wrong.');
+      toast.error(`Error occurred while adding new recipe: ${error.message}`);
     }
   };
 

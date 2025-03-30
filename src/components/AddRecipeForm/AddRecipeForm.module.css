@@ -233,7 +233,7 @@ input[name='recipeName']::placeholder {
 
 .charCounter {
   position: absolute;
-  bottom: 16px;
+  bottom: 36px;
   right: 10px;
   font-size: 16px;
   width: 42px;
