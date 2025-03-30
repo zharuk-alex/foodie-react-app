@@ -10,10 +10,6 @@
   flex-basis: calc((100% - var(--indent) * (var(--items) - 1)) / var(--items));
 }
 
-.itemsSet:has(> .item:only-child) .item {
-  flex-basis: 100%;
-  max-width: 290px;
-}
 
 @media (min-width: 768px) {
   .itemsSet {
@@ -21,10 +17,18 @@
     --items: 2;
     gap: 40px var(--indent);
   }
+
+  .item {
+    flex-basis: calc((100% - var(--indent) * (var(--items) - 1)) / var(--items));
+  }
 }
 
 @media (min-width: 1440px) {
   .itemsSet {
     --items: 3;
+  }
+
+  .item {
+    flex-basis: calc((100% - var(--indent) * (var(--items) - 1)) / var(--items));
   }
 }
