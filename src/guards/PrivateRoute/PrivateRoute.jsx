@@ -1,19 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLoggedIn } from '../../store/auth/selectors.js';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { openLoginModal } from '../../store/modal/slice.js';
 
 const PrivateRoute = ({ component, redirectTo = '/' }) => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const dispatch = useDispatch();
-
+  const location = useLocation();
   useEffect(() => {
     if (!isLoggedIn) {
       dispatch(openLoginModal());
-    } 
-  }, [ dispatch]);
-    
-  return isLoggedIn ? component : <Navigate to={redirectTo} replace />;
+    }
+  }, [isLoggedIn, dispatch]);
+  return isLoggedIn ? component : <Navigate to={location.state?.from ? location.state?.from : redirectTo} replace />;
 };
 export default PrivateRoute;
