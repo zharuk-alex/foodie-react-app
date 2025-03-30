@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Btn from '../UI/Btn/Btn';
 import Icon from '../UI/Icon/Icon';
 import clsx from 'clsx';
+import defaultAvatar from 'images/avatar/default_avatar.jpg';
+
 export default function PopularRecipeCard({ recipe, onChangeFavorite }) {
   const navigate = useNavigate();
 
@@ -20,8 +22,8 @@ export default function PopularRecipeCard({ recipe, onChangeFavorite }) {
         <p className={css.description}>{recipe?.description}</p>
         <div className={css.bottomMenu}>
           <div className={css.userDetails}>
-            <img className={css.avatar} src={recipe?.thumb} alt="" />
-            <span className={css.name}>Ivetta</span>
+            <img className={css.avatar} src={recipe?.ownerAvatar || defaultAvatar} alt="User avatar" />
+            <span className={css.name}>{recipe?.ownerName}</span>
           </div>
           <div className={css.buttons}>
             <Btn
