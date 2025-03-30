@@ -12,9 +12,12 @@ import { Toaster } from 'react-hot-toast';
 const AppLayout = ({ children }) => {
   const matches = useMatches();
   const currentRouteName = matches.find(match => match.handle)?.handle.routeName;
+  const layoutClass = matches
+    .map(m => m.handle?.layoutClass)
+    .filter(Boolean)
+    .at(-1);
 
   const [seo, setSeo] = useState({});
-  const { pathname } = useLocation();
   useEffect(() => {
     const t = getSeo(currentRouteName);
     setSeo(t);
@@ -28,7 +31,7 @@ const AppLayout = ({ children }) => {
           <meta key={index} name={name} content={content} />
         ))}
       </Helmet>
-      <Header className={['/'].includes(pathname) ? 'home' : ''} />
+      <Header className={layoutClass} />
       <main>
         <Suspense fallback={<AppLoader visible={true} />}>{children}</Suspense>
       </main>

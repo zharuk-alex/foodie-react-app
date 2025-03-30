@@ -5,14 +5,18 @@ import AuthBar from '../AuthBar/AuthBar';
 import css from './Header.module.css';
 import { Btn, Container, Icon } from '../UI/index.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useMatches } from 'react-router-dom';
 import LoginModal from 'components/LoginModal/LoginModal.jsx';
 import { setModalLoginOpen } from 'store/modal/operations';
 import { useEffect, useState } from 'react';
 
 const Header = ({ className }) => {
   const dispatch = useDispatch();
-  const { pathname } = useLocation();
+  const matches = useMatches();
+  const layoutClass = matches
+    .map(m => m.handle?.layoutClass)
+    .filter(Boolean)
+    .at(-1);
   const { isLoggedIn } = useSelector(state => state.auth);
   const { isLoginModalOpen } = useSelector(state => state.modal);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -44,7 +48,7 @@ const Header = ({ className }) => {
 
   return (
     <header className={className}>
-      <Container className={css.header} dataTheme={['/'].includes(pathname) ? 'dark' : ''}>
+      <Container className={css.header} dataTheme={layoutClass === 'home' ? 'dark' : ''}>
         {isMobileMenuOpen && <div className={css.overlay} onClick={closeMenu} />}
         <div id="menuContainer" className={isMobileMenuOpen ? css.menuContainerMobile : css.menuContainer}>
           {isMobileMenuOpen && (
@@ -52,12 +56,19 @@ const Header = ({ className }) => {
               <Icon name="icon-close" className={css.closeIcon} />
             </Btn>
           )}
-          <Logo className={isMobileMenuOpen ? css.logoMenu : ''} />
+          <Logo isDark={layoutClass === 'home'} className={isMobileMenuOpen ? css.logoMenu : ''} />
           <NavMenu variant={isMobileMenuOpen ? 'navMenu' : 'nav'} />
           {!isMobileMenuOpen && (
             <div className={css.menuAndUser}>
               {isLoggedIn ? <UserBar /> : <AuthBar />}
-              <Btn variant="clear" className={css.menuOpen} aria-expanded={isMobileMenuOpen} aria-controls="mobile-menu" aria-label="Open menu" onClick={openMenu}>
+              <Btn
+                variant="clear"
+                className={css.menuOpen}
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-menu"
+                aria-label="Open menu"
+                onClick={openMenu}
+              >
                 <Icon name="icon-burger-menu" className={css.burgerIcon} />
               </Btn>
             </div>
