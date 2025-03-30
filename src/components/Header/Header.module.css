@@ -1,6 +1,6 @@
-/* header {
-  
-} */
+.container {
+  max-width: 100%;
+}
 
 .headerWrapper {
   padding-bottom: 64px;
@@ -22,6 +22,7 @@
   flex-direction: row;
   gap: 4px;
   align-items: center;
+  justify-content: flex-end;
 }
 
 
@@ -73,6 +74,12 @@
   width: 100%;
 }
 
+.menuContainer>* {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
 .menuContainerMobile {
   position: fixed;
   top: 0;
@@ -108,10 +115,6 @@
   left: 24px;
   top: 32px;
 
-}
-
-.logoDesktop {
-  width: 236px;
 }
 
 .navMenu {
