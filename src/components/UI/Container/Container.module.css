@@ -7,18 +7,18 @@
 
 @media (min-width: 375px) {
   .container {
-    width: 375px;
+    max-width: 375px;
   }
 }
 
 @media (min-width: 768px) {
   .container {
-    width: 736px;
+    max-width: 736px;
   }
 }
 
 @media (min-width: 1440px) {
   .container {
-    width: 1312px;
+    max-width: 1312px;
   }
 }
