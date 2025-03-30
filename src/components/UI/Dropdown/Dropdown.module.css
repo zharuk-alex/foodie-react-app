@@ -20,7 +20,19 @@
   border-color: #888;
 }
 
+.placeholder {
+  color: var(--color-gray);
+}
+
+.clearBtn {
+  width: 18px;
+  height: 18px;
+  stroke: var(--color-main);
+  margin-inline: auto 4px;
+}
+
 .arrow {
+  color: var(--color-main);
   transition: transform ease-in-out .2s;
 }
 
