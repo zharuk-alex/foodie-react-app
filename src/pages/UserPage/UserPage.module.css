@@ -12,3 +12,14 @@
     width: 394px;
   }
 }
+
+@media (min-width: 1440px) {
+  .userWrapper {
+    margin: 0 auto;
+    display: flex;
+    width: 1312px;
+  }
+  .tabsContainer {
+    width: 100%;
+  }
+}

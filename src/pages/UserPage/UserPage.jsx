@@ -1,12 +1,11 @@
 import css from './UserPage.module.css';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { MainTitle, Subtitle, Modal, Container, Section } from 'components/UI';
+import { MainTitle, Subtitle, Container, Section } from 'components/UI';
 import { UserInfo, LogoutFollowButton, TabsList, ListItems, ListPagination, PathInfo } from 'components/User';
-// import { LogOutModal } from "components/UI";
 
 import { getFullUserDetailsThunk, getFollowersThunk, getFollowingThunk } from 'store/auth/operations';
 
@@ -19,9 +18,12 @@ import { getOwnRecipesThunk, getFavoriteRecipesThunk, fetchRecipes, removeRecipe
 import { selectRecipes as selectRecipeList, selectPagination as selectRecipePagination } from 'store/recipes/selectors';
 
 import { cleanPagination as cleanRecipesPagination, cleanRecipes } from 'store/recipes/slice';
+import { selectIsLoading } from '../../store/auth/selectors.js';
+import { AppLoader } from '../../components/UI/index.js';
 
 const UserPage = () => {
   const { id } = useParams();
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const currentUser = useSelector(selectCurrentUser);
@@ -30,22 +32,25 @@ const UserPage = () => {
   const following = useSelector(selectFollowing);
   const recipes = useSelector(selectRecipeList);
   const recipePagination = useSelector(selectRecipePagination);
+  const isLoading = useSelector(selectIsLoading);
 
-  const [activeTab, setActiveTab] = useState('recipes');
   const [currentPage, setCurrentPage] = useState(1);
-  const [isModalOpen, setModalOpen] = useState(false);
 
   const isOwnProfile = id === currentUser?.id;
 
-  useEffect(() => {
-    if (isOwnProfile) {
-      setActiveTab('my-recipes');
-    }
-  }, [isOwnProfile]);
+  const queryParams = new URLSearchParams(location.search);
+  const initialTab = queryParams.get('tab') || (isOwnProfile ? 'my-recipes' : 'recipes');
+
+  const [activeTab, setActiveTab] = useState(initialTab);
 
   useEffect(() => {
     dispatch(getFullUserDetailsThunk(id));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    const newTab = queryParams.get('tab') || (isOwnProfile ? 'my-recipes' : 'recipes');
+    setActiveTab(newTab);
+  }, [location.search, id, isOwnProfile]);
 
   // Reset pagination and lists when tab changes
   useEffect(() => {
@@ -60,7 +65,7 @@ const UserPage = () => {
   // Load tabs
   useEffect(() => {
     if (!currentUser?.id) return;
-    const limit = 5;
+    const limit = 9;
 
     switch (activeTab) {
       case 'followers':
@@ -77,9 +82,6 @@ const UserPage = () => {
       case 'favorites':
         dispatch(getFavoriteRecipesThunk({ id, page: currentPage, limit }));
         break;
-      case 'recipes':
-        dispatch(fetchRecipes({ userId: id, page: currentPage, limit }));
-        break;
       default:
         break;
     }
@@ -93,7 +95,6 @@ const UserPage = () => {
         return following;
       case 'my-recipes':
       case 'favorites':
-      case 'recipes':
         return recipes;
       default:
         return [];
@@ -108,7 +109,7 @@ const UserPage = () => {
     }
   }, [followers, following, recipes, currentPage]);
 
-  return (
+  return fullUserDetails && !isLoading ? (
     <>
       {/* Section Title */}
       <Section className={css.title}>
@@ -119,39 +120,39 @@ const UserPage = () => {
         </Container>
       </Section>
 
+      <div className={css.userWrapper}>
+        <Section>
+          <Container className={css.userContainer}>
+            <UserInfo user={fullUserDetails} isOwnProfile={isOwnProfile} />
+            <LogoutFollowButton isOwnProfile={isOwnProfile} isFollowing={fullUserDetails?.isFollowing} targetUserId={id} />
+          </Container>
+        </Section>
+
+        {/* Section Tabs */}
+        <Section>
+          <Container className={css.tabsContainer}>
+            <TabsList activeTab={activeTab} setActiveTab={setActiveTab} isOwnProfile={isOwnProfile} />
+
+            <ListItems
+              tab={activeTab}
+              items={getTabItems()}
+              onDelete={recipeId => {
+                if (activeTab === 'my-recipes') {
+                  dispatch(removeRecipeThunk(recipeId));
+                } else if (activeTab === 'favorites') {
+                  dispatch(removeRecipeFromFavoriteThunk(recipeId));
+                }
+              }}
+            />
+
+            <ListPagination currentPage={recipePagination.page} totalPages={recipePagination.totalPages} onPageChange={setCurrentPage} />
+          </Container>
+        </Section>
+      </div>
       {/* Section User */}
-      <Section>
-        <Container className={css.userContainer}>
-          <UserInfo user={fullUserDetails} isOwnProfile={isOwnProfile} />
-          <LogoutFollowButton isOwnProfile={isOwnProfile} isFollowing={fullUserDetails?.isFollowing} targetUserId={id} />
-        </Container>
-      </Section>
-
-      {/* Section Tabs */}
-      <Section>
-        <Container>
-          <TabsList activeTab={activeTab} setActiveTab={setActiveTab} isOwnProfile={isOwnProfile} />
-
-          <ListItems
-            tab={activeTab}
-            items={getTabItems()}
-            onDelete={recipeId => {
-              if (activeTab === 'my-recipes') {
-                dispatch(removeRecipeThunk(recipeId));
-              } else if (activeTab === 'favorites') {
-                dispatch(removeRecipeFromFavoriteThunk(recipeId));
-              }
-            }}
-          />
-
-          <ListPagination currentPage={recipePagination.page} totalPages={recipePagination.totalPages} onPageChange={setCurrentPage} />
-        </Container>
-      </Section>
-
-      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-        {/* <LogOutModal /> */}
-      </Modal>
     </>
+  ) : (
+    <AppLoader />
   );
 };
 

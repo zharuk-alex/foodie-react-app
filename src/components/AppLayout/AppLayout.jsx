@@ -1,17 +1,17 @@
-import { Suspense, useEffect } from "react";
-import { useMatches } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
-import Header from "../Header/Header.jsx";
-import { AppLoader } from "components/UI";
-import { getSeo } from "../../seo";
-import { useState } from "react";
-import Footer from "../Footer/Footer.jsx";
-import {useLocation} from "react-router-dom";
+import { Suspense, useEffect } from 'react';
+import { useMatches } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import Header from '../Header/Header.jsx';
+import { AppLoader } from 'components/UI';
+import { getSeo } from '../../seo';
+import { useState } from 'react';
+import Footer from '../Footer/Footer.jsx';
+import { useLocation } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
 const AppLayout = ({ children }) => {
   const matches = useMatches();
-  const currentRouteName = matches.find((match) => match.handle)?.handle
-    .routeName;
+  const currentRouteName = matches.find(match => match.handle)?.handle.routeName;
 
   const [seo, setSeo] = useState({});
   const { pathname } = useLocation();
@@ -33,6 +33,7 @@ const AppLayout = ({ children }) => {
         <Suspense fallback={<AppLoader visible={true} />}>{children}</Suspense>
       </main>
       <Footer />
+      <Toaster position="bottom-center" reverseOrder={false} />
     </>
   );
 };

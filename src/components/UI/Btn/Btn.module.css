@@ -27,7 +27,7 @@
   composes: button;
   background-color: var(--color-main);
   color: var(--color-white);
-  border: none;
+  border: unset;
 }
 
 .main:hover:not(:disabled) {

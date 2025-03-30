@@ -3,13 +3,14 @@ import css from './UserInfo.module.css';
 import defaultAvatar from 'images/avatar/default_avatar.jpg';
 
 const UserInfo = ({ user, isOwnProfile }) => {
-  if (!user) return null;
-  console.log('-->', user);
+  if (!user?.id) return null;
+
   const { avatar, name, email, totalFavoriteRecipes = 0, totalFollowers = 0, totalFollowing = 0, totalRecipes = 0 } = user;
+  const realAvatar = avatar ? avatar : defaultAvatar;
 
   return (
     <div className={css.userInfo}>
-      {isOwnProfile ? <UploadUserAvatar avatar={avatar || defaultAvatar} /> : <img src={avatar || defaultAvatar} alt="User Avatar" className={css.avatar} />}
+      {isOwnProfile ? <UploadUserAvatar avatar={realAvatar} /> : <img src={realAvatar} alt="User Avatar" className={css.avatar} />}
       <p className={css.name}>{name}</p>
       <ul className={css.stats}>
         <li className={css.statsItem}>

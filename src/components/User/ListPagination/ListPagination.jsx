@@ -1,25 +1,33 @@
-import css from "./ListPagination.module.css";
+import ReactPaginate from 'react-paginate';
+import css from './ListPagination.module.css';
 
 const ListPagination = ({ currentPage, totalPages, onPageChange }) => {
   if (totalPages <= 1) return null;
 
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const handlePageClick = event => {
+    const selectedPage = event.selected + 1;
+    onPageChange(selectedPage);
+  };
 
   return (
-    <div className={css.pagination}>
-      {pages.map((page) => (
-        <button
-          key={page}
-          type="button"
-          className={`${css.pageButton} ${
-            page === currentPage ? css.active : ""
-          }`}
-          onClick={() => onPageChange(page)}
-          disabled={page === currentPage}
-        >
-          {page}
-        </button>
-      ))}
+    <div className={css.paginationWrapper}>
+      <ReactPaginate
+        breakLabel="..."
+        nextLabel=">"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={3}
+        marginPagesDisplayed={1}
+        pageCount={totalPages}
+        previousLabel="<"
+        forcePage={currentPage - 1}
+        containerClassName={css.pagination}
+        pageClassName={css.page}
+        activeClassName={css.active}
+        previousClassName={css.prev}
+        nextClassName={css.next}
+        disabledClassName={css.disabled}
+        breakClassName={css.break}
+      />
     </div>
   );
 };

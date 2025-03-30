@@ -1,4 +1,4 @@
-import { createSlice, isAnyOf } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 import {
   fetchCategories,
   fetchAreas,
@@ -12,10 +12,10 @@ import {
   getPopularRecipesThunk,
   addRecipeToFavoriteThunk,
   removeRecipeFromFavoriteThunk,
-} from "./operations";
-import { initialState } from "./initialState.js";
+} from './operations';
+import { initialState } from './initialState.js';
 
-const handlePending = (state) => {
+const handlePending = state => {
   state.isLoading = true;
   state.error = null;
 };
@@ -26,7 +26,7 @@ const handleRejected = (state, action) => {
 };
 
 const recipesSlice = createSlice({
-  name: "recipes",
+  name: 'recipes',
   initialState,
   reducers: {
     clearCategories(state) {
@@ -35,20 +35,23 @@ const recipesSlice = createSlice({
     setAppendMode(state, action) {
       state.appendMode = action.payload;
     },
-    cleanPagination: (state) => {
+    cleanPagination: state => {
       state.pagination = { ...initialState.pagination };
     },
-    cleanRecipes: (state) => {
+    cleanRecipes: state => {
       state.recipes = [];
     },
-    cleanPopularRecipes: (state) => {
+    cleanPopularRecipes: state => {
       state.popularRecipes = [];
     },
-    cleanSingleRecipe: (state) => {
+    cleanSingleRecipe: state => {
       state.singleRecipe = {};
     },
+    removeRecipeLocally: (state, action) => {
+      state.recipes = state.recipes.filter(recipe => recipe.id !== action.payload);
+    },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       .addCase(fetchCategories.fulfilled, (state, { payload }) => {
         state.categories = payload;
@@ -76,6 +79,8 @@ const recipesSlice = createSlice({
           state.pagination.totalPages = payload.totalPage;
           state.pagination.hasNextPage = payload.hasNextPage;
           state.pagination.hasPreviousPage = payload.hasPreviousPage;
+        } else {
+          state.pagination = { ...initialState.pagination };
         }
       })
       .addCase(getRecipeByIdThunk.fulfilled, (state, { payload }) => {
@@ -88,7 +93,7 @@ const recipesSlice = createSlice({
         state.isLoading = false;
         state.error = null;
       })
-      .addCase(removeRecipeThunk.fulfilled, (state) => {
+      .addCase(removeRecipeThunk.fulfilled, state => {
         state.isLoading = false;
         state.error = null;
       })
@@ -101,16 +106,12 @@ const recipesSlice = createSlice({
         if (state.singleRecipe?.id === payload.recipeId) {
           state.singleRecipe.isFavorite = true;
         }
-        const popularRecipe = state.popularRecipes.find(
-          (p) => p.id === payload.recipeId
-        );
+        const popularRecipe = state.popularRecipes.find(p => p.id === payload.recipeId);
         if (popularRecipe) {
           popularRecipe.isFavorite = true;
         }
 
-        const recipe = state.recipes.find(
-          (r) => r.id === payload.id || r.id === payload.recipeId
-        );
+        const recipe = state.recipes.find(r => r.id === payload.id || r.id === payload.recipeId);
         if (recipe) {
           recipe.isFavorite = true;
         }
@@ -118,48 +119,35 @@ const recipesSlice = createSlice({
         state.isLoading = false;
         state.error = null;
       })
-      .addCase(
-        removeRecipeFromFavoriteThunk.fulfilled,
-        (state, { payload }) => {
-          if (state.singleRecipe?.id === payload.id) {
-            state.singleRecipe.isFavorite = false;
-          }
-          const popularRecipe = state.popularRecipes.find(
-            (p) => p.id === payload.id
-          );
-          if (popularRecipe) {
-            popularRecipe.isFavorite = false;
-          }
-
-          const recipe = state.recipes.find(
-            (r) => r.id === payload.id || r.id === payload.recipeId
-          );
-          if (recipe) {
-            recipe.isFavorite = false;
-          }
-
-          state.isLoading = false;
-          state.error = null;
+      .addCase(removeRecipeFromFavoriteThunk.fulfilled, (state, { payload }) => {
+        if (state.singleRecipe?.id === payload.id) {
+          state.singleRecipe.isFavorite = false;
         }
-      )
-      .addMatcher(
-        isAnyOf(
-          getOwnRecipesThunk.fulfilled,
-          getFavoriteRecipesThunk.fulfilled
-        ),
-        (state, { payload }) => {
-          state.recipes = payload?.recipes ?? [];
-          if (payload.recipes?.length > 0) {
-            state.pagination.page = payload.page;
-            state.pagination.limit = payload.limit;
-            state.pagination.totalPages = payload.totalPage;
-            state.pagination.hasNextPage = payload.hasNextPage;
-            state.pagination.hasPreviousPage = payload.hasPreviousPage;
-          }
-          state.isLoading = false;
-          state.error = null;
+        const popularRecipe = state.popularRecipes.find(p => p.id === payload.id);
+        if (popularRecipe) {
+          popularRecipe.isFavorite = false;
         }
-      )
+
+        const recipe = state.recipes.find(r => r.id === payload.id || r.id === payload.recipeId);
+        if (recipe) {
+          recipe.isFavorite = false;
+        }
+
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addMatcher(isAnyOf(getOwnRecipesThunk.fulfilled, getFavoriteRecipesThunk.fulfilled), (state, { payload }) => {
+        state.recipes = payload?.recipes ?? [];
+        if (payload.recipes?.length > 0) {
+          state.pagination.page = payload.page;
+          state.pagination.limit = payload.limit;
+          state.pagination.totalPages = payload.totalPage;
+          state.pagination.hasNextPage = payload.hasNextPage;
+          state.pagination.hasPreviousPage = payload.hasPreviousPage;
+        }
+        state.isLoading = false;
+        state.error = null;
+      })
       .addMatcher(
         isAnyOf(
           addRecipeThunk.pending,
@@ -197,12 +185,6 @@ const recipesSlice = createSlice({
   },
 });
 
-export const {
-  clearCategories,
-  setAppendMode,
-  cleanPagination,
-  cleanRecipes,
-  cleanSingleRecipe,
-  cleanPopularRecipes,
-} = recipesSlice.actions;
+export const { clearCategories, setAppendMode, cleanPagination, cleanRecipes, cleanSingleRecipe, cleanPopularRecipes, removeRecipeLocally } =
+  recipesSlice.actions;
 export const recipesReducer = recipesSlice.reducer;
