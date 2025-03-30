@@ -61,6 +61,22 @@
   background: none;
 }
 
+.delete {
+  color: transparent;
+}
+
+.trashIcon {
+  stroke: var(--color-gray);
+}
+
+.link.delete:is(:hover, :focus){
+  color: transparent;
+}
+
+.link.delete:is(:hover, :focus) > .trashIcon {
+  stroke: var( --color-white);
+}
+
 .icon {
   margin-left: auto;
 }
