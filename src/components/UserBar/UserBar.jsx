@@ -1,18 +1,21 @@
-import React from 'react';
+import { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-
 import LoginModal from '../LoginModal/LoginModal';
 import css from './UserBar.module.css';
 import { clsx } from 'clsx';
 import Btn from '../UI/Btn/Btn';
 import { logoutThunk } from '../../store/auth/operations';
 import { setModalLoginOpen } from '../../store/modal/operations';
+import { Avatar, Icon } from '../UI/index.js';
+import useOutsideClick from '../../hooks/useOutsideClick.jsx';
 
 const UserBar = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.auth);
   const { isLoginModalOpen } = useSelector(state => state.modal);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
   const handleLoginModalClose = () => {
     dispatch(setModalLoginOpen(false));
@@ -22,17 +25,25 @@ const UserBar = () => {
     dispatch(logoutThunk());
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(prev => !prev);
+  };
+  useOutsideClick(menuRef, () => setIsMenuOpen(false));
+
   return (
-    <div className={clsx('container', css.wrapper)}>
-      <>
-        <p>{currentUser?.name || 'User'}</p>
+    <div className={css.userWrapper} ref={menuRef}>
+      <Avatar variant="menu" src={currentUser?.avatarURL} placeholder={currentUser?.name} onClick={toggleMenu}>
+        <span>{currentUser?.name || 'User'}</span>
+        <Icon className={css.arrowIcon} name={isMenuOpen ? 'icon-chevron-up' : 'icon-chevron-down'}></Icon>
+      </Avatar>
+      <div className={clsx(css.menu, isMenuOpen && css.menuVisible)}>
         <Link to={`/user/${currentUser?.id}`} className={css.profileLink}>
           Profile
         </Link>
-        <Btn variant="btn-icon" onClick={handleLogout}>
-          Log Out
+        <Btn variant="logoutInHead" onClick={handleLogout}>
+          Log Out <Icon name='icon-arrow-up-right' className={css.logoutIcon} />
         </Btn>
-      </>
+      </div>
       {isLoginModalOpen && <LoginModal onClose={handleLoginModalClose} />}
     </div>
   );
