@@ -5,11 +5,13 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { selectLoading, selectError, selectRecipes, selectCategories, selectAreas, selectIngredients, selectPagination } from 'store/recipes/selectors';
 import { fetchCategories, fetchAreas, fetchIngredients, fetchRecipes } from 'store/recipes/operations';
-import PageTitle from '../PageTitle/PageTitle';
-import { Dropdown, Pagination, Icon, AppLoader } from '../UI';
-import RecipeList from '../RecipeList/RecipeList';
-import useScrollToElement from '../../hooks/useScrollToElement';
 import { selectIsLoggedIn } from 'store/auth/selectors';
+
+import PageTitle from '../PageTitle/PageTitle';
+import RecipeFilters from '../RecipeFilters/RecipeFilters';
+import RecipeList from '../RecipeList/RecipeList';
+import { Pagination, Icon, AppLoader } from '../UI';
+import useScrollToElement from '../../hooks/useScrollToElement';
 
 const Recipes = () => {
   const dispatch = useDispatch();
@@ -18,12 +20,11 @@ const Recipes = () => {
   const { slug } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const categories = useSelector(selectCategories);
   const rawAreas = useSelector(selectAreas);
   const rawIngredients = useSelector(selectIngredients);
-  const categories = useSelector(selectCategories);
   const recipes = useSelector(selectRecipes);
   const pagination = useSelector(selectPagination);
-
   const isLoading = useSelector(selectLoading);
   const hasError = useSelector(selectError);
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -101,9 +102,6 @@ const Recipes = () => {
     updateUrlParams(p, filters);
   };
 
-  const areas = [{ value: null, label: 'All areas' }, ...rawAreas];
-  const ingredients = [{ value: null, label: 'All ingredients' }, ...rawIngredients];
-
   const pageTitle = {
     title: activeCategory?.name,
     subtitle: 'Discover tasty recipes that fit your preferences!',
@@ -119,10 +117,7 @@ const Recipes = () => {
       </button>
       <PageTitle {...pageTitle} />
       <div className={css.wrapper}>
-        <div className={css.filters}>
-          <Dropdown options={areas} value={filters?.area} onChange={val => updateFilter('area', val)} placeholder="Area" />
-          <Dropdown options={ingredients} value={filters?.ingredient} onChange={val => updateFilter('ingredient', val)} placeholder="Ingredients" />
-        </div>
+        {filters && <RecipeFilters className={css.filters} areas={rawAreas} ingredients={rawIngredients} filters={filters} onChange={updateFilter} />}
         <div>
           {isLoading && <AppLoader />}
           {isEmpty && <p className="no-results">No recipes found for the selected category or filters.</p>}
