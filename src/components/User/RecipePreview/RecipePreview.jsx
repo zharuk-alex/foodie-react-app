@@ -6,6 +6,7 @@ import { removeRecipeThunk, removeRecipeFromFavoriteThunk } from 'store/recipes/
 import { removeRecipeLocally } from 'store/recipes/slice';
 import placeholderImage from 'images/recipe/placeholder-recipe.jpg';
 import { useState } from 'react';
+import clsx from 'clsx';
 
 const RecipePreview = ({ data, tab }) => {
   const dispatch = useDispatch();
@@ -45,8 +46,8 @@ const RecipePreview = ({ data, tab }) => {
           <Icon name="icon-arrow-up-right" size="18" />
         </Link>
         {isDeletable && (
-          <button className={css.link} onClick={handleDelete} disabled={loading} title="Delete Recipe">
-            <Icon name="icon-trash" size="18" />
+          <button className={clsx(css.link, css.delete)} onClick={handleDelete} disabled={loading} title="Delete Recipe">
+            <Icon name="icon-trash" size="18" className={css.trashIcon} />
           </button>
         )}
       </div>

@@ -1,16 +1,20 @@
-.header {
-  display: flex!important;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-  padding-right: 24px;
-  padding-left: 24px;
+/* header {
+  
+} */
+
+.headerWrapper {
+  padding-bottom: 64px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 20px;
+  margin-top: 8px;
+  margin-inline: 8px;
 }
 
-@media (max-width: 400px) {
-  .header {
-    width: auto;
-  }
+.headerWrapperDark {
+  background-color: var(--color-main);
+  border-top-left-radius: var(--main-radius);
+  border-top-right-radius: var(--main-radius);
 }
 
 .menuAndUser {
@@ -28,9 +32,7 @@
   }
 }
 
-.menuClose {
-
-}
+.menuClose {}
 
 .burgerIcon {
   width: 30px;
@@ -42,7 +44,7 @@
 }
 
 :global([data-theme='dark']) .burgerIcon {
-  color: var(--color-white );
+  color: var(--color-white);
   stroke: var(--color-white);
   fill: var(--color-white);
 }
@@ -59,7 +61,7 @@
 }
 
 :global([data-theme='dark']) .closeIcon {
-  color: var(--color-white );
+  color: var(--color-white);
   stroke: var(--color-white);
   fill: var(--color-white);
 }
@@ -87,7 +89,7 @@
 }
 
 :global([data-theme='dark']) .menuContainerMobile {
-    background-color: var(--color-main);
+  background-color: var(--color-main);
 }
 
 .overlay {
@@ -108,11 +110,31 @@
 
 }
 
+.logoDesktop {
+  width: 236px;
+}
+
 .navMenu {
-  display: flex!important;
+  display: flex !important;
 }
 
 .noScroll {
-    overflow: hidden;
-    height: 100vh;
+  overflow: hidden;
+  height: 100vh;
+}
+
+@media (min-width: 768px) {
+  .headerWrapper {
+    padding-bottom: 80px;
+    margin-top: 16px;
+    margin-inline: 16px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .headerWrapper {
+    padding-bottom: 80px;
+    margin-top: 20px;
+    margin-inline: auto;
+  }
 }

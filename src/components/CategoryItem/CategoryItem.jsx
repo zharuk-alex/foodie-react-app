@@ -14,12 +14,12 @@ const CategoryItem = ({ category, className = '' }) => {
   const slug = catName?.toLowerCase().trim().replace(/\s+/g, '_');
 
   return (
-    <div className={clsx(css.card, className)}>
+    <div className={clsx(css.card, className)} onClick={() => navigate(`category/${slug}`)}>
       <img src={srcSet['1x']} srcSet={srcSet} alt={catName} className={css.cardImage} />
       <div className={css.backdrop}></div>
       <div className={css.actions}>
         <Chip className={css.chip} label={catName} />
-        <Btn variant="btn-icon" onClick={() => navigate(`category/${slug}`)}>
+        <Btn variant="btn-icon">
           <Icon name="icon-arrow-up-right" size="18" color="#fff" />
         </Btn>
       </div>
