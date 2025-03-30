@@ -3,7 +3,7 @@ import css from './Dropdown.module.css';
 import clsx from 'clsx';
 import { Icon } from 'components/UI';
 
-const Dropdown = ({ options = [], value, onChange, placeholder = 'Select...', clearable, className = '' }) => {
+const Dropdown = ({ options = [], value, onChange, placeholder = 'Select...', clearable, className = '', isAddRecipeForm = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef();
 
@@ -32,8 +32,10 @@ const Dropdown = ({ options = [], value, onChange, placeholder = 'Select...', cl
   return (
     <div className={clsx(css.dropdown, className)} ref={dropdownRef}>
       <div className={clsx(css.trigger, { [css.open]: isOpen })} onClick={() => setIsOpen(prev => !prev)}>
-        <span className={clsx(!value && css.placeholder)}>{value ? value.label : placeholder}</span>
+        <span className={clsx(!value && isAddRecipeForm && css.placeholderText)}>{value ? value.label : placeholder}</span>
+
         {clearable && value && <Icon name="icon-close" className={css.clearBtn} onClick={handleClear} />}
+
         <Icon name="icon-chevron-down" className={clsx(css.arrow, { [css.arrowRotated]: isOpen })} />
       </div>
       {isOpen && (

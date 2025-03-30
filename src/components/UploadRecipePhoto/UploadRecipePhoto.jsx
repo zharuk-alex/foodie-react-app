@@ -72,7 +72,7 @@ const UploadRecipePhoto = ({
           className={clsx(css.text, css.btnAfterPicture)}
           onClick={handleClick}
         >
-          Upload a photo
+          Upload another photo
         </button>
       )}
     </label>
