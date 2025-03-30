@@ -24,17 +24,13 @@ const RecipeCard = ({ recipe = {}, className = '' }) => {
       return;
     }
 
-    let result;
     try {
       if (isFavorite) {
-        result = await dispatch(removeRecipeFromFavoriteThunk(id));
+        await dispatch(removeRecipeFromFavoriteThunk(id));
       } else {
-        result = await dispatch(addRecipeToFavoriteThunk(id));
+        await dispatch(addRecipeToFavoriteThunk(id));
       }
-
-      console.log('result', result);
     } catch (error) {
-      console.log('error', error);
       toast.error(error);
     }
   };
