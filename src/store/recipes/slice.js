@@ -128,11 +128,10 @@ const recipesSlice = createSlice({
           popularRecipe.isFavorite = false;
         }
 
-        const recipe = state.recipes.find(r => r.id === payload.id || r.id === payload.recipeId);
-        if (recipe) {
-          recipe.isFavorite = false;
+        const recipeIndex = state.recipes.findIndex(r => r.id === payload.id || r.id === payload.recipeId);
+        if (recipeIndex !== -1) {
+          state.recipes = [...state.recipes.slice(0, recipeIndex), ...state.recipes.slice(recipeIndex + 1)];
         }
-
         state.isLoading = false;
         state.error = null;
       })

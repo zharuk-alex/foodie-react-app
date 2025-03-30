@@ -77,6 +77,9 @@ const UserPage = () => {
         }
         break;
       case 'my-recipes':
+        if (isOwnProfile) {
+          
+        }
         dispatch(getOwnRecipesThunk({ id, page: currentPage, limit }));
         break;
       case 'favorites':
