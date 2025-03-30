@@ -1,7 +1,6 @@
 .section {
   overflow: hidden;
   position: relative;
-  margin-top: -72px;
   padding-inline: 8px;
 }
 
@@ -11,8 +10,8 @@
   position: relative;
   margin: 0 auto;
   background-color: var(--color-main);
-  border-radius: var(--main-radius);
-  padding-top: 194px;
+  border-bottom-right-radius: var(--main-radius);
+  border-bottom-left-radius: var(--main-radius);
 }
 
 .heroInfo {

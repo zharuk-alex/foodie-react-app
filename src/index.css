@@ -25,24 +25,7 @@ body {
   color: var(--color-secondary);
 }
 
-section {
-  padding-bottom: 120px;
-}
-
-header {
-  padding-top: 40px;
-  padding-bottom: 120px;
-}
-
-header.home {
-  z-index: 1000;
-  position: sticky;
-  top: 40px;
-  padding: 0;
-}
 
 main {
   flex-grow: 1;
-  padding-top: 40px;
 }
-

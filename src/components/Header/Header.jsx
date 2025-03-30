@@ -9,6 +9,7 @@ import { useLocation, useMatches } from 'react-router-dom';
 import LoginModal from 'components/LoginModal/LoginModal.jsx';
 import { setModalLoginOpen } from 'store/modal/operations';
 import { useEffect, useState } from 'react';
+import { clsx } from 'clsx';
 
 const Header = ({ className }) => {
   const dispatch = useDispatch();
@@ -48,34 +49,36 @@ const Header = ({ className }) => {
 
   return (
     <header className={className}>
-      <Container className={css.header} dataTheme={layoutClass === 'home' ? 'dark' : ''}>
-        {isMobileMenuOpen && <div className={css.overlay} onClick={closeMenu} />}
-        <div id="menuContainer" className={isMobileMenuOpen ? css.menuContainerMobile : css.menuContainer}>
-          {isMobileMenuOpen && (
-            <Btn variant="clear" className={css.menuClose} aria-label="Close menu" onClick={closeMenu}>
-              <Icon name="icon-close" className={css.closeIcon} />
-            </Btn>
-          )}
-          <Logo isDark={layoutClass === 'home'} className={isMobileMenuOpen ? css.logoMenu : ''} />
-          <NavMenu variant={isMobileMenuOpen ? 'navMenu' : 'nav'} />
-          {!isMobileMenuOpen && (
-            <div className={css.menuAndUser}>
-              {isLoggedIn ? <UserBar /> : <AuthBar />}
-              <Btn
-                variant="clear"
-                className={css.menuOpen}
-                aria-expanded={isMobileMenuOpen}
-                aria-controls="mobile-menu"
-                aria-label="Open menu"
-                onClick={openMenu}
-              >
-                <Icon name="icon-burger-menu" className={css.burgerIcon} />
+      <div className={clsx(css.headerWrapper, layoutClass === 'home' && css.headerWrapperDark)}>
+        <Container dataTheme={layoutClass === 'home' ? 'dark' : ''}>
+          {isMobileMenuOpen && <div className={css.overlay} onClick={closeMenu} />}
+          <div id="menuContainer" className={isMobileMenuOpen ? css.menuContainerMobile : css.menuContainer}>
+            {isMobileMenuOpen && (
+              <Btn variant="clear" className={css.menuClose} aria-label="Close menu" onClick={closeMenu}>
+                <Icon name="icon-close" className={css.closeIcon} />
               </Btn>
-            </div>
-          )}
-        </div>
-        {isLoginModalOpen && <LoginModal onClose={handleLoginModalClose} />}
-      </Container>
+            )}
+            <Logo isDark={layoutClass === 'home'} className={isMobileMenuOpen ? css.logoMenu : css.logoDesktop} />
+            <NavMenu variant={isMobileMenuOpen ? 'navMenu' : 'nav'} />
+            {!isMobileMenuOpen && (
+              <div className={css.menuAndUser}>
+                {isLoggedIn ? <UserBar /> : <AuthBar />}
+                <Btn
+                  variant="clear"
+                  className={css.menuOpen}
+                  aria-expanded={isMobileMenuOpen}
+                  aria-controls="mobile-menu"
+                  aria-label="Open menu"
+                  onClick={openMenu}
+                >
+                  <Icon name="icon-burger-menu" className={css.burgerIcon} />
+                </Btn>
+              </div>
+            )}
+          </div>
+          {isLoginModalOpen && <LoginModal onClose={handleLoginModalClose} />}
+        </Container>
+      </div>
     </header>
   );
 };
