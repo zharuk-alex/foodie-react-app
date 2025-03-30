@@ -7,12 +7,14 @@ const Btn = ({
   children,
   onClick,
   disabled,
+  type = "button",
   ...restProps
 }) => {
   return (
     <button
       className={clsx(css[variant], className)}
       onClick={onClick}
+      type={type} 
       {...restProps}
       disabled={disabled}
     >
