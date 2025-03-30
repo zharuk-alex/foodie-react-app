@@ -15,15 +15,17 @@ const routes = [
     element: <HomePage />,
     title: 'Home',
     isNav: true,
-    handle: { routeName: 'home' },
+    handle: { routeName: 'home', layoutClass: 'home' },
     children: [
       {
         index: true,
         element: <CategoriesList />,
+        handle: { routeName: 'home', layoutClass: 'home' },
       },
       {
         path: 'category/:slug',
         element: <Recipes />,
+        handle: { routeName: 'home', layoutClass: 'home' },
       },
     ],
   },
