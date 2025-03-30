@@ -69,7 +69,17 @@ const AddRecipeForm = ({ onSubmitForm }) => {
     setIngredientQuantity('');
   };
 
+  const countWords = str => {
+    return str.trim().split(/\s+/).length;
+  };
+
   const handleInputResize = event => {
+    const value = event.target.value;
+    const wordCount = countWords(value);
+    if (wordCount > 200) {
+      event.target.value = value.split(/\s+/).slice(0, 200).join(' ');
+    }
+
     event.target.style.height = 'auto';
     event.target.style.height = event.target.scrollHeight + 'px';
   };
@@ -87,36 +97,33 @@ const AddRecipeForm = ({ onSubmitForm }) => {
   };
 
   const onSubmit = async data => {
+    console.log('Form submitted with data:', data);
+    const formData = new FormData();
+    formData.append('recipeName', data.recipeName);
+    formData.append('description', data.description);
+    formData.append('instruction', data.instruction);
+    formData.append('preparationTime', preparationTime);
+    formData.append('category', selectedCategory);
+
+    selectedIngredients.forEach(ingredient => {
+      formData.append('ingredients[]', JSON.stringify(ingredient));
+    });
+
+    if (previewImage) {
+      formData.append('image', previewImage);
+    }
+
+    console.log([...formData.entries()]);
+
     try {
-      const formData = new FormData();
-      const { image, title, description, category, area, time, instructions } = data;
+      await dispatch(addRecipeThunk(formData));
+      navigate('/userPage');
 
-      formData.append('thumb', image[0]);
-      formData.append('title', title);
-      formData.append('description', description);
-      formData.append('category', category);
-      formData.append('area', area);
-      formData.append('time', time);
-      formData.append('instructions', instructions);
-
-      formData.append(
-        'ingredients',
-        JSON.stringify(
-          selectedIngredients.map(card => ({
-            id: card._id,
-            measure: card.measure,
-          }))
-        )
-      );
-
-      await addNewRecipe(formData);
+      setSuccessMessage('Recipe added successfully');
       toast.success('Recipe added successfully');
-
-      if (user) {
-        navigate(`/user/${user.id}/recipies`);
-      }
     } catch (error) {
-      toast.error(`Error occurred while adding new recipe: ${error.message}`);
+      setErrorMessage('Failed to add recipe');
+      toast.error('Failed to add recipe');
     }
   };
 
@@ -134,12 +141,11 @@ const AddRecipeForm = ({ onSubmitForm }) => {
         <div className={styles.inputWrapper}>
           <textarea
             placeholder="Enter a description of the dish"
-            maxLength="200"
             {...register('description')}
             className={errors.description ? styles.errorInput : ''}
             onInput={handleInputResize}
           />
-          <div className={styles.charCounter}>{descriptionValue.length}/200</div>
+          <div className={styles.charCounter}>{countWords(descriptionValue)}/200</div>
           {errors.description && <p className={styles.errorMessage}>{errors.description.message}</p>}
         </div>
 
@@ -205,12 +211,11 @@ const AddRecipeForm = ({ onSubmitForm }) => {
 
           <textarea
             placeholder="Enter recipe"
-            maxLength="200"
             {...register('instruction')}
             className={errors.instruction ? styles.errorInput : ''}
             onInput={handleInputResize}
           />
-          <div className={styles.charCounter}>{instructionValue.length}/200</div>
+          <div className={styles.charCounter}>{countWords(instructionValue)}/200</div>
           {errors.instruction && <p className={styles.errorMessage}>{errors.instruction.message}</p>}
         </div>
 
@@ -227,6 +232,7 @@ const AddRecipeForm = ({ onSubmitForm }) => {
           >
             <Trash size={18} />
           </button>
+
           <Btn type="submit">Publish</Btn>
         </div>
       </div>
