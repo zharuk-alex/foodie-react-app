@@ -1,7 +1,7 @@
 import css from './UserPage.module.css';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { MainTitle, Subtitle, Container, Section } from 'components/UI';
@@ -23,6 +23,7 @@ import { AppLoader } from '../../components/UI/index.js';
 
 const UserPage = () => {
   const { id } = useParams();
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const currentUser = useSelector(selectCurrentUser);
@@ -37,11 +38,19 @@ const UserPage = () => {
 
   const isOwnProfile = id === currentUser?.id;
 
-  const [activeTab, setActiveTab] = useState(isOwnProfile ? 'my-recipes' : 'recipes');
+  const queryParams = new URLSearchParams(location.search);
+  const initialTab = queryParams.get('tab') || (isOwnProfile ? 'my-recipes' : 'recipes');
+
+  const [activeTab, setActiveTab] = useState(initialTab);
 
   useEffect(() => {
     dispatch(getFullUserDetailsThunk(id));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    const newTab = queryParams.get('tab') || (isOwnProfile ? 'my-recipes' : 'recipes');
+    setActiveTab(newTab);
+  }, [location.search, id, isOwnProfile]);
 
   // Reset pagination and lists when tab changes
   useEffect(() => {
