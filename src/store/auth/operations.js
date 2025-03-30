@@ -129,7 +129,7 @@ export const removeFromFollowingThunk = createAsyncThunk(
 
 export const getFollowersThunk = createAsyncThunk(
   "auth/getAllFollowers",
-  async ({ id, page, limit }, { getState, rejectWithValue }) => {
+  async ({ id, page = 1, limit = 10 }, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token;
       setToken(token);
