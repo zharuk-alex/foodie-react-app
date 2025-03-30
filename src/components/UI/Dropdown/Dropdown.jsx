@@ -9,6 +9,7 @@ const Dropdown = ({
   onChange,
   placeholder = "Select...",
   className = "",
+  isAddRecipeForm = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef();
@@ -35,7 +36,9 @@ const Dropdown = ({
         className={clsx(css.trigger, { [css.open]: isOpen })}
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        {value ? value.label : placeholder}
+        <span className={clsx(!value && isAddRecipeForm && css.placeholderText)}>
+          {value ? value.label : placeholder}
+        </span>
 
         <Icon
           name="icon-chevron-down"

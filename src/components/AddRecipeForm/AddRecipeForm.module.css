@@ -141,6 +141,7 @@ input[name='recipeName']::placeholder {
   align-items: center;
   gap: 8px;
   padding-top: 80px;
+  padding-bottom: 120px;
 }
 
 .timeContainer {
@@ -165,6 +166,14 @@ input[name='recipeName']::placeholder {
   color: #bfbebe;
 }
 
+.Selector {
+  width: 315px;
+}
+
+.quantity {
+  width: 270px;
+}
+
 .cookingTimeBtn {
   display: flex;
   align-items: center;
@@ -176,6 +185,7 @@ input[name='recipeName']::placeholder {
   border-color: #bfbebe;
   width: 56px;
   height: 56px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .cookingTimeBtn:hover {
@@ -191,10 +201,11 @@ input[name='recipeName']::placeholder {
 }
 
 .btnadd {
-  width: 229px;
+  width: 230px;
   background-color: white;
   border: 1px solid #000;
   color: #000;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .btnadd:hover {

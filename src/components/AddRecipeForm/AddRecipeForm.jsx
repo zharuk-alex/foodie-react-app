@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { recipeValidationSchema } from '../../validation/recipeValidation';
@@ -6,8 +6,21 @@ import Btn from '../UI/Btn/Btn';
 import { Plus, Minus, Trash } from 'lucide-react';
 import styles from './AddRecipeForm.module.css';
 import UploadRecipePhoto from '../UploadRecipePhoto/UploadRecipePhoto.jsx';
+import { Dropdown } from '../UI';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchIngredients, fetchCategories } from '../../store/recipes/operations.js';
+import { selectCategories, selectIngredients } from '../../store/recipes/selectors.js';
 
-const AddRecipeForm = ({ categories = [], ingredients = [], onSubmitForm }) => {
+const AddRecipeForm = ({ onSubmitForm }) => {
+  const dispatch = useDispatch();
+  const categories = useSelector(selectCategories);
+  const ingredients = useSelector(selectIngredients);
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
   const {
     register,
     handleSubmit,
@@ -20,22 +33,25 @@ const AddRecipeForm = ({ categories = [], ingredients = [], onSubmitForm }) => {
   });
 
   const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedIngredient, setSelectedIngredient] = useState('');
+  const [ingredientQuantity, setIngredientQuantity] = useState('');
   const [preparationTime, setPreparationTime] = useState(1);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const descriptionValue = watch('description', '');
   const instructionValue = watch('instruction', '');
-  const [previewImage, setPreviewImage] = useState(null);
+
+  const categoryOptions = categories.map(cat => ({ value: cat.id, label: cat.name }));
+  const ingredientOptions = ingredients.map(ing => ({ value: ing.id, label: ing.name }));
 
   const addIngredient = () => {
-    const ingredient = watch('ingredient');
-    const quantity = watch('quantity');
-
-    if (ingredient && quantity) {
-      setSelectedIngredients([...selectedIngredients, { ingredient, quantity }]);
-
-      setSelectedIngredients(updatedIngredients);
-      setValue('ingredients', updatedIngredients);
-      setValue('ingredient', '');
-      setValue('quantity', '');
+    if (selectedIngredient && ingredientQuantity) {
+      const newIngredient = { id: selectedIngredient.value, name: selectedIngredient.label, quantity: ingredientQuantity };
+      setSelectedIngredients(prev => [...prev, newIngredient]);
+      setSelectedIngredient(null);
+      setIngredientQuantity('');
     }
   };
 
@@ -45,34 +61,50 @@ const AddRecipeForm = ({ categories = [], ingredients = [], onSubmitForm }) => {
   };
 
   const removeIngredient = index => {
-    setSelectedIngredients(selectedIngredients.filter((_, i) => i !== index));
+    setSelectedIngredients(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleCategoryChange = value => {
+    setSelectedCategory(value);
+  };
+
+  const handleIngredientChange = value => {
+    setSelectedIngredient(value);
   };
 
   const adjustPreparationTime = delta => {
     setPreparationTime(prev => Math.max(1, prev + delta));
   };
 
-  const onSubmit = data => {
+  const onSubmit = async data => {
+    setErrorMessage('');
     const formData = new FormData();
     formData.append('recipeName', data.recipeName);
     formData.append('description', data.description);
-    formData.append('category', data.category);
+    formData.append('category', selectedCategory);
     formData.append('preparationTime', preparationTime);
     formData.append('instruction', data.instruction);
-    if (data.image[0]) formData.append('thumb', data.image[0]);
+    if (data.image?.[0]) formData.append('thumb', data.image[0]);
+
     selectedIngredients.forEach((item, index) => {
       formData.append(`ingredients[${index}][name]`, item.ingredient);
       formData.append(`ingredients[${index}][quantity]`, item.quantity);
     });
-    onSubmitForm(formData);
-    if (previewImage) {
-      URL.revokeObjectURL(previewImage);
+
+    try {
+      await onSubmitForm(formData);
+      navigate('/user');
+    } catch (error) {
+      setErrorMessage(error.message || 'Something went wrong.');
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      {errorMessage && <div className={styles.errorNotification}>{errorMessage}</div>}
+
       <UploadRecipePhoto register={register} setValue={setValue} previewImage={previewImage} setPreviewImage={setPreviewImage} />
+
       <div className={styles.formContainer}>
         <input type="text" placeholder="The Name of the Recipe" {...register('recipeName')} className={errors.recipeName ? styles.errorInput : ''} />
         {errors.recipeName && <p className={styles.errorMessage}>{errors.recipeName.message}</p>}
@@ -90,20 +122,19 @@ const AddRecipeForm = ({ categories = [], ingredients = [], onSubmitForm }) => {
 
         <div className={styles.categorytimeName}>
           <label htmlFor="category">Category</label>
+
           <label htmlFor="preparationtime">COOKING TIME</label>
         </div>
 
         <div className={styles.categorytimecontainer}>
-          <select {...register('category')} className={errors.category ? styles.errorInput : ''}>
-            <option value="" disabled hidden>
-              Select a category
-            </option>
-            {categories.map(cat => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+          <Dropdown
+            className={styles.Selector}
+            options={categoryOptions}
+            value={selectedCategory}
+            onChange={setSelectedCategory}
+            placeholder="Select a category"
+            isAddRecipeForm={true}
+          />
 
           <div className={styles.timeContainer}>
             <button className={styles.cookingTimeBtn} type="button" onClick={() => adjustPreparationTime(-1)}>
@@ -122,28 +153,28 @@ const AddRecipeForm = ({ categories = [], ingredients = [], onSubmitForm }) => {
 
         <label htmlFor="ingredient">Ingredients</label>
         <div className={styles.IngredientContainer}>
-          <select {...register('ingredient')}>
-            <option value="" disabled hidden>
-              Add the ingredient
-            </option>
-            {ingredients.map(ing => (
-              <option key={ing} value={ing}>
-                {ing}
-              </option>
-            ))}
-          </select>
-          <input type="text" placeholder="Enter quantity" {...register('quantity')} />
+          <Dropdown
+            className={styles.Selector}
+            options={ingredientOptions}
+            value={selectedIngredient}
+            onChange={setSelectedIngredient}
+            placeholder="Select an ingredient"
+            isAddRecipeForm={true}
+          />
+          <input className={styles.quantity} type="text" placeholder="Enter quantity" value={ingredientQuantity} onChange={e => setIngredientQuantity(e.target.value)} />
         </div>
         <Btn className={styles.btnadd} type="button" onClick={addIngredient}>
           Add ingredient <Plus size={22} />
         </Btn>
 
-        <ul>
+        <ul className={styles.ingredientsList}>
           {selectedIngredients.map((item, index) => (
-            <li key={index}>
-              {item.ingredient} - {item.quantity}
-              <button type="button" onClick={() => removeIngredient(index)}>
-                Remove
+            <li key={index} className={styles.ingredientItem}>
+              <span>
+                {item.ingredient} - {item.quantity}
+              </span>
+              <button type="button" className={styles.removeButton} onClick={() => removeIngredient(index)}>
+                <Trash size={18} />
               </button>
             </li>
           ))}

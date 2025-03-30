@@ -21,7 +21,7 @@
 }
 
 .arrow {
-  transition: transform ease-in-out .2s;
+  transition: transform ease-in-out 0.2s;
 }
 
 .arrowRotated {
@@ -54,4 +54,9 @@
 
 .selected {
   font-weight: 700;
+}
+
+.placeholderText {
+  color: #BFBEBE; 
+  font-weight: 500;
 }
