@@ -96,6 +96,7 @@ export const addRecipeThunk = createAsyncThunk(
       const { data } = await api.post(API_ROUTES.RECIPES.RECIPES, body, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
