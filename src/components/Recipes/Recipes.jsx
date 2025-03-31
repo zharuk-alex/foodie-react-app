@@ -118,7 +118,7 @@ const Recipes = () => {
       <PageTitle {...pageTitle} />
       <div className={css.wrapper}>
         {filters && <RecipeFilters className={css.filters} areas={rawAreas} ingredients={rawIngredients} filters={filters} onChange={updateFilter} />}
-        <div>
+        <div style={{ width: '100%' }}>
           {isLoading && <AppLoader />}
           {isEmpty && <p className="no-results">No recipes found for the selected category or filters.</p>}
           <RecipeList recipes={recipes} className={css.recipeList} />
