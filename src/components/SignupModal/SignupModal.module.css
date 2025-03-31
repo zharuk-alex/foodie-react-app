@@ -1,4 +1,4 @@
-.loginModal {
+.signUpModal {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +11,7 @@
   z-index: 1000;
 }
 
-.loginForm {
+.signUpForm {
   background: white;
   padding: 80px;
   border-radius: 30px;
@@ -23,7 +23,7 @@
   flex-direction: column;
 }
 
-.loginForm h2 {
+.signUpForm h2 {
   padding-bottom: 40px;
   font-size: 1.5rem;
   font-weight: 800;
@@ -63,14 +63,14 @@
   font-weight: 500;
   line-height: 24px;
   border-radius: 30px;
-  border: 1px solid var(--gray);
+  border: 1px solid #bfbebe;
 }
 
 .inputField:focus,
 .inputField:hover,
 .inputField:not(:placeholder-shown) {
   outline: none;
-  border-color: var(--extra-black);
+  border-color: #050505;
 }
 
 .inputField::placeholder {
@@ -94,7 +94,7 @@
 .eyeButton {
   position: absolute;
   right: 105px;
-  top: 48.5%;
+  top: 44.5%;
   transform: translateY(-50%);
   background: transparent;
   border: none;
@@ -111,6 +111,10 @@
   background: none;
   border: none;
   cursor: pointer;
+}
+
+.signUpButton {
+  margin-bottom: 20px;
 }
 
 button[type='submit'] {
@@ -131,13 +135,6 @@ button[type='submit']:disabled {
   background-color: #bfbebe;
   cursor: not-allowed;
   border-color: #bfbebe;
-}
-
-.signinText {
-  text-align: center;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 18px;
 }
 
 .signinButton {

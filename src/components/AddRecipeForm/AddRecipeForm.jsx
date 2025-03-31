@@ -70,7 +70,8 @@ const AddRecipeForm = ({ onSubmitForm }) => {
   };
 
   const countWords = str => {
-    return str.trim().split(/\s+/).length;
+    const words = str.trim().split(/\s+/);
+    return words[0] === '' ? 0 : words.length;
   };
 
   const handleInputResize = event => {
