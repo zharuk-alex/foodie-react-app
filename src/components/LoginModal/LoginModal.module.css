@@ -91,10 +91,15 @@
   border-style: solid;
 }
 
+.passwordWrapper {
+  position: relative;
+  width: 100%;
+}
+
 .eyeButton {
   position: absolute;
-  right: 105px;
-  top: 48.5%;
+  right: 15px;
+  top: 50%;
   transform: translateY(-50%);
   background: transparent;
   border: none;
@@ -165,6 +170,12 @@ button[type='submit']:disabled {
 }
 
 .error {
+  color: red;
+  font-size: 0.875rem;
+  padding-top: 14px;
+}
+
+.errorpassword {
   color: red;
   font-size: 0.875rem;
 }
