@@ -7,14 +7,21 @@ import css from './SignupModal.module.css';
 const SignUpModal = ({ onClose, onSwitchToLogin }) => {
   const dispatch = useDispatch();
   const { isLoading, error } = useSelector(state => state.auth);
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [errorMessage, setErrorMessage] = useState('');
 
   const validateInputs = () => {
     let newErrors = {};
+
+    if (!username.trim()) {
+      newErrors.username = 'Username is required';
+    } else if (username.length < 3) {
+      newErrors.username = 'Username must be at least 3 characters';
+    }
 
     if (!email.trim()) {
       newErrors.email = 'Email is required';
@@ -28,10 +35,6 @@ const SignUpModal = ({ onClose, onSwitchToLogin }) => {
       newErrors.password = 'Password must be at least 6 characters';
     } else if (!/[A-Za-z]/.test(password) || !/\d/.test(password)) {
       newErrors.password = 'Password must contain letters and numbers';
-    }
-
-    if (password !== confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
     }
 
     setErrors(newErrors);
@@ -54,10 +57,10 @@ const SignUpModal = ({ onClose, onSwitchToLogin }) => {
     if (!validateInputs()) return;
 
     try {
-      await dispatch(registerThunk({ email, password })).unwrap();
+      await dispatch(registerThunk({ name: username, email, password })).unwrap();
       onClose();
     } catch (err) {
-      console.error('Registration failed:', err);
+      setErrorMessage(err.response?.data?.message);
     }
   };
 
@@ -69,8 +72,20 @@ const SignUpModal = ({ onClose, onSwitchToLogin }) => {
         </button>
 
         <h2>Sign Up</h2>
+        {(errorMessage || error) && <div className={css.errorServer}>{errorMessage || error}</div>}
 
         <div className={css.inputFieldsWrapper}>
+          <label>
+            <input
+              type="text"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              placeholder="Username*"
+              className={`${css.inputField} ${errors.username ? css.inputError : ''}`}
+            />
+            {errors.username && <div className={css.error}>{errors.username}</div>}
+          </label>
+
           <label>
             <input
               type="email"
@@ -96,25 +111,12 @@ const SignUpModal = ({ onClose, onSwitchToLogin }) => {
             </button>
           </label>
           {errors.password && <div className={css.error}>{errors.password}</div>}
-
-          <label>
-            <input
-              type={showPassword ? 'text' : 'password'}
-              value={confirmPassword}
-              onChange={e => setConfirmPassword(e.target.value)}
-              placeholder="Confirm Password"
-              className={`${css.inputField} ${errors.confirmPassword ? css.inputError : ''}`}
-              required
-            />
-            {errors.confirmPassword && <div className={css.error}>{errors.confirmPassword}</div>}
-          </label>
         </div>
 
-        <button type="submit" className={css.signUpButton} disabled={isLoading || !email || !password || !confirmPassword}>
+        <button type="submit" className={css.signUpButton} disabled={isLoading || !username || !email || !password}>
           {isLoading ? 'Signing Up...' : 'Sign Up'}
         </button>
 
-        {error && <div className={css.error}>{error}</div>}
         <button type="button" className={css.signupButton} onClick={onSwitchToLogin}>
           I already have an account? <span>Sign in</span>
         </button>
