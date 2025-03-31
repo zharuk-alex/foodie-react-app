@@ -117,7 +117,7 @@ const SignUpModal = ({ onClose, onSwitchToLogin }) => {
           {isLoading ? 'Signing Up...' : 'Sign Up'}
         </button>
 
-        <button type="button" className={css.signupButton} onClick={onSwitchToLogin}>
+        <button type="button" className={css.signinButton} onClick={onSwitchToLogin}>
           I already have an account? <span>Sign in</span>
         </button>
       </form>

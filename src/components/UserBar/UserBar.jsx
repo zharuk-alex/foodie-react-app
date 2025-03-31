@@ -15,7 +15,7 @@ import useOutsideClick from '../../hooks/useOutsideClick.jsx';
 const UserBar = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.auth);
-  const { isLoginModalOpen } = useSelector(state => state.modal);
+  const isLoginModalOpen = useSelector(state => state.modal.isLoginModalOpen);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const menuRef = useRef(null);
@@ -35,6 +35,11 @@ const UserBar = () => {
 
   const cancelLogout = () => {
     setIsConfirmModalOpen(false);
+  };
+
+  const handleSwitchToRegister = () => {
+    dispatch(setModalLoginOpen(false));
+    dispatch(setModalSignupOpen(true));
   };
 
   const toggleMenu = () => {
@@ -57,7 +62,7 @@ const UserBar = () => {
           Log Out <Icon name="icon-arrow-up-right" className={css.logoutIcon} />
         </Btn>
       </div>
-      {isLoginModalOpen && <LoginModal onClose={handleLoginModalClose} />}
+      {isLoginModalOpen && <LoginModal onClose={handleLoginModalClose} onSwitchToRegister={handleSwitchToRegister} />}
       {isConfirmModalOpen && <ConfirmModal onConfirm={confirmLogout} onCancel={cancelLogout} message="Are you logging out?" />}
     </div>
   );

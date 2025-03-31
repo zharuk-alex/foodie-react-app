@@ -120,21 +120,6 @@
   cursor: pointer;
 }
 
-button[type='submit'] {
-  font-weight: 700;
-  width: 400px;
-  height: 56px;
-  background-color: #050505;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  border-radius: 30px;
-  border-color: #050505;
-  border-width: 1px;
-  border-style: solid;
-  gap: 20px;
-}
-
 .error {
   color: red;
   font-size: 0.875rem;

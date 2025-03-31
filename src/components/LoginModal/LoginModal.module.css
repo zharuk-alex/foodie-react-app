@@ -118,7 +118,7 @@
   cursor: pointer;
 }
 
-button[type='submit'] {
+.signinButton {
   font-weight: 700;
   width: 400px;
   height: 56px;
@@ -130,9 +130,12 @@ button[type='submit'] {
   border-color: #050505;
   border-width: 1px;
   border-style: solid;
+  border: 1px solid #000;
+  margin-bottom: 40px;
+  text-transform: uppercase;
 }
 
-button[type='submit']:disabled {
+.signinButton:disabled {
   background-color: #bfbebe;
   cursor: not-allowed;
   border-color: #bfbebe;
@@ -143,15 +146,6 @@ button[type='submit']:disabled {
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
-}
-
-.signinButton {
-  width: 230px;
-  background-color: white;
-  border: 1px solid #000;
-  color: #000;
-  margin-bottom: 40px;
-  text-transform: uppercase;
 }
 
 .signupButton {
