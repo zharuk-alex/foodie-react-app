@@ -10,13 +10,42 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validateInputs = () => {
+    let newErrors = {};
+
+    if (!email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+      newErrors.email = 'Invalid email format';
+    }
+
+    if (!password.trim()) {
+      newErrors.password = 'Password is required';
+    } else if (password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword(prev => !prev);
   };
 
+  const handleOverlayClick = e => {
+    if (e.target.classList.contains(css.loginModal)) {
+      onClose();
+    }
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
+
+    if (!validateInputs()) return;
+
     try {
       await dispatch(loginThunk({ email, password })).unwrap();
       onClose();
@@ -26,7 +55,7 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
   };
 
   return (
-    <div className={css.loginModal}>
+    <div className={css.loginModal} onClick={handleOverlayClick}>
       <form onSubmit={handleSubmit} className={css.loginForm}>
         <button type="button" className={css.closeButton} onClick={onClose}>
           <X size={20} />
@@ -36,7 +65,14 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
           <h2>Sign in</h2>
 
           <label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email*" className={css.inputField} required />
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="Email*"
+              className={`${css.inputField} ${errors.email ? css.inputError : ''}`}
+            />
+            {errors.email && <div className={css.error}>{errors.email}</div>}
           </label>
 
           <label className={css.passwordWrapper}>
@@ -45,13 +81,14 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder="Password"
-              className={css.inputField}
+              className={`${css.inputField} ${errors.password ? css.inputError : ''}`}
               required
             />
             <button type="button" className={css.eyeButton} onClick={togglePasswordVisibility}>
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </label>
+          {errors.password && <div className={css.errorpassword}>{errors.password}</div>}
         </div>
 
         <button type="submit" className={css.signinButton} disabled={isLoading || !email || !password}>

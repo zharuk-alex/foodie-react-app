@@ -1,9 +1,11 @@
 import { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import LoginModal from '../LoginModal/LoginModal';
 import css from './UserBar.module.css';
 import { clsx } from 'clsx';
+
+import LoginModal from '../LoginModal/LoginModal';
+import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import Btn from '../UI/Btn/Btn';
 import { logoutThunk } from '../../store/auth/operations';
 import { setModalLoginOpen } from '../../store/modal/operations';
@@ -15,6 +17,7 @@ const UserBar = () => {
   const { currentUser } = useSelector(state => state.auth);
   const { isLoginModalOpen } = useSelector(state => state.modal);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const menuRef = useRef(null);
 
   const handleLoginModalClose = () => {
@@ -22,12 +25,22 @@ const UserBar = () => {
   };
 
   const handleLogout = () => {
+    setIsConfirmModalOpen(true);
+  };
+
+  const confirmLogout = () => {
     dispatch(logoutThunk());
+    setIsConfirmModalOpen(false);
+  };
+
+  const cancelLogout = () => {
+    setIsConfirmModalOpen(false);
   };
 
   const toggleMenu = () => {
     setIsMenuOpen(prev => !prev);
   };
+
   useOutsideClick(menuRef, () => setIsMenuOpen(false));
 
   return (
@@ -41,10 +54,11 @@ const UserBar = () => {
           Profile
         </Link>
         <Btn variant="logoutInHead" onClick={handleLogout}>
-          Log Out <Icon name='icon-arrow-up-right' className={css.logoutIcon} />
+          Log Out <Icon name="icon-arrow-up-right" className={css.logoutIcon} />
         </Btn>
       </div>
       {isLoginModalOpen && <LoginModal onClose={handleLoginModalClose} />}
+      {isConfirmModalOpen && <ConfirmModal onConfirm={confirmLogout} onCancel={cancelLogout} message="Are you logging out?" />}
     </div>
   );
 };
