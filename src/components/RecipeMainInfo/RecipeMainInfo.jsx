@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setModalLoginOpen } from "../../store/modal/operations";
 import { Section } from "../UI";
+import defaultAvatar from 'images/avatar/default_avatar.jpg';
+
 export default function RecipeMainInfo({ recipe, isLoggedIn }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,7 +28,7 @@ export default function RecipeMainInfo({ recipe, isLoggedIn }) {
         <img
           className={css.userAvatar}
           src={`${
-            recipe?.ownerAvatar || "/src/images/avatar/default_avatar.jpg"
+            recipe?.ownerAvatar || defaultAvatar
           }`}
           alt=""
         />
