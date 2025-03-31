@@ -74,8 +74,6 @@
   width: 100%;
 }
 
-
-
 .menuContainerMobile {
   position: fixed;
   top: 0;
@@ -89,11 +87,26 @@
   flex-direction: column;
   align-items: center;
   gap: 24px;
+  transform: translateX(100%);
+  transition: none;
+
 }
 
 :global([data-theme='dark']) .menuContainerMobile {
   background-color: var(--color-main);
 }
+
+.menuContainerOpen {
+  transform: translateX(0%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.menuContainerClosed {
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  pointer-events: none;
+}
+
 
 .overlay {
   position: fixed;
