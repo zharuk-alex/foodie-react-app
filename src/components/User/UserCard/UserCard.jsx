@@ -37,7 +37,9 @@ const UserCard = ({ user, tab }) => {
   return (
     <div className={css.userCardWrapper} id={id}>
       <div className={css.userCard}>
-        <img src={avatar || placeholderImage} alt={name} className={css.userCard__avatar} />
+        <Link to={`/user/${id}?tab=recipes`} title="View User">
+          <img src={avatar || placeholderImage} alt={name} className={css.userCard__avatar} />
+        </Link>
         <div className={css.userCard_actions}>
           <div className={css.userCard_info}>
             <span className={css.userCard__name}>{name || 'User'}</span>
@@ -51,7 +53,9 @@ const UserCard = ({ user, tab }) => {
       <ul className={css.userCardRecipes}>
         {ownedRecipes?.map(recipe => (
           <li key={recipe.id} className={css.userCardRecipes__item}>
-            <img src={recipe.thumb} alt={`Recipe ${recipe.id}`} className={css.userCardRecipes__thumb} />
+            <Link to={`/recipe/${recipe.id}`} className={css.linkImage} title="View Recipe">
+              <img src={recipe.thumb} alt={`Recipe ${recipe.id}`} className={css.userCardRecipes__thumb} />
+            </Link>
           </li>
         ))}
       </ul>

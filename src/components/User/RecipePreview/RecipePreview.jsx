@@ -34,7 +34,9 @@ const RecipePreview = ({ data, tab }) => {
 
   return (
     <div className={css.card}>
-      <img src={thumb || placeholderImage} alt={title} className={css.image} />
+      <Link to={`/recipe/${id}`} className={css.linkImage} title="View Recipe">
+        <img src={thumb || placeholderImage} alt={title} className={css.image} />
+      </Link>
       <div className={css.content}>
         <h3 className={css.title}>{title}</h3>
         <p className={css.description} title={description}>

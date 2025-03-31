@@ -4,22 +4,16 @@ import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { MainTitle, Subtitle, Container, Section } from 'components/UI';
+import { MainTitle, Subtitle, Container, Section, AppLoader } from 'components/UI';
 import { UserInfo, LogoutFollowButton, TabsList, ListItems, ListPagination, PathInfo } from 'components/User';
 
 import { getFullUserDetailsThunk, getFollowersThunk, getFollowingThunk } from 'store/auth/operations';
-
 import { cleanPagination as cleanAuthPagination, cleanFollowers, cleanFollowing } from 'store/auth/slice';
+import { selectCurrentUser, selectFullUserDetails, selectFollowers, selectFollowing, selectIsLoading } from 'store/auth/selectors';
 
-import { selectCurrentUser, selectFullUserDetails, selectFollowers, selectFollowing } from 'store/auth/selectors';
-
-import { getOwnRecipesThunk, getFavoriteRecipesThunk, fetchRecipes, removeRecipeThunk, removeRecipeFromFavoriteThunk } from 'store/recipes/operations';
-
+import { getOwnRecipesThunk, getFavoriteRecipesThunk, removeRecipeThunk, removeRecipeFromFavoriteThunk } from 'store/recipes/operations';
 import { selectRecipes as selectRecipeList, selectPagination as selectRecipePagination } from 'store/recipes/selectors';
-
 import { cleanPagination as cleanRecipesPagination, cleanRecipes } from 'store/recipes/slice';
-import { selectIsLoading } from '../../store/auth/selectors.js';
-import { AppLoader } from '../../components/UI/index.js';
 
 const UserPage = () => {
   const { id } = useParams();
@@ -38,19 +32,14 @@ const UserPage = () => {
 
   const isOwnProfile = id === currentUser?.id;
 
+  // Active tab is now derived directly from URL
   const queryParams = new URLSearchParams(location.search);
-  const initialTab = queryParams.get('tab') || (isOwnProfile ? 'my-recipes' : 'recipes');
+  const activeTab = queryParams.get('tab') || (isOwnProfile ? 'my-recipes' : 'recipes');
 
-  const [activeTab, setActiveTab] = useState(initialTab);
-
+  // Load full user details once
   useEffect(() => {
     dispatch(getFullUserDetailsThunk(id));
   }, [dispatch, id]);
-
-  useEffect(() => {
-    const newTab = queryParams.get('tab') || (isOwnProfile ? 'my-recipes' : 'recipes');
-    setActiveTab(newTab);
-  }, [location.search, id, isOwnProfile]);
 
   // Reset pagination and lists when tab changes
   useEffect(() => {
@@ -62,7 +51,7 @@ const UserPage = () => {
     dispatch(cleanRecipes());
   }, [activeTab, dispatch]);
 
-  // Load tabs
+  // Load data when needed
   useEffect(() => {
     if (!currentUser?.id) return;
     const limit = 9;
@@ -86,7 +75,7 @@ const UserPage = () => {
       default:
         break;
     }
-  }, [activeTab, currentPage, dispatch, id, isOwnProfile]);
+  }, [activeTab, currentPage, dispatch, id, isOwnProfile, currentUser?.id]);
 
   const getTabItems = () => {
     switch (activeTab) {
@@ -103,7 +92,7 @@ const UserPage = () => {
     }
   };
 
-  // Empty page after deletion
+  // Handle empty page adjustment
   useEffect(() => {
     const items = getTabItems();
     if (items.length === 0 && currentPage > 1) {
@@ -123,6 +112,7 @@ const UserPage = () => {
       </Section>
 
       <div className={css.userWrapper}>
+        {/* Section User */}
         <Section>
           <Container className={css.userContainer}>
             <UserInfo user={fullUserDetails} isOwnProfile={isOwnProfile} />
@@ -133,7 +123,7 @@ const UserPage = () => {
         {/* Section Tabs */}
         <Section>
           <Container className={css.tabsContainer}>
-            <TabsList activeTab={activeTab} setActiveTab={setActiveTab} isOwnProfile={isOwnProfile} />
+            <TabsList activeTab={activeTab} isOwnProfile={isOwnProfile} />
 
             <ListItems
               tab={activeTab}
@@ -151,7 +141,6 @@ const UserPage = () => {
           </Container>
         </Section>
       </div>
-      {/* Section User */}
     </>
   ) : (
     <AppLoader />
