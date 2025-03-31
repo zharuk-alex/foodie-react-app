@@ -5,13 +5,22 @@ import Btn from '../UI/Btn/Btn';
 import Icon from '../UI/Icon/Icon';
 import clsx from 'clsx';
 import defaultAvatar from 'images/avatar/default_avatar.jpg';
+import { useDispatch } from 'react-redux';
+import { setModalLoginOpen } from '../../store/modal/operations';
 
-export default function PopularRecipeCard({ recipe, onChangeFavorite }) {
+export default function PopularRecipeCard({ recipe, onChangeFavorite,isLoggedIn }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleUserClick = () => {
+    if (isLoggedIn) {
+      navigate(`/user/${recipe?.ownerId}`);
+    } else {
+      dispatch(setModalLoginOpen(true));
+    }
+  };
 
   const handleClick = () => {
     navigate(`/recipe/${recipe?.id}`);
-    window.scrollTo(0, 0);
   };
 
   return (
@@ -21,10 +30,10 @@ export default function PopularRecipeCard({ recipe, onChangeFavorite }) {
         <h2 className={css.title}>{recipe?.title}</h2>
         <p className={css.description}>{recipe?.description}</p>
         <div className={css.bottomMenu}>
-          <div className={css.userDetails}>
+          <button className={css.userDetails} onClick={handleUserClick}>
             <img className={css.avatar} src={recipe?.ownerAvatar || defaultAvatar} alt="User avatar" />
             <span className={css.name}>{recipe?.ownerName}</span>
-          </div>
+          </button>
           <div className={css.buttons}>
             <Btn
               className={css.btn}

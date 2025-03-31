@@ -32,6 +32,7 @@ const RecipeDetailPage = () => {
 
   useEffect(() => {
     dispatch(getRecipeByIdThunk(id));
+    window.scrollTo(0,0);
   }, [id, isLoggedIn]);
 
 
