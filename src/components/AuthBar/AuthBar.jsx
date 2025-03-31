@@ -29,10 +29,10 @@ const AuthBar = () => {
 
   return (
     <div className={clsx('container', css.wrapper)}>
-      <Btn variant="login" onClick={handleLoginModalOpen}>
+      <Btn variant="login" className={css.btn} onClick={handleLoginModalOpen}>
         Sign In
       </Btn>
-      <Btn variant="register" onClick={handleSignupModalOpen}>
+      <Btn variant="register" className={css.btn} onClick={handleSignupModalOpen}>
         Sign Up
       </Btn>
       {isLoginModalOpen && <LoginModal onClose={handleModalClose} onSwitchToRegister={handleSignupModalOpen} />}
