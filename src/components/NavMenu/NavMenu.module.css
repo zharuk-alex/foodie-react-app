@@ -58,3 +58,13 @@
 }
 
 .navMenu .link {}
+
+.navMenu .active {
+  border: 1px solid transparent;
+  cursor: default;
+}
+
+:global([data-theme='dark']) .navMenu .active {
+  border: 1px solid transparent;
+  cursor: default;
+}
