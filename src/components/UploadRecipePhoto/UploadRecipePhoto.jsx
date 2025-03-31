@@ -20,7 +20,7 @@ const UploadRecipePhoto = ({
     if (file) {
       const imageURL = URL.createObjectURL(file);
       setPreviewImage(imageURL);
-      setValue("thumb", [file]);
+      setValue("thumb", file);
     }
   };
 

@@ -3,7 +3,7 @@ import css from './Dropdown.module.css';
 import clsx from 'clsx';
 import { Icon } from 'components/UI';
 
-const Dropdown = ({ options = [], value, onChange, placeholder = 'Select...', clearable, className = '', isAddRecipeForm = false }) => {
+const Dropdown = ({ options = [],value, onChange, placeholder = 'Select...', clearable, className = '', isAddRecipeForm = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef();
 
