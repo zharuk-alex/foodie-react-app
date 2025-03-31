@@ -21,6 +21,8 @@ const Header = ({ className }) => {
   const { isLoggedIn } = useSelector(state => state.auth);
   const { isLoginModalOpen } = useSelector(state => state.modal);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAnimatingClose, setIsAnimatingClose] = useState(false);
+  const [isAnimatingOpen, setIsAnimatingOpen] = useState(false);
 
   useEffect(() => {
     const html = document.documentElement;
@@ -40,8 +42,25 @@ const Header = ({ className }) => {
     };
   }, [isMobileMenuOpen]);
 
-  const openMenu = () => setIsMobileMenuOpen(true);
-  const closeMenu = () => setIsMobileMenuOpen(false);
+  const openMenu = () => {
+    setIsMobileMenuOpen(true);
+    setIsAnimatingClose(false);
+    setIsAnimatingOpen(false);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setIsAnimatingOpen(true);
+      });
+    });
+  };
+
+  const closeMenu = () => {
+    setIsAnimatingClose(true);
+    setIsAnimatingOpen(false);
+    setTimeout(() => {
+      setIsMobileMenuOpen(false);
+      setIsAnimatingClose(false);
+    }, 300);
+  };
 
   const handleLoginModalClose = () => {
     dispatch(setModalLoginOpen(false));
@@ -52,14 +71,16 @@ const Header = ({ className }) => {
       <div className={clsx(css.headerWrapper, layoutClass === 'home' && css.headerWrapperDark)}>
         <Container className={layoutClass === 'home' && css.container} dataTheme={layoutClass === 'home' ? 'dark' : ''}>
           {isMobileMenuOpen && <div className={css.overlay} onClick={closeMenu} />}
-          <div id="menuContainer" className={isMobileMenuOpen ? css.menuContainerMobile : css.menuContainer}>
+          <div id="menuContainer" className={clsx(isMobileMenuOpen ? css.menuContainerMobile : css.menuContainer,
+            isAnimatingOpen && css.menuContainerOpen,
+            isAnimatingClose && css.menuContainerClosed)}>
             {isMobileMenuOpen && (
               <Btn variant="clear" className={css.menuClose} aria-label="Close menu" onClick={closeMenu}>
                 <Icon name="icon-close" className={css.closeIcon} />
               </Btn>
             )}
             <Logo isDark={layoutClass === 'home'} className={isMobileMenuOpen ? css.logoMenu : css.logoDesktop} />
-            <NavMenu variant={isMobileMenuOpen ? 'navMenu' : 'nav'} />
+            <NavMenu variant={isMobileMenuOpen ? 'navMenu' : 'nav'} onLinkClick={isMobileMenuOpen ? closeMenu : undefined} />
             {!isMobileMenuOpen && (
               <div className={css.menuAndUser}>
                 {isLoggedIn ? <UserBar /> : <AuthBar />}
