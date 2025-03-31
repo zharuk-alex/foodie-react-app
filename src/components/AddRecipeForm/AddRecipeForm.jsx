@@ -239,7 +239,7 @@ const AddRecipeForm = ({ onSubmitForm }) => {
 
         <div className={styles.publishContainer}>
           <button
-            className={styles.cookingTimeBtn}
+            className={styles.TrashBtn}
             type="button"
             onClick={() => {
               reset();
@@ -251,7 +251,9 @@ const AddRecipeForm = ({ onSubmitForm }) => {
             <Trash size={18} />
           </button>
 
-          <Btn type="submit">Publish</Btn>
+          <button type="submit" className={styles.PublishBtn}>
+            Publish
+          </button>
         </div>
       </div>
     </form>
