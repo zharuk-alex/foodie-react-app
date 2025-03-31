@@ -17,7 +17,7 @@ const TabsList = ({ activeTab, isOwnProfile }) => {
         { key: 'followers', label: 'Followers' },
       ];
 
-  const sortedTabs = [...allTabs.filter(tab => tab.key === activeTab), ...allTabs.filter(tab => tab.key !== activeTab)];
+  //const sortedTabs = [...allTabs.filter(tab => tab.key === activeTab), ...allTabs.filter(tab => tab.key !== activeTab)];
 
   const handleClick = tab => {
     if (tab !== activeTab) {
@@ -27,7 +27,7 @@ const TabsList = ({ activeTab, isOwnProfile }) => {
 
   return (
     <div className={css.tabsWrapper}>
-      {sortedTabs.map(tab => (
+      {allTabs.map(tab => (
         <button key={tab.key} type="button" className={`${css.tabButton} ${tab.key === activeTab ? css.active : ''}`} onClick={() => handleClick(tab.key)}>
           {tab.label}
         </button>
