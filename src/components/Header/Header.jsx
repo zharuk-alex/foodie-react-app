@@ -50,7 +50,7 @@ const Header = ({ className }) => {
   return (
     <header className={className}>
       <div className={clsx(css.headerWrapper, layoutClass === 'home' && css.headerWrapperDark)}>
-        <Container className={css.container} dataTheme={layoutClass === 'home' ? 'dark' : ''}>
+        <Container className={layoutClass === 'home' && css.container} dataTheme={layoutClass === 'home' ? 'dark' : ''}>
           {isMobileMenuOpen && <div className={css.overlay} onClick={closeMenu} />}
           <div id="menuContainer" className={isMobileMenuOpen ? css.menuContainerMobile : css.menuContainer}>
             {isMobileMenuOpen && (

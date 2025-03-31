@@ -1,5 +1,5 @@
 .container {
-  max-width: 100%;
+  display: block;
 }
 
 .headerWrapper {
@@ -20,7 +20,7 @@
 .menuAndUser {
   display: flex;
   flex-direction: row;
-  gap: 4px;
+  gap: 8px;
   align-items: center;
   justify-content: flex-end;
 }
