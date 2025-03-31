@@ -66,15 +66,15 @@
 }
 
 .trashIcon {
-  stroke: var(--color-gray);
+  stroke: var(--color-main);
 }
 
-.link.delete:is(:hover, :focus){
+.link.delete:is(:hover, :focus) {
   color: transparent;
 }
 
 .link.delete:is(:hover, :focus) > .trashIcon {
-  stroke: var( --color-white);
+  stroke: var(--color-white);
 }
 
 .icon {
@@ -84,4 +84,10 @@
 .link:hover {
   background-color: var(--color-main);
   color: var(--color-white);
+}
+
+@media (min-width: 768px) {
+  .description {
+    color: var(--color-secondary);
+  }
 }
