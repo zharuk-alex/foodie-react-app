@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 export const recipeValidationSchema = Yup.object().shape({
   recipeName: Yup.string().required('Recipe name is required'),
   description: Yup.string().max(200, 'Description cannot be more than 200 words').required('Description is required'),
-  category: Yup.string().required('Category is required'),
+  categoryId: Yup.string().required('Category is required'),
   ingredients: Yup.array()
     .of(
       Yup.object().shape({
@@ -13,6 +13,6 @@ export const recipeValidationSchema = Yup.object().shape({
     )
     .min(1, 'At least one ingredient is required'),
 
-  preparationTime: Yup.number().min(1, 'Time should be at least 1 minute').required('Preparation time is required'),
+  time: Yup.number().min(1, 'Time should be at least 1 minute').required('Preparation time is required'),
   instruction: Yup.string().max(200, 'Instruction cannot be more than 200 words').required('Instruction is required'),
 });

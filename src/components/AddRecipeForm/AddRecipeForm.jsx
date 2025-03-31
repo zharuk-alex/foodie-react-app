@@ -47,7 +47,6 @@ const AddRecipeForm = ({ onSubmitForm }) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-
   const descriptionValue = watch('description', '');
   const instructionValue = watch('instruction', '');
 
@@ -98,38 +97,48 @@ const AddRecipeForm = ({ onSubmitForm }) => {
   };
 
   const onSubmit = async data => {
-    console.log('Form submitted with data:', data);
-    const formData = new FormData();
-    formData.append('recipeName', data.recipeName);
-    formData.append('description', data.description);
-    formData.append('instruction', data.instruction);
-    formData.append('preparationTime', preparationTime);
-    formData.append('category', selectedCategory);
-
-    selectedIngredients.forEach(ingredient => {
-      formData.append('ingredients[]', JSON.stringify(ingredient));
-    });
-
-    if (previewImage) {
-      formData.append('image', previewImage);
+    if (!selectedCategory) {
+      setErrorMessage('Please select a category');
+      return;
     }
 
-    console.log([...formData.entries()]);
+    if (selectedIngredients.length === 0) {
+      setErrorMessage('Please add at least one ingredient');
+      return;
+    }
+
+    const formData = new FormData();
+    if (previewImage) {
+      formData.append('thumb', data.thumb);
+    }
+    formData.append('title', data.recipeName);
+    formData.append('description', data.description);
+    formData.append('instructions', data.instruction);
+    formData.append('time', preparationTime);
+    formData.append('categoryId', selectedCategory?.value);
+
+    const ingredientsForBackend = selectedIngredients.map(ing => ({
+      ingredientId: ing.id,
+      measure: ing.measure,
+    }));
+    formData.append('ingredients', JSON.stringify(ingredientsForBackend));
 
     try {
-      await dispatch(addRecipeThunk(formData));
-      navigate('/userPage');
-
-      setSuccessMessage('Recipe added successfully');
+      const recipe = await dispatch(addRecipeThunk(formData)).unwrap();
+      navigate(`/recipe/${recipe.id}`);
       toast.success('Recipe added successfully');
     } catch (error) {
-      setErrorMessage('Failed to add recipe');
-      toast.error('Failed to add recipe');
+      setErrorMessage(error.message || 'Failed to add recipe');
+      toast.error(error.message || 'Failed to add recipe');
     }
   };
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+    <form
+      onSubmit={e => {
+        handleSubmit(onSubmit)(e);
+      }}
+      className={styles.form}
+    >
       {errorMessage && <div className={styles.errorNotification}>{errorMessage}</div>}
       {successMessage && <div className={styles.successNotification}>{successMessage}</div>}
 
@@ -158,10 +167,15 @@ const AddRecipeForm = ({ onSubmitForm }) => {
 
         <div className={styles.categorytimecontainer}>
           <Dropdown
+            setValue={setValue}
+            name="categoryId"
             className={styles.Selector}
             options={categoryOptions}
             value={selectedCategory}
-            onChange={setSelectedCategory}
+            onChange={value => {
+              setSelectedCategory(value);
+              setValue('categoryId', value.value);
+            }}
             placeholder="Select a category"
             isAddRecipeForm={true}
           />
@@ -172,6 +186,7 @@ const AddRecipeForm = ({ onSubmitForm }) => {
             </button>
 
             <div className={styles.cookingTimeCount}>
+              <input type="hidden" {...register('time')} value={preparationTime} />
               <span>{preparationTime}</span>
               <span>min</span>
             </div>
@@ -184,6 +199,8 @@ const AddRecipeForm = ({ onSubmitForm }) => {
         <label htmlFor="ingredient">Ingredients</label>
         <div className={styles.IngredientContainer}>
           <Dropdown
+            name="ingredientId"
+            setValue={setValue}
             className={styles.Selector}
             options={ingredientOptions}
             value={selectedIngredient}
