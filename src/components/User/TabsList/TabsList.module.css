@@ -1,6 +1,6 @@
 .tabsWrapper {
   display: flex;
-  gap: 30px;
+  gap: 5px;
   padding-bottom: 14px;
   overflow-x: auto;
   scrollbar-width: none;
@@ -13,13 +13,23 @@
 
 .tabButton {
   font-weight: 800;
-  font-size: 18px;
+  font-size: 14px;
   line-height: 1.33;
   letter-spacing: -2%;
   color: var(--color-gray);
   background: none;
   white-space: nowrap;
   position: relative;
+  text-transform: uppercase;
+}
+
+@media (min-width: 375px) {
+  .tabsWrapper {
+    gap: 30px;
+  }
+  .tabButton {
+    font-size: 18px;
+  }
 }
 
 .active {
