@@ -1,36 +1,37 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { recipesReducer } from "./recipes/slice";
-import { testimonialsReducer } from "./testimonials/slice";
-import { modalReducer } from "./modal/slice";
-import { usersReducer } from "./auth/slice.js";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { recipesReducer } from './recipes/slice';
+import { testimonialsReducer } from './testimonials/slice';
+import { modalReducer } from './modal/slice';
+import { usersReducer } from './auth/slice.js';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import { setupInterceptors } from '../api/setupInterceptors';
-
+import { followersAndFollowingSliceReducer } from './followersAndFollowing/slice.js';
 
 const authPersistConfig = {
-  key: "auth",
+  key: 'auth',
   storage,
-  whitelist: ["token", "currentUser", "isLoggedIn"],
+  whitelist: ['token', 'currentUser', 'isLoggedIn'],
 };
 
 const rootReducer = combineReducers({
   recipes: recipesReducer,
   testimonials: testimonialsReducer,
   modal: modalReducer,
+  followerAndFollowing: followersAndFollowingSliceReducer,
   auth: persistReducer(authPersistConfig, usersReducer),
 });
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-  devTools: import.meta.env.MODE === "development",
+  devTools: import.meta.env.MODE === 'development',
 });
 
 setupInterceptors(store);

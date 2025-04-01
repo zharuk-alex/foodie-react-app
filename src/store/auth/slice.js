@@ -1,31 +1,29 @@
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { initialState } from './initialState.js';
 import {
-  addToFollowingThunk,
   currentUserThunk,
-  getFollowersThunk,
-  getFollowingThunk,
   getFullUserDetailsThunk,
   loginThunk,
   logoutThunk,
   registerThunk,
-  removeFromFollowingThunk,
   updateAvatarThunk,
 } from './operations.js';
+
+const handlePending = state => {
+  state.isLoading = true;
+  state.error = null;
+};
+
+const handleRejected = (state, action) => {
+  state.isLoading = false;
+  state.error = action.payload;
+};
+
 
 const usersSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    cleanPagination: state => {
-      state.pagination = { ...initialState.pagination };
-    },
-    cleanFollowers: state => {
-      state.followers = [];
-    },
-    cleanFollowing: state => {
-      state.following = [];
-    },
     cleanFullUserDetails: state => {
       state.fullUserDetails = {};
     },
@@ -50,36 +48,6 @@ const usersSlice = createSlice({
         state.isLoading = false;
         state.error = null;
       })
-      .addCase(addToFollowingThunk.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
-        state.error = null;
-      })
-      .addCase(removeFromFollowingThunk.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
-        state.error = null;
-      })
-      .addCase(getFollowersThunk.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
-        state.error = null;
-        state.followers = payload?.followers ?? [];
-        state.total = payload?.totalItem;
-        state.pagination.page = payload.page;
-        state.pagination.limit = payload.limit;
-        state.pagination.totalPages = payload.totalPage;
-        state.pagination.hasNextPage = payload.hasNextPage;
-        state.pagination.hasPreviousPage = payload.hasPreviousPage;
-      })
-      .addCase(getFollowingThunk.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
-        state.error = null;
-        state.following = payload?.following ?? [];
-        state.total = payload?.totalItem;
-        state.pagination.page = payload?.page;
-        state.pagination.limit = payload.limit;
-        state.pagination.totalPages = payload.totalPage;
-        state.pagination.hasNextPage = payload.hasNextPage;
-        state.pagination.hasPreviousPage = payload.hasPreviousPage;
-      })
       .addMatcher(isAnyOf(registerThunk.fulfilled, loginThunk.fulfilled, currentUserThunk.fulfilled), (state, { payload }) => {
         state.token = payload.token;
         state.currentUser = payload.user;
@@ -94,16 +62,9 @@ const usersSlice = createSlice({
           logoutThunk.pending,
           currentUserThunk.pending,
           getFullUserDetailsThunk.pending,
-          updateAvatarThunk.pending,
-          addToFollowingThunk.pending,
-          removeFromFollowingThunk.pending,
-          getFollowersThunk.pending,
-          getFollowingThunk.pending
+          updateAvatarThunk.pending
         ),
-        state => {
-          state.isLoading = true;
-          state.error = null;
-        }
+        handlePending
       )
       .addMatcher(
         isAnyOf(
@@ -112,23 +73,13 @@ const usersSlice = createSlice({
           logoutThunk.rejected,
           currentUserThunk.rejected,
           getFullUserDetailsThunk.rejected,
-          updateAvatarThunk.rejected,
-          addToFollowingThunk.rejected,
-          removeFromFollowingThunk.rejected,
-          getFollowersThunk.rejected,
-          getFollowingThunk.rejected
+          updateAvatarThunk.rejected
         ),
-        (state, action) => {
-          state.error = action.payload;
-          state.isLoading = false;
-        }
+        handleRejected
       ),
 });
 
 export const {
-  cleanPagination,
-  cleanFollowers,
-  cleanFollowing,
   cleanFullUserDetails,
   forceLogout,
   updateFollowStatus,

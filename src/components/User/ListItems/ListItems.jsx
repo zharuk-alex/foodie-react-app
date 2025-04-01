@@ -1,7 +1,14 @@
+import { useSelector } from 'react-redux';
 import css from './ListItems.module.css';
 import { RecipePreview, UserCard } from 'components/User';
+import { selectIsLoading as selectIsLoadingFollow } from '../../../store/followersAndFollowing/selectors.js';
+import { selectIsLoading as selectIsLoadingRecipe } from '../../../store/recipes/selectors.js';
+import { AppLoader } from '../../UI/index.js';
 
 const ListItems = ({ tab, items, onDelete = () => {} }) => {
+  const isLoadingFollow = useSelector(selectIsLoadingFollow);
+  const isLoadingRecipe = useSelector(selectIsLoadingRecipe);
+
   const getEmptyMessage = () => {
     switch (tab) {
       case 'my-recipes':
@@ -16,24 +23,20 @@ const ListItems = ({ tab, items, onDelete = () => {} }) => {
         return 'No items to display.';
     }
   };
-
-  if (!items || items.length === 0) {
-    return <div className={css.empty}>{getEmptyMessage()}</div>;
-  }
-
-  const renderContent = () => {
-    if (['my-recipes', 'favorites', 'recipes'].includes(tab)) {
-      return items.map(recipe => <RecipePreview key={recipe.id} data={recipe} tab={tab} onDelete={onDelete} />);
-    }
-
-    if (['followers', 'following'].includes(tab)) {
-      return items.map(user => <UserCard key={user.id} user={user} tab={tab} />);
-    }
-
-    return null;
-  };
-
-  return <div className={css.itemsGrid}>{renderContent()}</div>;
+  return (
+    <>
+      {(isLoadingFollow || isLoadingRecipe) && <AppLoader />}
+      {((!isLoadingFollow && !isLoadingRecipe) && (!items || items.length === 0)) ? (
+        <div className={css.empty}>{getEmptyMessage()}</div>
+      ) : (
+        <div className={css.itemsGrid}>
+          {['my-recipes', 'favorites', 'recipes'].includes(tab) &&
+            items.map(recipe => <RecipePreview key={recipe.id} data={recipe} tab={tab} onDelete={onDelete} />)}
+          {['followers', 'following'].includes(tab) && items.map(user => <UserCard key={user.id} user={user} tab={tab} />)}
+        </div>
+      )}
+    </>
+  );
 };
 
 export default ListItems;
