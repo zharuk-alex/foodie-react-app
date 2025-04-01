@@ -1,16 +1,15 @@
-import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getFollowersThunk, getFollowingThunk, addToFollowingThunk, removeFromFollowingThunk } from '../../../store/auth/operations';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import css from './UserCard.module.css';
 import placeholderImage from 'images/avatar/default_avatar.jpg';
 import { Link } from 'react-router-dom';
 import Icon from '../../UI/Icon/Icon';
 import Btn from '../../UI/Btn/Btn';
+import { addToFollowingThunk, getFollowersThunk, getFollowingThunk } from '../../../store/followersAndFollowing/operations.js';
 
-const UserCard = ({ user, tab }) => {
+const UserCard = React.memo(({ user, tab }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const { currentUser } = useSelector(state => state.auth);
   const { id, name, avatar, totalRecipes, following, ownedRecipes } = user;
 
   const handleFollow = async () => {
@@ -23,9 +22,9 @@ const UserCard = ({ user, tab }) => {
         await dispatch(addToFollowingThunk(id)).unwrap();
       }
       if (tab === 'followers') {
-        dispatch(getFollowersThunk({ id: currentUser.id }));
+        dispatch(getFollowersThunk({ id }));
       } else if (tab === 'following') {
-        dispatch(getFollowingThunk({ id: currentUser.id }));
+        dispatch(getFollowingThunk({ id }));
       }
     } catch (error) {
       console.error('Failed to follow/unfollow user:', error);
@@ -64,6 +63,6 @@ const UserCard = ({ user, tab }) => {
       </Link>
     </div>
   );
-};
+});
 
 export default UserCard;

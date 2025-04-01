@@ -7,13 +7,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MainTitle, Subtitle, Container, Section, AppLoader } from 'components/UI';
 import { UserInfo, LogoutFollowButton, TabsList, ListItems, ListPagination, PathInfo } from 'components/User';
 
-import { getFullUserDetailsThunk, getFollowersThunk, getFollowingThunk } from 'store/auth/operations';
-import { cleanPagination as cleanAuthPagination, cleanFollowers, cleanFollowing } from 'store/auth/slice';
-import { selectCurrentUser, selectFullUserDetails, selectFollowers, selectFollowing, selectIsLoading } from 'store/auth/selectors';
+import { getFullUserDetailsThunk } from 'store/auth/operations';
+import { selectCurrentUser, selectFullUserDetails, selectIsLoading } from 'store/auth/selectors';
 
 import { getOwnRecipesThunk, getFavoriteRecipesThunk, removeRecipeThunk, removeRecipeFromFavoriteThunk } from 'store/recipes/operations';
 import { selectRecipes as selectRecipeList, selectPagination as selectRecipePagination } from 'store/recipes/selectors';
 import { cleanPagination as cleanRecipesPagination, cleanRecipes } from 'store/recipes/slice';
+import { selectFollowers, selectFollowing } from '../../store/followersAndFollowing/selectors.js';
+import { getFollowersThunk, getFollowingThunk } from '../../store/followersAndFollowing/operations.js';
+import { cleanFollowers, cleanFollowing } from '../../store/followersAndFollowing/slice.js';
 
 const UserPage = () => {
   const { id } = useParams();
@@ -44,7 +46,6 @@ const UserPage = () => {
   // Reset pagination and lists when tab changes
   useEffect(() => {
     setCurrentPage(1);
-    dispatch(cleanAuthPagination());
     dispatch(cleanRecipesPagination());
     dispatch(cleanFollowers());
     dispatch(cleanFollowing());
@@ -95,7 +96,7 @@ const UserPage = () => {
   // Handle empty page adjustment
   useEffect(() => {
     const items = getTabItems();
-    if (items.length === 0 && currentPage > 1) {
+    if (items?.length === 0 && currentPage > 1) {
       setCurrentPage(prev => prev - 1);
     }
   }, [followers, following, recipes, currentPage]);

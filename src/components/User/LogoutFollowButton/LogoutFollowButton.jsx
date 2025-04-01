@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addToFollowingThunk, removeFromFollowingThunk } from 'store/auth/operations';
 import { updateFollowStatus } from 'store/auth/slice';
 import { Modal } from 'components/UI';
 import { LogoutModal } from 'components/User';
 import css from './LogoutFollowButton.module.css';
+import { addToFollowingThunk, removeFromFollowingThunk } from '../../../store/followersAndFollowing/operations.js';
 
 const LogoutFollowButton = ({ isOwnProfile, isFollowing, targetUserId }) => {
   const dispatch = useDispatch();
